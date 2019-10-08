@@ -1,0 +1,32 @@
+{
+  "name": "ui_server",
+  "version": "1.0.0",
+  "description": "node backend for rehab robot UI ",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "author": "Nick Berezny",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/parser": "^7.1.6",
+    "@material-ui/core": "^3.5.1",
+    "@material-ui/icons": "^3.0.1",
+    "babel": "^6.23.0",
+    "express": "^4.16.4",
+    "next": "^7.0.3",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-redux": "^5.1.1",
+    "react-websocket": "^2.0.0",
+    "redux": "^4.0.1",
+    "socket.io": "^2.1.1",
+    "socket.io-client": "^2.1.1",
+    "three": "^0.98.0",
+    "three-obj-loader": "^1.1.3",
+    "webpack": "^4.26.1",
+    "webpackbar": "^3.1.3"
+  }
+}

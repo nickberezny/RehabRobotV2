@@ -1,0 +1,41 @@
+\BOOKMARK [1][-]{section.1}{Real Time Linux}{}% 1
+\BOOKMARK [2][-]{subsection.1.1}{Background}{section.1}% 2
+\BOOKMARK [2][-]{subsection.1.2}{Installation}{section.1}% 3
+\BOOKMARK [2][-]{subsection.1.3}{Libraries}{section.1}% 4
+\BOOKMARK [1][-]{section.2}{Controller}{}% 5
+\BOOKMARK [2][-]{subsection.2.1}{Outline}{section.2}% 6
+\BOOKMARK [2][-]{subsection.2.2}{Initialization}{section.2}% 7
+\BOOKMARK [2][-]{subsection.2.3}{Getting Control Parameters}{section.2}% 8
+\BOOKMARK [2][-]{subsection.2.4}{Discretization}{section.2}% 9
+\BOOKMARK [2][-]{subsection.2.5}{Zeroing the Force Sensor \046 Homing}{section.2}% 10
+\BOOKMARK [2][-]{subsection.2.6}{Thread 1: Controller}{section.2}% 11
+\BOOKMARK [3][-]{subsubsection.2.6.1}{Reading \046 Writing to the DAQ}{subsection.2.6}% 12
+\BOOKMARK [3][-]{subsubsection.2.6.2}{Filtering}{subsection.2.6}% 13
+\BOOKMARK [3][-]{subsubsection.2.6.3}{Trajectory Calculation}{subsection.2.6}% 14
+\BOOKMARK [3][-]{subsubsection.2.6.4}{Admittance Control}{subsection.2.6}% 15
+\BOOKMARK [3][-]{subsubsection.2.6.5}{Maintaining Frequency}{subsection.2.6}% 16
+\BOOKMARK [2][-]{subsection.2.7}{Thread 2: Server}{section.2}% 17
+\BOOKMARK [3][-]{subsubsection.2.7.1}{TCP Socket}{subsection.2.7}% 18
+\BOOKMARK [2][-]{subsection.2.8}{Thread 3: Data Logging}{section.2}% 19
+\BOOKMARK [3][-]{subsubsection.2.8.1}{Data Formatting and Printing}{subsection.2.8}% 20
+\BOOKMARK [3][-]{subsubsection.2.8.2}{Plotting with Python}{subsection.2.8}% 21
+\BOOKMARK [1][-]{section.3}{UI Server}{}% 22
+\BOOKMARK [2][-]{subsection.3.1}{Outline}{section.3}% 23
+\BOOKMARK [2][-]{subsection.3.2}{HTTP Server}{section.3}% 24
+\BOOKMARK [2][-]{subsection.3.3}{Communication}{section.3}% 25
+\BOOKMARK [1][-]{section.4}{UI Application}{}% 26
+\BOOKMARK [2][-]{subsection.4.1}{Background}{section.4}% 27
+\BOOKMARK [2][-]{subsection.4.2}{Installation}{section.4}% 28
+\BOOKMARK [2][-]{subsection.4.3}{Structure}{section.4}% 29
+\BOOKMARK [3][-]{subsubsection.4.3.1}{Drawer}{subsection.4.3}% 30
+\BOOKMARK [3][-]{subsubsection.4.3.2}{Topbar}{subsection.4.3}% 31
+\BOOKMARK [3][-]{subsubsection.4.3.3}{Content Window}{subsection.4.3}% 32
+\BOOKMARK [3][-]{subsubsection.4.3.4}{Setup Page}{subsection.4.3}% 33
+\BOOKMARK [3][-]{subsubsection.4.3.5}{Visuals Page}{subsection.4.3}% 34
+\BOOKMARK [3][-]{subsubsection.4.3.6}{Settings Page}{subsection.4.3}% 35
+\BOOKMARK [2][-]{subsection.4.4}{Three.js \046 Visuals}{section.4}% 36
+\BOOKMARK [3][-]{subsubsection.4.4.1}{Scene Setup in React}{subsection.4.4}% 37
+\BOOKMARK [3][-]{subsubsection.4.4.2}{Animating the Scene}{subsection.4.4}% 38
+\BOOKMARK [1][-]{section.5}{Controller Folder Organization}{}% 39
+\BOOKMARK [1][-]{section.6}{Server Folder Organization}{}% 40
+\BOOKMARK [1][-]{section.7}{Suggestions for Future Improvements}{}% 41

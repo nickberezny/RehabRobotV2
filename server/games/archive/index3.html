@@ -1,0 +1,140 @@
+<html>
+	<head>
+		<title>My first three.js app</title>
+		<style>
+			body { margin: 0; }
+			canvas { width: 100%; height: 100% }
+		</style>
+	</head>
+	<body>
+		<div id="point_div"></div>
+		<script src="three.min.js"></script>
+		<script>
+
+			function addHexColor(c1, c2, c3) {
+			  var hexStr = (parseInt(c1, 16) + (c3*parseInt(c2, 16))).toString(16);
+			  while (hexStr.length < 6) { hexStr = '0' + hexStr; } // Zero pad.
+			  return hexStr;
+			}
+
+			var currentColor = 'FF0000'
+
+			var xSpeed = 0;
+			var ySpeed = 5;
+			var maxStroke = 200;
+			var dir = 1*0.5;
+			var text;
+			var points = 0;
+			var init = 0;
+
+			var width = window.innerWidth;
+			var height = window.innerHeight;
+
+			var text_geometry
+
+			var scene = new THREE.Scene();
+			scene.background = new THREE.Color( 0xBCBFFF );
+
+			var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
+			var cameraOrtho = new THREE.OrthographicCamera( - width / 2, width / 2, height / 2, - height / 2, -100, 500000);
+			cameraOrtho.position.set( 0,0,5);
+			group = new THREE.Group();
+
+			var renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+
+			var geometry = new THREE.BoxGeometry( 100, 100, 100 );
+			var material = new THREE.MeshBasicMaterial( { color: 0xffcc66 } );
+			var cube = new THREE.Mesh( geometry, material );
+			cube.position.z = 0;
+			scene.add( cube );
+
+			var loader = new THREE.FontLoader();
+
+			var textureLoader = new THREE.TextureLoader();
+
+			var mapA = textureLoader.load( "sprite/crosshair.png" );
+			var materialA = new THREE.SpriteMaterial( { map: mapA, color: 0xFFFFFF} );
+			var mapB = textureLoader.load( "sprite/crosshair_yellow.png" );
+			var materialB = new THREE.SpriteMaterial( { map: mapB, color: 0xFFFFFF} );
+			var sprite1 = new THREE.Sprite( materialA );
+			var sprite2 = new THREE.Sprite( materialB );
+
+			var colors = [0xFF0000, 0xFFFF00, 0x00FF00]
+
+			sprite1.position.set( 0, 0, 100 );
+			sprite1.scale.set(100,100,100);
+
+			group.add(sprite1);
+			
+			scene.add( group );
+			//scene.add( sprite1 );
+
+			scene.add( cameraOrtho );
+			//camera.position.z = 10;
+
+			document.addEventListener("keydown", onDocumentKeyDown, false);
+			function onDocumentKeyDown(event) {
+			    var keyCode = event.which;
+			    if (keyCode == 87) {
+			        group.position.y += ySpeed;
+			    } else if (keyCode == 83) {
+			        group.position.y -= ySpeed;
+			    } else if (keyCode == 65) {
+			        group.position.x -= xSpeed;
+			    } else if (keyCode == 68) {
+			        group.position.x += xSpeed;
+			    } else if (keyCode == 32) {
+			        group.position.set(0, 0, 0);
+			    }
+			};
+
+			var animate = function () {
+
+				requestAnimationFrame( animate );
+				if (cube.position.y > maxStroke || cube.position.y <= -0.1) {
+					dir = -dir;
+					
+				}
+
+				currentColor = addHexColor(currentColor, '000500', dir);
+				if(currentColor == '00FF00')
+				{
+
+				}
+				cube.material.color.setHex( '0x'+currentColor)
+
+				if(init == 1) { 
+					scene.remove( text ) 
+					console.log('check')
+				}
+				init = 1;
+
+				/* loader.load( 'sprite/helvetiker_regular.typeface.json', function ( font ) {
+
+					var message = 'Points: ' + points
+					var shapes = font.generateShapes( message, 25 );
+					var geometry = new THREE.ShapeBufferGeometry( shapes );
+					text = new THREE.Mesh( geometry, material );
+					text.position.set(width/2 - 200, - height/2 + 100, 0)
+					scene.add( text );
+
+				} ); */
+
+				cube.scale.y += 0.02*dir*ySpeed;
+				cube.position.y += dir*ySpeed
+				if(group.position.y > cube.position.y - 50 && group.position.y < cube.position.y + 50){
+					points += 1;
+					//console.log(points);
+				}
+				renderer.render( scene, cameraOrtho );
+			};
+
+			
+
+			animate();
+		</script>
+	</body>
+</html>
+		
