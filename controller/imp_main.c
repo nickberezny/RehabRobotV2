@@ -274,28 +274,35 @@ int main(int argc, char* argv[]) {
 	//system("gnome-terminal --working-directory=Documents/RehabRobot/server -e 'sudo NODE_ENV='production' node server.js'");
 	system("gnome-terminal --working-directory=Documents/RehabRobot/server -e 'sudo node server.js'");
 
+//start top level while loop 
+
+
 	while(1)
 	{
 		connfd = accept(listenfd, (struct sockaddr*)NULL, NULL);
-		if(read(connfd, recvBuff, sizeof(recvBuff)) && recvBuff[0] == 'S')
+		if(read(connfd, recvBuff, sizeof(recvBuff)))
 		{
-			//recieved settings 
-			if(DEBUG) printf("recieved data: %s\n", recvBuff);
-			
-			regcomp(&compiled, regex.exp, REG_EXTENDED);
-			if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
-				sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
-				sscanf(matchBuffer, "%d", &exp_number);
-			    if(DEBUG) { printf("Experiment set to: %d\n", exp_number); }
-			}
-			if(exp_number == 3)
-			{
-				regcomp(&compiled, regex.game, REG_EXTENDED);
-					if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
+			if(recvBuff[0] == 'S'){
+				//recieved settings 
+				if(DEBUG) printf("recieved data: %s\n", recvBuff);
+				
+				regcomp(&compiled, regex.exp, REG_EXTENDED);
+				if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
 					sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
-					sscanf(matchBuffer, "%d", &game_number);
-				    if(DEBUG) { printf("Game set to: %d\n", game_number); }
-			}
+					sscanf(matchBuffer, "%d", &exp_number);
+				    if(DEBUG) { printf("Experiment set to: %d\n", exp_number); }
+				}
+				if(exp_number == 3)
+				{
+					regcomp(&compiled, regex.game, REG_EXTENDED);
+						if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
+						sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
+						sscanf(matchBuffer, "%d", &game_number);
+					    if(DEBUG) { printf("Game set to: %d\n", game_number); }
+					}
+				}
+			}else if(recvBuff[0] == 'E'){
+				//end loop, exit program
 			}
 
 			
