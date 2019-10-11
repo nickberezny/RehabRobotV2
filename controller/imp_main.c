@@ -276,7 +276,7 @@ int main(int argc, char* argv[]) {
 
 //start top level while loop 
 
-
+while(1){
 	while(1)
 	{
 		connfd = accept(listenfd, (struct sockaddr*)NULL, NULL);
@@ -316,7 +316,7 @@ int main(int argc, char* argv[]) {
 /*----------------------------------------------------------------------------
 	Prepare and run experiments
 -----------------------------------------------------------------------------*/
-
+while(1){
 	while(!terminate_program){
 
   
@@ -329,157 +329,14 @@ int main(int argc, char* argv[]) {
 	gait.phase = 1;
 	gait.v_traj = 25.0;
 
-	//printf("%d\n", exp_number);
-	if(exp_number == 1)
-	{
 		game_type = 1;
 		max_count = 60000; //1.5 min = 90000
 		temp_counter = 0;
 		game_wait_sec = 5.0;
 		v_max = V_MAX; 
 
-		switch(++exp_iteration){
-			
-			case 1:
-				k_gain = KMIN;
-				b_gain = BMIN + 0.1;
-				//game_number = 2;
-				//environment = 1;
-				//terminate_program = 1;
-				break;
-
-			case 2:
-				k_gain = KMIN + 0.2;
-				b_gain = BMIN + 0.1;
-				break;
-			
-			case 3:
-				k_gain = KMIN + 0.4;
-				b_gain = BMIN + 0.1;
-				break; 
-
-			case 4:
-				k_gain = KMIN + 0.3 ;
-				b_gain = BMIN + 0.1;
-				break;
-
-			case 5:
-				k_gain = KMIN + 0.1;
-				b_gain = BMIN + 0.1;
-				break;
-
-			case 6:
-				k_gain = 0.00001; //TODO: implement pinv, set K = 0
-				b_gain = BMIN;
-				break;
-
-			case 7:
-				k_gain = 0.00001; 
-				b_gain = BMIN + 0.2;
-				break;
-
-			case 8:
-				k_gain = 0.00001; 
-				b_gain = BMIN + 0.4;
-				break;
-
-			case 9:
-				k_gain = 0.00001; 
-				b_gain = BMIN + 0.3;
-				break;
-
-			case 10:
-				k_gain = 0.00001; 
-				b_gain = BMIN + 0.1;
-				terminate_program = 1;
-				break;
-		}
-	}
-	else if(exp_number == 2 )
-	{
-		max_count = 120000; //3 min
-		game_type = 1;
-		temp_counter = 0;
-		game_wait_sec = 5.0;
-		v_max = V_MAX;
-		//exp_iteration++;
-
-		switch(++exp_iteration)
-		{
-			case 1:
-				//cube w/ assist
-				k_gain = K_GAIN;
-				b_gain = BMIN + 0.1;
-				game_type = 1;
-				break;
-
-			case 2:
-				//race w/ assist
-				k_gain = K_GAIN;
-				b_gain = BMIN + 0.1;
-				game_type = 1;
-				break;
-
-			case 3: 
-				//balance game
-				game_type = 2;
-				environment = 1;
-				terminate_program = 1;
-				break;
-		}
-	}
-	else if(exp_number == 3)
-	{
-		max_count = 120000; //6 min
-		game_type = 1;
-		temp_counter = 0;
-		game_wait_sec = 5.0;
-		v_max = V_MAX;
-		++exp_iteration;
-
-		switch(game_number)
-		{
-			case 1:
-				//assist w/ no visuals
-				k_gain = K_GAIN;
-				b_gain = BMIN + 0.1;
-				game_type = 1;
-				terminate_program = 1;
-				break;
-
-			case 2:
-				//resist with no visuals 
-				k_gain = 0.00001;
-				b_gain = BMIN + 0.1;
-				game_type = 1;
-				terminate_program = 1;
-				break;
-
-			case 3:
-				//assist with cube
-				k_gain = K_GAIN;
-				b_gain = BMIN + 0.1;
-				game_type = 1;
-				terminate_program = 1;
-				break;
-
-			case 4:
-				//resist with race 
-				k_gain = 0.00001;
-				b_gain = BMIN + 0.1;
-				game_type = 1;
-				terminate_program = 1;
-				break;
-
-			case 5: 
-				//balance game
-				game_type = 2;
-				environment = 1;
-				terminate_program = 1;
-				break;
-		}
-	}
-
+		
+	/*
 	//set default values if not connecting to UI (for testing)
     for(int i = 0; i < BUFFER_SIZE; i++)
 	{
@@ -506,6 +363,123 @@ int main(int argc, char* argv[]) {
 		imp[i].Fk_1= 0.0;
 		imp[i].Fa_1 = 0.0;
 		imp[i].Fa = 0.0;
+	}
+	*/
+
+	if(GET_PARAMS_FROM_UI){
+			while(1)
+		    {
+				if(DEBUG) printf("Waiting for run signal from UI ... \n");
+
+				//wait for game settings
+				connfd = accept(listenfd, (struct sockaddr*)NULL, NULL); 
+				if(read(connfd, recvBuff, sizeof(recvBuff)) && recvBuff[0] == 'S')
+				{
+					//recieved settings 
+					if(DEBUG) printf("recieved data: %s\n", recvBuff);
+					start_controller = 1;
+
+					//find set parameters in message using regular expreesions 
+					regcomp(&compiled, regex.P, REG_EXTENDED);
+					if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
+						sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
+						sscanf(matchBuffer, "%lf", &imp[0].P);
+					    if(DEBUG) { printf("P gain is: %lf\n", imp[0].P); }
+					}
+
+					regcomp(&compiled, regex.D, REG_EXTENDED);
+					if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
+						sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
+						sscanf(matchBuffer, "%lf", &imp[0].D);
+					    if(DEBUG) { printf("D gain is: %f\n", imp[0].D); }
+					}
+
+					regcomp(&compiled, regex.xdes, REG_EXTENDED);
+					if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
+						sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
+						sscanf(matchBuffer, "%lf", &imp[0].xdes);
+					    if(DEBUG) { printf("xdes is: %f\n", imp[0].xdes); }
+					}
+
+					regcomp(&compiled, regex.xmax, REG_EXTENDED);
+					if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
+						sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
+						sscanf(matchBuffer, "%lf", &imp[0].xmax);
+					    if(DEBUG) { printf("Xmax is: %f\n", imp[0].xmax); }
+					}
+
+					regcomp(&compiled, regex.vmax, REG_EXTENDED);
+					if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
+						sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
+						sscanf(matchBuffer, "%lf", &imp[0].vmax);
+					    if(DEBUG) { printf("Vmax is: %f\n", imp[0].vmax); }
+					}
+
+					regcomp(&compiled, regex.K, REG_EXTENDED);
+					if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
+						sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
+						sscanf(matchBuffer, "%lf", &imp[0].K);
+					    if(DEBUG) { printf("K is: %f\n", imp[0].K); }
+					}
+					
+					regcomp(&compiled, regex.B, REG_EXTENDED);
+					if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
+						sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
+						sscanf(matchBuffer, "%lf", &imp[0].B);
+					    if(DEBUG) { printf("B is: %f\n", imp[0].B); }
+					}
+					
+					regcomp(&compiled, regex.M, REG_EXTENDED);
+					if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
+						sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
+						sscanf(matchBuffer, "%lf", &imp[0].M);
+					    if(DEBUG) { printf("M is: %f\n", imp[0].M); }
+					}
+
+					regcomp(&compiled, regex.game, REG_EXTENDED);
+					if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
+						sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
+						sscanf(matchBuffer, "%lf", &imp[0].game);
+					    if(DEBUG) { printf("Game set to: %f\n", imp[0].game); }
+					}
+				}
+					
+					
+
+				for(int i = 1; i < BUFFER_SIZE; i++)
+				{
+					imp[i].P = imp[0].P;
+					imp[i].D = imp[0].D;
+					imp[i].K = imp[0].K;
+					imp[i].B = imp[0].B;
+					imp[i].M = imp[0].M;
+					imp[i].xdes = imp[0].xdes;
+					imp[i].fp = imp[0].fp;
+
+					imp[i].xmax = imp[0].xmax;
+					imp[i].vmax = imp[0].vmax;
+					imp[i].game = imp[0].game;
+							
+				}
+
+				/*if(DEBUG) printf("Set All Parameters (From UI)...\n");
+
+				//wait for run signal before starting controller
+				if(read(connfd, recvBuff, sizeof(recvBuff)) && recvBuff[0] == 'R' && start_controller == 1)
+				{
+					//everything set, begin therapy 
+					if(DEBUG) printf("Start signal recieved \n");
+					break;
+				}
+
+				close(connfd);
+				printf("TEST01\n");
+				sleep(0.01);
+				printf("TEST01\n");
+			}
+		*/
+				
+	    }
 	}
 	
 
@@ -689,7 +663,7 @@ int main(int argc, char* argv[]) {
 	pthread_join(thread[2], NULL);
 	
 }
-
+}
 	//finished sessions, begin shutdown
 	LJM_eStreamStop(daqHandle);
 	LJM_Close(daqHandle);

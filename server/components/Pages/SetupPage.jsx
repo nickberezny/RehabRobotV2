@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 
 import {runRobot} from '../../src/actions'
 import SetButton from '../Generic/SetButton'
+import HomeButton from '../Generic/HomeButton'
 import RunButton from '../Generic/RunButton'
 import InputText from '../Generic/InputText'
 import Dropdown from '../Generic/Dropdown'
@@ -16,6 +17,8 @@ import FollowTraj from '../Setups/FollowTraj'
 import FollowVel from '../Setups/FollowVel'
 import Balance from '../Setups/Balance'
 import Gait from '../Setups/Gait'
+
+import Grid from '@material-ui/core/Grid';
 
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -73,19 +76,43 @@ class SetupPage extends React.Component {
 		return (
 
 			<div>
-			  	<Typography variant="display1" gutterBottom>
-			    	Set Up a Session    
-		      	</Typography>
-		      	<div style={{display: 'inline-flex'}}>
-		      	<Dropdown text="Game" id="game" value={this.props.game} select1="Follow Trajectory" select2 = "Racing" select3 = "Balance" />
-		      	{this.state.contents}
 		      	<div>
-			    <SetButton text="Set" />
-			    </div>
+		      	<Grid container>
+			      	<Grid item xs>
+			      		<Typography variant="display1" gutterBottom>
+			    			Game Type  
+		      			</Typography>
+			      		<Dropdown text="Game" id="game" value={this.props.game} select1="Follow Trajectory" select2 = "Racing" select3 = "Balance" />
+			      		<br/>
+			      		<br/>
+			      		<Typography variant="display1" gutterBottom>
+				    			Trajectory  
+			      		</Typography>
+			      		<Dropdown text="Trajectory Profile" id="game" value={this.props.game} select1="Standard Trajectory" select2 = "Custom Trajectory 1" select3 = "Custom Trajectory 2" />
+
+			      	</Grid>
+			      	<Grid item xs>
+				      	<Typography variant="display1" gutterBottom>
+				    			Parameters 
+			      		</Typography>
+				      	{this.state.contents}
+			      	</Grid>
+			      	<Grid item xs>
+			      		<Typography variant="display1" gutterBottom>
+				    		Send Commands
+			      		</Typography>
+					    <SetButton text="Set" />
+					    <HomeButton text="Home" />
+					    <RunButton text="Run" />
+					</Grid>
+					<Grid item xs>
+
+					</Grid>
+				</Grid>
 				</div>
 			</div>
 	
-		)
+		);
 	}
 }
 
