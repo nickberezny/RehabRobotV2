@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import { openPage } from "../src/actions";
+import { setValue } from "../src/actions";
 
 import { withStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
@@ -10,6 +10,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 import BuildIcon from '@material-ui/icons/Build';
 import MoviesIcon from '@material-ui/icons/Movie';
+import ChartIcon from '@material-ui/icons/InsertChartOutlined';
 import SettingsIcon from '@material-ui/icons/Settings';
 
 
@@ -28,15 +29,15 @@ class DrawerList extends React.Component {
   }
 
   pageOne() {
-    this.props.openPage(1);
+    this.props.setValue('activePage',1);
   }
 
   pageTwo() {
-    this.props.openPage(2);
+    this.props.setValue('activePage',2);
   }
 
   pageThree() {
-    this.props.openPage(3);
+    this.props.setValue('activePage',3);
   }
 
 
@@ -52,9 +53,9 @@ class DrawerList extends React.Component {
           </ListItem>
           <ListItem button onClick={this.pageTwo}>
             <ListItemIcon>
-              <MoviesIcon />
+              <ChartIcon />
             </ListItemIcon>
-            <ListItemText primary="Game" />
+            <ListItemText primary="Data" />
           </ListItem>
           <ListItem button onClick={this.pageThree}>
             <ListItemIcon>
@@ -74,7 +75,7 @@ function mapStateToProps(state) {
 
 export default connect(
   mapStateToProps,
-  { openPage }
+  { setValue }
 )(DrawerList);
 
 

@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
-import { setParam } from "../../src/actions";
+import { setValue } from "../../src/actions";
 
 class InputText extends React.Component {
 
@@ -14,7 +14,7 @@ class InputText extends React.Component {
 	onInputChange = (event) => {
         console.log("New parameter")
         let name = this.props.paramName
-        this.props.setParam(name,event.target.value);
+        this.props.setValue(name,event.target.value);
         
     }
 
@@ -42,5 +42,5 @@ function mapStateToProps(state) {
 
 export default connect(
   mapStateToProps,
-  { setParam }
+  { setValue }
 )(InputText);

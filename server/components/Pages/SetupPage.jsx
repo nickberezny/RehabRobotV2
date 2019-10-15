@@ -1,22 +1,19 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import {runRobot} from '../../src/actions'
-import SetButton from '../Generic/SetButton'
-import HomeButton from '../Generic/HomeButton'
-import RunButton from '../Generic/RunButton'
+import GenericButton from '../Generic/GenericButton'
 import InputText from '../Generic/InputText'
 import Dropdown from '../Generic/Dropdown'
 
 import FollowTraj_Dev from '../Setups/FollowTraj_Dev'
 import FollowVel_Dev from '../Setups/FollowVel_Dev'
 import Balance_Dev from '../Setups/Balance_Dev'
-import Gait_Dev from '../Setups/Gait_Dev'
+
 
 import FollowTraj from '../Setups/FollowTraj'
 import FollowVel from '../Setups/FollowVel'
 import Balance from '../Setups/Balance'
-import Gait from '../Setups/Gait'
+
 
 import Grid from '@material-ui/core/Grid';
 
@@ -45,9 +42,6 @@ class SetupPage extends React.Component {
 				case 3:
 					this.state.contents = <div> <Balance_Dev /> </div> 
 					break;
-				case 4:
-					this.state.contents = <div> <Gait_Dev /> </div> 
-					break;
 				default: 
 					this.state.contents = <div> Select a Game </div> 
 			}
@@ -62,9 +56,6 @@ class SetupPage extends React.Component {
 					break;
 				case 3:
 					this.state.contents = <div> <Balance /> </div> 
-					break;
-				case 4:
-					this.state.contents = <div> <Gait /> </div> 
 					break;
 				default: 
 					this.state.contents = <div> Select a Game </div> 
@@ -101,9 +92,20 @@ class SetupPage extends React.Component {
 			      		<Typography variant="display1" gutterBottom>
 				    		Send Commands
 			      		</Typography>
-					    <SetButton text="Set" />
-					    <HomeButton text="Home" />
-					    <RunButton text="Run" />
+					    <GenericButton text="Set" message="SET" /> 
+					    {this.props.SET}
+					    <GenericButton text="Home" message="HOME" />
+					    {this.props.HOME} 
+					    <GenericButton text="Run" message="RUN" /> 
+					    {this.props.RUN}
+					    <br/>
+			      		<br/>
+					    <Typography variant="display1" gutterBottom>
+				    		Robot Status
+			      		</Typography>
+			      		Status:
+			      		<br/> 
+			      		Total Length: 
 					</Grid>
 					<Grid item xs>
 
@@ -126,7 +128,11 @@ function mapStateToProps(state) {
   	B: state.B,
   	M: state.M,
   	game: state.game,
-  	user: state.user
+  	user: state.user,
+  	RUN: state.RUN,
+  	HOME: state.HOME,
+  	SET: state.SET
+
   }
 }
 

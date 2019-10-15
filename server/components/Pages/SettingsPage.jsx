@@ -6,7 +6,7 @@ import FormControl from '@material-ui/core/FormControl'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import FormLabel from '@material-ui/core/FormLabel'
 
-import {setUser} from '../../src/actions'
+import {setValue} from '../../src/actions'
 
 
 class SettingsPage extends React.Component {
@@ -17,7 +17,7 @@ class SettingsPage extends React.Component {
 
 	handleChange = event => {
 		console.log(parseInt(event.target.value))
-		this.props.setUser(parseInt(event.target.value));
+		this.props.setValue('user',parseInt(event.target.value));
 	}
 
 	render() {
@@ -32,7 +32,6 @@ class SettingsPage extends React.Component {
 	          >
 	            <FormControlLabel value="1" control={<Radio color="secondary" />} label="Developer" />
 	            <FormControlLabel value="2" control={<Radio color="secondary" />} label="User" />
-	            <FormControlLabel value="3" control={<Radio color="secondary" />} label="Expriment" />
 	          </RadioGroup>
 	        </FormControl>
 		)
@@ -48,5 +47,5 @@ function mapStateToProps(state) {
 
 export default connect(
   mapStateToProps,
-  { setUser }
+  { setValue }
 )(SettingsPage);

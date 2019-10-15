@@ -34,15 +34,14 @@ if(TEST) {
 
     var res = data.toString().split(",");
 
-    if(data.toString() == 'END_STAGE') { io.emit('END_STAGE', data.toString()); }
-    else if(data.toString() == 'END') { io.emit('END', data.toString()); }
-    else if(data.toString() == 'HOME') { io.emit('HOME', data.toString()); }
-    else if(res[0] == 'INFO') {
+    if(data.toString() == 'SET') { io.emit('CONFIRM', 'SET'; }
+    else if(data.toString() == 'RUN') { io.emit('CONFIRM', 'RUN'; }
+    else if(data.toString() == 'HOME') { io.emit('CONFIRM', 'HOME'; }
+    else if(data.toString() == 'END') { io.emit('CONFIRM', 'END'; }
+    if(res[0] == 'INFO') {
       io.emit('INFO',data.toString());
       console.log('INFO' + res[1] + '  ' + data)
     }
-    else { io.emit('message', data.toString()) }
-    //console.log(data.toString())
   });
 
 
@@ -59,39 +58,9 @@ io.on('connection', socket => {
   console.log("server socket connect")
   //socket.broadcast.emit('message', 'world')
 
-  socket.on('HEY', function (data) {
-    console.log(data)
-  });
-
-  socket.on('SET_PARAMS', function (data) {
+  socket.on('MESSAGE', function (data) {
     client.write(data)
     console.log(data);
-  });
-
-  socket.on('START_ROBOT', function (data) {
-    client.write(data)
-    console.log(data);
-  });
-
-  socket.on('STOP_ROBOT', function (data) {
-    client.write(data)
-  });
-
-  socket.on('MOVE_LEFT', function (data) {
-    client.write(data)
-  });
-
-  socket.on('MOVE_RIGHT', function (data) {
-    client.write(data)
-  });
-
-  socket.on('NEW_PATIENT', function () {
-  });
-
-  socket.on('EDIT_PATIENT', function () {
-  });
-
-  socket.on('DELETE_PATIENT', function () {
   });
 
 })

@@ -245,14 +245,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @material-ui/core/Typography */ "@material-ui/core/Typography");
 /* harmony import */ var _material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _Pages_SetupPage__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Pages/SetupPage */ "./components/Pages/SetupPage.jsx");
-/* harmony import */ var _Pages_UserPage__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Pages/UserPage */ "./components/Pages/UserPage.jsx");
-/* harmony import */ var _Pages_VisualsPage__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Pages/VisualsPage */ "./components/Pages/VisualsPage.jsx");
-/* harmony import */ var _Pages_SettingsPage__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Pages/SettingsPage */ "./components/Pages/SettingsPage.jsx");
-/* harmony import */ var _Pages_BasicSetupPage__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Pages/BasicSetupPage */ "./components/Pages/BasicSetupPage.jsx");
-/* harmony import */ var _Setups_Experiment2019__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./Setups/Experiment2019 */ "./components/Setups/Experiment2019.jsx");
-/* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! socket.io-client */ "socket.io-client");
-/* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(socket_io_client__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var _src_actions__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../src/actions */ "./src/actions.js");
+/* harmony import */ var _Pages_DataPage__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Pages/DataPage */ "./components/Pages/DataPage.jsx");
+/* harmony import */ var _Pages_SettingsPage__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Pages/SettingsPage */ "./components/Pages/SettingsPage.jsx");
+/* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! socket.io-client */ "socket.io-client");
+/* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(socket_io_client__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _src_actions__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../src/actions */ "./src/actions.js");
 var _jsxFileName = "C:\\Users\\nicho_000\\Documents\\RehabRobotV2\\server\\components\\ContentWindow.jsx";
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -284,10 +281,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
-
-
-
-
 var WIRELESS = 1;
 
 var WindowContent =
@@ -307,7 +300,7 @@ function (_React$Component) {
       var test = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 57
+          lineNumber: 48
         },
         __self: this
       }, " Force Offset: ", res[1], ", Total Length: ", res[2], " ");
@@ -318,77 +311,13 @@ function (_React$Component) {
 
     });
 
-    _defineProperty(_assertThisInitialized(_this), "handleMessage", function (message) {
-      console.log('Message Recieved: ' + message);
-      var res = message.split(",");
-
-      _this.props.setParam('x', res[0]);
-
-      _this.props.setParam('xdes', res[1]);
-
-      _this.props.setParam('v', res[2]);
-
-      _this.props.setParam('vdes', res[3]);
-
-      _this.props.setParam('x_ball', res[4]);
-
-      _this.props.setParam('x_end', res[5]);
-
-      _this.setState({
-        info: null,
-        home: null
-      });
+    _defineProperty(_assertThisInitialized(_this), "handleConfirm", function (message) {
+      //var test = <div>Back Home Complete</div> 
+      _this.setValue(message.toString(), 2);
     });
 
-    _defineProperty(_assertThisInitialized(_this), "handleEndStage", function (message) {
-      console.log('Stage Ended');
-
-      _this.props.setParam('stage', _this.props.stage + 1);
-
-      _this.props.setParam('run', 0);
-
-      _this.props.setParam('xdes', 0.0);
-
-      _this.props.setParam('x', 0.0);
-
-      switch (_this.props.exp) {
-        case 1:
-          //assist/resist ranges (exp 1)
-          _this.props.setParam('game', 1);
-
-          break;
-
-        case 2:
-          //games vs no games (exp 2)
-          switch (_this.props.stage) {
-            case 1:
-              _this.props.setParam('game', 3);
-
-              break;
-
-            case 2:
-              _this.props.setParam('game', 4);
-
-              break;
-
-            case 3:
-              _this.props.setParam('game', 5);
-
-              break;
-          }
-
-        case 3:
-          //practice run
-          //this.props.setParam('game', this.props.game + 2)
-          break;
-          break;
-      }
-    });
-
-    _this.handleMessage = _this.handleMessage.bind(_assertThisInitialized(_this));
-    _this.handleEndStage = _this.handleEndStage.bind(_assertThisInitialized(_this));
     _this.handleInfo = _this.handleInfo.bind(_assertThisInitialized(_this));
-    _this.handleHome = _this.handleHome.bind(_assertThisInitialized(_this));
+    _this.handleConfirm = _this.handleConfirm.bind(_assertThisInitialized(_this));
     _this.state = {
       content: null,
       style: null,
@@ -401,48 +330,18 @@ function (_React$Component) {
   _createClass(WindowContent, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      var socketio = socket_io_client__WEBPACK_IMPORTED_MODULE_10___default()();
+      var socketio = socket_io_client__WEBPACK_IMPORTED_MODULE_7___default()();
       socketio.on('message', this.handleMessage);
-      socketio.on('END_STAGE', this.handleEndStage);
-      socketio.on('END', this.handleEnd);
+      socketio.on('CONFIRM', this.handleConfirm);
       socketio.on('INFO', this.handleInfo);
-      socketio.on('HOME', this.handleHome);
       console.log(socketio);
-      this.props.setSocket(socketio);
+      this.props.setValue('socket', socketio);
     }
   }, {
     key: "componentWillUnmount",
     value: function componentWillUnmount() {
       console.log('unmount');
       this.props.socket.close();
-    }
-  }, {
-    key: "handleHome",
-    value: function handleHome() {
-      var test = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 64
-        },
-        __self: this
-      }, "Back Home Complete");
-      this.setState({
-        home: test
-      });
-    }
-  }, {
-    key: "handleEnd",
-    value: function handleEnd() {
-      var test = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 69
-        },
-        __self: this
-      }, "Experiment Finished");
-      this.setState({
-        info: test
-      });
     }
   }, {
     key: "render",
@@ -468,13 +367,13 @@ function (_React$Component) {
               style: this.state.style,
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 141
+                lineNumber: 78
               },
               __self: this
             }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Pages_SetupPage__WEBPACK_IMPORTED_MODULE_4__["default"], {
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 141
+                lineNumber: 78
               },
               __self: this
             }), " ");
@@ -485,30 +384,13 @@ function (_React$Component) {
               style: this.state.style,
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 142
+                lineNumber: 79
               },
               __self: this
             }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Pages_SetupPage__WEBPACK_IMPORTED_MODULE_4__["default"], {
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 142
-              },
-              __self: this
-            }), " ");
-          }
-
-          if (this.props.user == 3) {
-            this.state.content = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-              style: this.state.style,
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 143
-              },
-              __self: this
-            }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Setups_Experiment2019__WEBPACK_IMPORTED_MODULE_9__["default"], {
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 143
+                lineNumber: 79
               },
               __self: this
             }), " ");
@@ -521,13 +403,13 @@ function (_React$Component) {
             style: this.state.style,
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 146
+              lineNumber: 82
             },
             __self: this
-          }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Pages_VisualsPage__WEBPACK_IMPORTED_MODULE_6__["default"], {
+          }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Pages_DataPage__WEBPACK_IMPORTED_MODULE_5__["default"], {
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 146
+              lineNumber: 82
             },
             __self: this
           }), " ", this.state.home, " ", this.state.info, "  ");
@@ -538,13 +420,13 @@ function (_React$Component) {
             style: this.state.style,
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 149
+              lineNumber: 85
             },
             __self: this
-          }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Pages_SettingsPage__WEBPACK_IMPORTED_MODULE_7__["default"], {
+          }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Pages_SettingsPage__WEBPACK_IMPORTED_MODULE_6__["default"], {
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 149
+              lineNumber: 85
             },
             __self: this
           }), " ");
@@ -555,7 +437,7 @@ function (_React$Component) {
             style: this.state.style,
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 152
+              lineNumber: 88
             },
             __self: this
           }, " Page Load Failed ");
@@ -564,7 +446,7 @@ function (_React$Component) {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 156
+          lineNumber: 92
         },
         __self: this
       }, this.state.content);
@@ -588,8 +470,7 @@ function mapStateToProps(state) {
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, {
-  setSocket: _src_actions__WEBPACK_IMPORTED_MODULE_11__["setSocket"],
-  setParam: _src_actions__WEBPACK_IMPORTED_MODULE_11__["setParam"] //add importing action functions here
+  setValue: _src_actions__WEBPACK_IMPORTED_MODULE_8__["setValue"] //add importing action functions here
 
 })(WindowContent));
 
@@ -799,8 +680,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _material_ui_icons_Build__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_Build__WEBPACK_IMPORTED_MODULE_9__);
 /* harmony import */ var _material_ui_icons_Movie__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @material-ui/icons/Movie */ "@material-ui/icons/Movie");
 /* harmony import */ var _material_ui_icons_Movie__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_Movie__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var _material_ui_icons_Settings__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @material-ui/icons/Settings */ "@material-ui/icons/Settings");
-/* harmony import */ var _material_ui_icons_Settings__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_Settings__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var _material_ui_icons_InsertChartOutlined__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @material-ui/icons/InsertChartOutlined */ "@material-ui/icons/InsertChartOutlined");
+/* harmony import */ var _material_ui_icons_InsertChartOutlined__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_InsertChartOutlined__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var _material_ui_icons_Settings__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @material-ui/icons/Settings */ "@material-ui/icons/Settings");
+/* harmony import */ var _material_ui_icons_Settings__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_Settings__WEBPACK_IMPORTED_MODULE_12__);
 var _jsxFileName = "C:\\Users\\nicho_000\\Documents\\RehabRobotV2\\server\\components\\DrawerList.jsx";
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -820,6 +703,7 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
 
 
 
@@ -858,17 +742,17 @@ function (_React$Component) {
   _createClass(DrawerList, [{
     key: "pageOne",
     value: function pageOne() {
-      this.props.openPage(1);
+      this.props.setValue('activePage', 1);
     }
   }, {
     key: "pageTwo",
     value: function pageTwo() {
-      this.props.openPage(2);
+      this.props.setValue('activePage', 2);
     }
   }, {
     key: "pageThree",
     value: function pageThree() {
-      this.props.openPage(3);
+      this.props.setValue('activePage', 3);
     }
   }, {
     key: "render",
@@ -877,14 +761,14 @@ function (_React$Component) {
         style: ListStyles,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 45
+          lineNumber: 46
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_List__WEBPACK_IMPORTED_MODULE_4___default.a, {
         component: "nav",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 46
+          lineNumber: 47
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5___default.a, {
@@ -892,26 +776,26 @@ function (_React$Component) {
         onClick: this.pageOne,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 47
+          lineNumber: 48
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemIcon__WEBPACK_IMPORTED_MODULE_6___default.a, {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 48
+          lineNumber: 49
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_Build__WEBPACK_IMPORTED_MODULE_9___default.a, {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 49
+          lineNumber: 50
         },
         __self: this
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_7___default.a, {
         primary: "Setup",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 51
+          lineNumber: 52
         },
         __self: this
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5___default.a, {
@@ -919,26 +803,26 @@ function (_React$Component) {
         onClick: this.pageTwo,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 53
+          lineNumber: 54
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemIcon__WEBPACK_IMPORTED_MODULE_6___default.a, {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 54
-        },
-        __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_Movie__WEBPACK_IMPORTED_MODULE_10___default.a, {
-        __source: {
-          fileName: _jsxFileName,
           lineNumber: 55
         },
         __self: this
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_7___default.a, {
-        primary: "Game",
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_InsertChartOutlined__WEBPACK_IMPORTED_MODULE_11___default.a, {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 57
+          lineNumber: 56
+        },
+        __self: this
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_7___default.a, {
+        primary: "Data",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 58
         },
         __self: this
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5___default.a, {
@@ -946,26 +830,26 @@ function (_React$Component) {
         onClick: this.pageThree,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 59
+          lineNumber: 60
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemIcon__WEBPACK_IMPORTED_MODULE_6___default.a, {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 60
+          lineNumber: 61
         },
         __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_Settings__WEBPACK_IMPORTED_MODULE_11___default.a, {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_Settings__WEBPACK_IMPORTED_MODULE_12___default.a, {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 61
+          lineNumber: 62
         },
         __self: this
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_7___default.a, {
         primary: "Settings",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 63
+          lineNumber: 64
         },
         __self: this
       }))));
@@ -980,7 +864,7 @@ function mapStateToProps(state) {
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, {
-  openPage: _src_actions__WEBPACK_IMPORTED_MODULE_2__["openPage"]
+  setValue: _src_actions__WEBPACK_IMPORTED_MODULE_2__["setValue"]
 })(DrawerList));
 
 /***/ }),
@@ -1140,355 +1024,10 @@ function mapStateToProps(state) {
 
 /***/ }),
 
-/***/ "./components/Generic/Dropdown5.jsx":
-/*!******************************************!*\
-  !*** ./components/Generic/Dropdown5.jsx ***!
-  \******************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "react-redux");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_redux__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _material_ui_core_Select__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @material-ui/core/Select */ "@material-ui/core/Select");
-/* harmony import */ var _material_ui_core_Select__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_Select__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _material_ui_core_FormControl__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @material-ui/core/FormControl */ "@material-ui/core/FormControl");
-/* harmony import */ var _material_ui_core_FormControl__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_FormControl__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @material-ui/core/MenuItem */ "@material-ui/core/MenuItem");
-/* harmony import */ var _material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _material_ui_core_InputLabel__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @material-ui/core/InputLabel */ "@material-ui/core/InputLabel");
-/* harmony import */ var _material_ui_core_InputLabel__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_InputLabel__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _src_actions__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../src/actions */ "./src/actions.js");
-var _jsxFileName = "C:\\Users\\nicho_000\\Documents\\RehabRobotV2\\server\\components\\Generic\\Dropdown5.jsx";
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-
-
-
-
-
-
-
-
-var Dropdown5 =
-/*#__PURE__*/
-function (_React$Component) {
-  _inherits(Dropdown5, _React$Component);
-
-  function Dropdown5(props) {
-    var _this;
-
-    _classCallCheck(this, Dropdown5);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Dropdown5).call(this, props));
-    _this.handleChange = _this.handleChange.bind(_assertThisInitialized(_this));
-    return _this;
-  }
-
-  _createClass(Dropdown5, [{
-    key: "handleChange",
-    value: function handleChange(event) {
-      this.props.setValue(this.props.id, event.target.value);
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        style: {
-          padding: 12
-        },
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 24
-        },
-        __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_FormControl__WEBPACK_IMPORTED_MODULE_3___default.a, {
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 25
-        },
-        __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_InputLabel__WEBPACK_IMPORTED_MODULE_5___default.a, {
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 26
-        },
-        __self: this
-      }, this.props.text), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Select__WEBPACK_IMPORTED_MODULE_2___default.a, {
-        value: this.props.value,
-        onChange: this.handleChange,
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 27
-        },
-        __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_4___default.a, {
-        value: "",
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 31
-        },
-        __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("em", {
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 32
-        },
-        __self: this
-      }, "None")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_4___default.a, {
-        value: 1,
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 34
-        },
-        __self: this
-      }, this.props.select1), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_4___default.a, {
-        value: 2,
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 35
-        },
-        __self: this
-      }, this.props.select2), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_4___default.a, {
-        value: 3,
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 36
-        },
-        __self: this
-      }, this.props.select3), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_4___default.a, {
-        value: 4,
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 37
-        },
-        __self: this
-      }, this.props.select4), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_4___default.a, {
-        value: 5,
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 38
-        },
-        __self: this
-      }, this.props.select5))));
-    }
-  }]);
-
-  return Dropdown5;
-}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
-
-function mapStateToProps(state) {
-  return {
-    game: state.game
-  };
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, {
-  setValue: _src_actions__WEBPACK_IMPORTED_MODULE_6__["setValue"]
-})(Dropdown5));
-
-/***/ }),
-
-/***/ "./components/Generic/Dropdown6.jsx":
-/*!******************************************!*\
-  !*** ./components/Generic/Dropdown6.jsx ***!
-  \******************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "react-redux");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_redux__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _material_ui_core_Select__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @material-ui/core/Select */ "@material-ui/core/Select");
-/* harmony import */ var _material_ui_core_Select__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_Select__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _material_ui_core_FormControl__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @material-ui/core/FormControl */ "@material-ui/core/FormControl");
-/* harmony import */ var _material_ui_core_FormControl__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_FormControl__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @material-ui/core/MenuItem */ "@material-ui/core/MenuItem");
-/* harmony import */ var _material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _material_ui_core_InputLabel__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @material-ui/core/InputLabel */ "@material-ui/core/InputLabel");
-/* harmony import */ var _material_ui_core_InputLabel__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_InputLabel__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _src_actions__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../src/actions */ "./src/actions.js");
-var _jsxFileName = "C:\\Users\\nicho_000\\Documents\\RehabRobotV2\\server\\components\\Generic\\Dropdown6.jsx";
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-
-
-
-
-
-
-
-
-var Dropdown6 =
-/*#__PURE__*/
-function (_React$Component) {
-  _inherits(Dropdown6, _React$Component);
-
-  function Dropdown6(props) {
-    var _this;
-
-    _classCallCheck(this, Dropdown6);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Dropdown6).call(this, props));
-    _this.handleChange = _this.handleChange.bind(_assertThisInitialized(_this));
-    return _this;
-  }
-
-  _createClass(Dropdown6, [{
-    key: "handleChange",
-    value: function handleChange(event) {
-      this.props.setValue(this.props.id, event.target.value);
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        style: {
-          padding: 12
-        },
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 24
-        },
-        __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_FormControl__WEBPACK_IMPORTED_MODULE_3___default.a, {
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 25
-        },
-        __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_InputLabel__WEBPACK_IMPORTED_MODULE_5___default.a, {
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 26
-        },
-        __self: this
-      }, this.props.text), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Select__WEBPACK_IMPORTED_MODULE_2___default.a, {
-        value: this.props.value,
-        onChange: this.handleChange,
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 27
-        },
-        __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_4___default.a, {
-        value: "",
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 31
-        },
-        __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("em", {
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 32
-        },
-        __self: this
-      }, "None")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_4___default.a, {
-        value: 1,
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 34
-        },
-        __self: this
-      }, this.props.select1), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_4___default.a, {
-        value: 2,
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 35
-        },
-        __self: this
-      }, this.props.select2), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_4___default.a, {
-        value: 3,
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 36
-        },
-        __self: this
-      }, this.props.select3), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_4___default.a, {
-        value: 4,
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 37
-        },
-        __self: this
-      }, this.props.select4), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_4___default.a, {
-        value: 5,
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 38
-        },
-        __self: this
-      }, this.props.select5), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_4___default.a, {
-        value: 6,
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 39
-        },
-        __self: this
-      }, this.props.select6))));
-    }
-  }]);
-
-  return Dropdown6;
-}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
-
-function mapStateToProps(state) {
-  return {
-    game: state.game
-  };
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, {
-  setValue: _src_actions__WEBPACK_IMPORTED_MODULE_6__["setValue"]
-})(Dropdown6));
-
-/***/ }),
-
-/***/ "./components/Generic/HomeButton.jsx":
-/*!*******************************************!*\
-  !*** ./components/Generic/HomeButton.jsx ***!
-  \*******************************************/
+/***/ "./components/Generic/GenericButton.jsx":
+/*!**********************************************!*\
+  !*** ./components/Generic/GenericButton.jsx ***!
+  \**********************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1503,7 +1042,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _src_actions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../src/actions */ "./src/actions.js");
 /* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! socket.io-client */ "socket.io-client");
 /* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(socket_io_client__WEBPACK_IMPORTED_MODULE_4__);
-var _jsxFileName = "C:\\Users\\nicho_000\\Documents\\RehabRobotV2\\server\\components\\Generic\\HomeButton.jsx";
+var _jsxFileName = "C:\\Users\\nicho_000\\Documents\\RehabRobotV2\\server\\components\\Generic\\GenericButton.jsx";
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -1529,30 +1068,53 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
-
-var HomeButton =
+var GenericButton =
 /*#__PURE__*/
 function (_React$Component) {
-  _inherits(HomeButton, _React$Component);
+  _inherits(GenericButton, _React$Component);
 
-  function HomeButton(props) {
+  function GenericButton(props) {
     var _this;
 
-    _classCallCheck(this, HomeButton);
+    _classCallCheck(this, GenericButton);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(HomeButton).call(this, props));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(GenericButton).call(this, props));
     _this.run = _this.run.bind(_assertThisInitialized(_this));
     return _this;
   }
 
-  _createClass(HomeButton, [{
+  _createClass(GenericButton, [{
     key: "run",
     value: function run() {
-      //change this to send different data
-      var dataToSend = 'HOME';
-      console.log(dataToSend);
-      this.props.socket.emit('START_ROBOT', dataToSend);
-      this.props.setValue('home', 1);
+      var dataToSend = 0;
+
+      switch (this.props.message) {
+        case "SET":
+          if (this.props.HOME == 0 && this.props.RUN == 0) {
+            dataToSend = 'SET_exp' + this.props.exp + '_' + '_game' + this.props.game + '_';
+            this.props.setValue(this.props.message, 1);
+          }
+
+          break;
+
+        case "HOME":
+          if (this.props.SET == 1 && this.props.RUN == 0) {
+            dataToSend = this.props.message;
+            this.props.setValue(this.props.message, 1);
+          }
+
+          break;
+
+        case "RUN":
+          if (this.props.SET == 1 && this.props.HOME == 1) {
+            dataToSend = this.props.message;
+            this.props.setValue(this.props.message, 1);
+          }
+
+          break;
+      }
+
+      if (dataToSend != 0) this.props.socket.emit('MESSAGE', dataToSend);
     }
   }, {
     key: "render",
@@ -1563,7 +1125,7 @@ function (_React$Component) {
         },
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 30
+          lineNumber: 56
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_1___default.a, {
@@ -1572,26 +1134,28 @@ function (_React$Component) {
         onClick: this.run,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 31
+          lineNumber: 57
         },
         __self: this
       }, this.props.text));
     }
   }]);
 
-  return HomeButton;
+  return GenericButton;
 }(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
 
 function mapStateToProps(state) {
   return {
-    socket: state.socket
+    socket: state.socket,
+    SET: state.SET,
+    HOME: state.HOME,
+    RUN: state.RUN
   };
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(mapStateToProps, {
-  runRobot: _src_actions__WEBPACK_IMPORTED_MODULE_3__["runRobot"],
   setValue: _src_actions__WEBPACK_IMPORTED_MODULE_3__["setValue"]
-})(HomeButton)); //
+})(GenericButton)); //
 
 /***/ }),
 
@@ -1657,7 +1221,7 @@ function (_React$Component) {
       console.log("New parameter");
       var name = _this.props.paramName;
 
-      _this.props.setParam(name, event.target.value);
+      _this.props.setValue(name, event.target.value);
     });
 
     return _this;
@@ -1695,253 +1259,15 @@ function mapStateToProps(state) {
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, {
-  setParam: _src_actions__WEBPACK_IMPORTED_MODULE_4__["setParam"]
+  setValue: _src_actions__WEBPACK_IMPORTED_MODULE_4__["setValue"]
 })(InputText));
 
 /***/ }),
 
-/***/ "./components/Generic/RunButton.jsx":
-/*!******************************************!*\
-  !*** ./components/Generic/RunButton.jsx ***!
-  \******************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _material_ui_core_Button__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @material-ui/core/Button */ "@material-ui/core/Button");
-/* harmony import */ var _material_ui_core_Button__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-redux */ "react-redux");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_redux__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _src_actions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../src/actions */ "./src/actions.js");
-/* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! socket.io-client */ "socket.io-client");
-/* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(socket_io_client__WEBPACK_IMPORTED_MODULE_4__);
-var _jsxFileName = "C:\\Users\\nicho_000\\Documents\\RehabRobotV2\\server\\components\\Generic\\RunButton.jsx";
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-
-
-
-
-
-
-
-var RunButton =
-/*#__PURE__*/
-function (_React$Component) {
-  _inherits(RunButton, _React$Component);
-
-  function RunButton(props) {
-    var _this;
-
-    _classCallCheck(this, RunButton);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(RunButton).call(this, props));
-    _this.run = _this.run.bind(_assertThisInitialized(_this));
-    return _this;
-  }
-
-  _createClass(RunButton, [{
-    key: "run",
-    value: function run() {
-      //change this to send different data
-      if (this.props.home == 1) {
-        var dataToSend = 'RUN';
-        console.log(dataToSend);
-        this.props.socket.emit('START_ROBOT', dataToSend);
-        this.props.setValue('run', 1);
-      }
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        style: {
-          padding: 12
-        },
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 34
-        },
-        __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_1___default.a, {
-        variant: "contained",
-        color: "primary",
-        onClick: this.run,
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 35
-        },
-        __self: this
-      }, this.props.text));
-    }
-  }]);
-
-  return RunButton;
-}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
-
-function mapStateToProps(state) {
-  return {
-    socket: state.socket,
-    stage: state.stage,
-    home: state.home
-  };
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(mapStateToProps, {
-  runRobot: _src_actions__WEBPACK_IMPORTED_MODULE_3__["runRobot"],
-  setValue: _src_actions__WEBPACK_IMPORTED_MODULE_3__["setValue"]
-})(RunButton)); //
-
-/***/ }),
-
-/***/ "./components/Generic/SetButton.jsx":
-/*!******************************************!*\
-  !*** ./components/Generic/SetButton.jsx ***!
-  \******************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _material_ui_core_Button__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @material-ui/core/Button */ "@material-ui/core/Button");
-/* harmony import */ var _material_ui_core_Button__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-redux */ "react-redux");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_redux__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _src_actions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../src/actions */ "./src/actions.js");
-/* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! socket.io-client */ "socket.io-client");
-/* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(socket_io_client__WEBPACK_IMPORTED_MODULE_4__);
-var _jsxFileName = "C:\\Users\\nicho_000\\Documents\\RehabRobotV2\\server\\components\\Generic\\SetButton.jsx";
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-
-
-
-
-
-
-
-var RunButton =
-/*#__PURE__*/
-function (_React$Component) {
-  _inherits(RunButton, _React$Component);
-
-  function RunButton(props) {
-    var _this;
-
-    _classCallCheck(this, RunButton);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(RunButton).call(this, props));
-    _this.run = _this.run.bind(_assertThisInitialized(_this));
-    return _this;
-  }
-
-  _createClass(RunButton, [{
-    key: "run",
-    value: function run() {
-      //change this to send different data
-
-      /*
-      let dataToSend = 'SET_P' + this.props.P + '_D' + this.props.D + '_xdes' + this.props.xdes +
-                       '_xmax' + this.props.xmax + '_vmax' + this.props.vmax +  
-                       '_K' + this.props.K + '_B' + this.props.B +'_M' + this.props.M + '_GAME' + this.props.game + '_END';
-      */
-      var dataToSend = 'SET_exp' + this.props.exp + '_' + '_game' + this.props.game + '_';
-      console.log(dataToSend);
-      this.props.socket.emit('START_ROBOT', dataToSend);
-      if (this.props.exp == 2) this.props.setParam('game', 3);
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        style: {
-          padding: 12
-        },
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 37
-        },
-        __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_1___default.a, {
-        variant: "contained",
-        color: "primary",
-        onClick: this.run,
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 38
-        },
-        __self: this
-      }, this.props.text));
-    }
-  }]);
-
-  return RunButton;
-}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
-
-function mapStateToProps(state) {
-  return {
-    socket: state.socket,
-    P: state.P,
-    D: state.D,
-    xdes: state.xdes,
-    K: state.K,
-    B: state.B,
-    M: state.M,
-    game: state.game,
-    exp: state.exp
-  };
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(mapStateToProps, {
-  runRobot: _src_actions__WEBPACK_IMPORTED_MODULE_3__["runRobot"],
-  setParam: _src_actions__WEBPACK_IMPORTED_MODULE_3__["setParam"]
-})(RunButton)); //
-
-/***/ }),
-
-/***/ "./components/Instructions/Balance_Instruction.jsx":
-/*!*********************************************************!*\
-  !*** ./components/Instructions/Balance_Instruction.jsx ***!
-  \*********************************************************/
+/***/ "./components/Pages/DataPage.jsx":
+/*!***************************************!*\
+  !*** ./components/Pages/DataPage.jsx ***!
+  \***************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1951,7 +1277,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "react-redux");
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_redux__WEBPACK_IMPORTED_MODULE_1__);
-var _jsxFileName = "C:\\Users\\nicho_000\\Documents\\RehabRobotV2\\server\\components\\Instructions\\Balance_Instruction.jsx";
+var _jsxFileName = "C:\\Users\\nicho_000\\Documents\\RehabRobotV2\\server\\components\\Pages\\DataPage.jsx";
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -1974,472 +1300,38 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
-var Balance_Instruction =
+var DataPage =
 /*#__PURE__*/
 function (_React$Component) {
-  _inherits(Balance_Instruction, _React$Component);
+  _inherits(DataPage, _React$Component);
 
-  function Balance_Instruction(props) {
-    _classCallCheck(this, Balance_Instruction);
+  function DataPage(props) {
+    _classCallCheck(this, DataPage);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(Balance_Instruction).call(this, props));
+    return _possibleConstructorReturn(this, _getPrototypeOf(DataPage).call(this, props));
   }
 
-  _createClass(Balance_Instruction, [{
+  _createClass(DataPage, [{
     key: "render",
     value: function render() {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 14
+          lineNumber: 12
         },
         __self: this
-      }, "Keep your player (BLUE) on the column. Disturbances will be launched from the left or right (ORANGE). Push the diturbances out of the arena by applying force.");
+      }, " Data Page");
     }
   }]);
 
-  return Balance_Instruction;
+  return DataPage;
 }(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
 
 function mapStateToProps(state) {
   return {};
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, {})(Balance_Instruction));
-
-/***/ }),
-
-/***/ "./components/Instructions/FollowTraj_Instruction.jsx":
-/*!************************************************************!*\
-  !*** ./components/Instructions/FollowTraj_Instruction.jsx ***!
-  \************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "react-redux");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_redux__WEBPACK_IMPORTED_MODULE_1__);
-var _jsxFileName = "C:\\Users\\nicho_000\\Documents\\RehabRobotV2\\server\\components\\Instructions\\FollowTraj_Instruction.jsx";
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-
-
-
-var FollowTraj_Instruction =
-/*#__PURE__*/
-function (_React$Component) {
-  _inherits(FollowTraj_Instruction, _React$Component);
-
-  function FollowTraj_Instruction(props) {
-    _classCallCheck(this, FollowTraj_Instruction);
-
-    return _possibleConstructorReturn(this, _getPrototypeOf(FollowTraj_Instruction).call(this, props));
-  }
-
-  _createClass(FollowTraj_Instruction, [{
-    key: "render",
-    value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 14
-        },
-        __self: this
-      }, "Follow the trajectory displayed on screen as closely as possible. Points are earned by staying close to the desired point.");
-    }
-  }]);
-
-  return FollowTraj_Instruction;
-}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
-
-function mapStateToProps(state) {
-  return {};
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, {})(FollowTraj_Instruction));
-
-/***/ }),
-
-/***/ "./components/Instructions/FollowVel_Instruction.jsx":
-/*!***********************************************************!*\
-  !*** ./components/Instructions/FollowVel_Instruction.jsx ***!
-  \***********************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "react-redux");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_redux__WEBPACK_IMPORTED_MODULE_1__);
-var _jsxFileName = "C:\\Users\\nicho_000\\Documents\\RehabRobotV2\\server\\components\\Instructions\\FollowVel_Instruction.jsx";
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-
-
-
-var FollowVel_Instruction =
-/*#__PURE__*/
-function (_React$Component) {
-  _inherits(FollowVel_Instruction, _React$Component);
-
-  function FollowVel_Instruction(props) {
-    _classCallCheck(this, FollowVel_Instruction);
-
-    return _possibleConstructorReturn(this, _getPrototypeOf(FollowVel_Instruction).call(this, props));
-  }
-
-  _createClass(FollowVel_Instruction, [{
-    key: "render",
-    value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 14
-        },
-        __self: this
-      }, "Move at the desired velocity as closely as possible. The display bar will rise if you are moving too fast, a and will lower if you are going too slow.");
-    }
-  }]);
-
-  return FollowVel_Instruction;
-}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
-
-function mapStateToProps(state) {
-  return {};
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, {})(FollowVel_Instruction));
-
-/***/ }),
-
-/***/ "./components/Instructions/Gait_Instruction.jsx":
-/*!******************************************************!*\
-  !*** ./components/Instructions/Gait_Instruction.jsx ***!
-  \******************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "react-redux");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_redux__WEBPACK_IMPORTED_MODULE_1__);
-var _jsxFileName = "C:\\Users\\nicho_000\\Documents\\RehabRobotV2\\server\\components\\Instructions\\Gait_Instruction.jsx";
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-
-
-
-var Gait_Instruction =
-/*#__PURE__*/
-function (_React$Component) {
-  _inherits(Gait_Instruction, _React$Component);
-
-  function Gait_Instruction(props) {
-    _classCallCheck(this, Gait_Instruction);
-
-    return _possibleConstructorReturn(this, _getPrototypeOf(Gait_Instruction).call(this, props));
-  }
-
-  _createClass(Gait_Instruction, [{
-    key: "render",
-    value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 14
-        },
-        __self: this
-      }, "Gait");
-    }
-  }]);
-
-  return Gait_Instruction;
-}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
-
-function mapStateToProps(state) {
-  return {};
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, {})(Gait_Instruction));
-
-/***/ }),
-
-/***/ "./components/Instructions/Race_Instruction.jsx":
-/*!******************************************************!*\
-  !*** ./components/Instructions/Race_Instruction.jsx ***!
-  \******************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "react-redux");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_redux__WEBPACK_IMPORTED_MODULE_1__);
-var _jsxFileName = "C:\\Users\\nicho_000\\Documents\\RehabRobotV2\\server\\components\\Instructions\\Race_Instruction.jsx";
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-
-
-
-var Race_Instruction =
-/*#__PURE__*/
-function (_React$Component) {
-  _inherits(Race_Instruction, _React$Component);
-
-  function Race_Instruction(props) {
-    _classCallCheck(this, Race_Instruction);
-
-    return _possibleConstructorReturn(this, _getPrototypeOf(Race_Instruction).call(this, props));
-  }
-
-  _createClass(Race_Instruction, [{
-    key: "render",
-    value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 14
-        },
-        __self: this
-      }, "Follow the desired trajectory. The closer you follow, the faster your player will move around the track.");
-    }
-  }]);
-
-  return Race_Instruction;
-}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
-
-function mapStateToProps(state) {
-  return {};
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, {})(Race_Instruction));
-
-/***/ }),
-
-/***/ "./components/Pages/BasicSetupPage.jsx":
-/*!*********************************************!*\
-  !*** ./components/Pages/BasicSetupPage.jsx ***!
-  \*********************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "react-redux");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_redux__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _src_actions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../src/actions */ "./src/actions.js");
-/* harmony import */ var _Generic_SetButton__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Generic/SetButton */ "./components/Generic/SetButton.jsx");
-/* harmony import */ var _Generic_RunButton__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Generic/RunButton */ "./components/Generic/RunButton.jsx");
-/* harmony import */ var _Generic_InputText__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Generic/InputText */ "./components/Generic/InputText.jsx");
-/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @material-ui/core/styles */ "@material-ui/core/styles");
-/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @material-ui/core/Typography */ "@material-ui/core/Typography");
-/* harmony import */ var _material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_7__);
-var _jsxFileName = "C:\\Users\\nicho_000\\Documents\\RehabRobotV2\\server\\components\\Pages\\BasicSetupPage.jsx";
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-
-
-
-
-
-
-
-
-
-var BasicSetupPage =
-/*#__PURE__*/
-function (_React$Component) {
-  _inherits(BasicSetupPage, _React$Component);
-
-  function BasicSetupPage(props) {
-    _classCallCheck(this, BasicSetupPage);
-
-    return _possibleConstructorReturn(this, _getPrototypeOf(BasicSetupPage).call(this, props));
-  }
-
-  _createClass(BasicSetupPage, [{
-    key: "render",
-    value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 21
-        },
-        __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_7___default.a, {
-        variant: "display1",
-        gutterBottom: true,
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 22
-        },
-        __self: this
-      }, "Set Up a Session"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        style: {
-          padding: 24
-        },
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 25
-        },
-        __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_InputText__WEBPACK_IMPORTED_MODULE_5__["default"], {
-        text: "Resistance Level",
-        textValue: this.props.P,
-        paramName: "P",
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 26
-        },
-        __self: this
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        style: {
-          padding: 12
-        },
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 29
-        },
-        __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_SetButton__WEBPACK_IMPORTED_MODULE_3__["default"], {
-        text: "Set",
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 30
-        },
-        __self: this
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        style: {
-          padding: 12
-        },
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 32
-        },
-        __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_RunButton__WEBPACK_IMPORTED_MODULE_4__["default"], {
-        text: "Run",
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 33
-        },
-        __self: this
-      })));
-    }
-  }]);
-
-  return BasicSetupPage;
-}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
-
-function mapStateToProps(state) {
-  return {
-    P: state.P,
-    D: state.D,
-    xdes: state.xdes,
-    K: state.K,
-    B: state.B,
-    M: state.M
-  };
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, {})(BasicSetupPage));
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, {})(DataPage));
 
 /***/ }),
 
@@ -2513,7 +1405,7 @@ function (_React$Component) {
     _defineProperty(_assertThisInitialized(_this), "handleChange", function (event) {
       console.log(parseInt(event.target.value));
 
-      _this.props.setUser(parseInt(event.target.value));
+      _this.props.setValue('user', parseInt(event.target.value));
     });
 
     return _this;
@@ -2578,22 +1470,6 @@ function (_React$Component) {
           lineNumber: 34
         },
         __self: this
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_FormControlLabel__WEBPACK_IMPORTED_MODULE_5___default.a, {
-        value: "3",
-        control: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Radio__WEBPACK_IMPORTED_MODULE_2___default.a, {
-          color: "secondary",
-          __source: {
-            fileName: _jsxFileName,
-            lineNumber: 35
-          },
-          __self: this
-        }),
-        label: "Expriment",
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 35
-        },
-        __self: this
       })));
     }
   }]);
@@ -2608,7 +1484,7 @@ function mapStateToProps(state) {
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, {
-  setUser: _src_actions__WEBPACK_IMPORTED_MODULE_7__["setUser"]
+  setValue: _src_actions__WEBPACK_IMPORTED_MODULE_7__["setValue"]
 })(SettingsPage));
 
 /***/ }),
@@ -2626,26 +1502,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "react-redux");
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_redux__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _src_actions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../src/actions */ "./src/actions.js");
-/* harmony import */ var _Generic_SetButton__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Generic/SetButton */ "./components/Generic/SetButton.jsx");
-/* harmony import */ var _Generic_HomeButton__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Generic/HomeButton */ "./components/Generic/HomeButton.jsx");
-/* harmony import */ var _Generic_RunButton__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Generic/RunButton */ "./components/Generic/RunButton.jsx");
-/* harmony import */ var _Generic_InputText__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../Generic/InputText */ "./components/Generic/InputText.jsx");
-/* harmony import */ var _Generic_Dropdown__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../Generic/Dropdown */ "./components/Generic/Dropdown.jsx");
-/* harmony import */ var _Setups_FollowTraj_Dev__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../Setups/FollowTraj_Dev */ "./components/Setups/FollowTraj_Dev.jsx");
-/* harmony import */ var _Setups_FollowVel_Dev__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../Setups/FollowVel_Dev */ "./components/Setups/FollowVel_Dev.jsx");
-/* harmony import */ var _Setups_Balance_Dev__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../Setups/Balance_Dev */ "./components/Setups/Balance_Dev.jsx");
-/* harmony import */ var _Setups_Gait_Dev__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../Setups/Gait_Dev */ "./components/Setups/Gait_Dev.jsx");
-/* harmony import */ var _Setups_FollowTraj__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../Setups/FollowTraj */ "./components/Setups/FollowTraj.jsx");
-/* harmony import */ var _Setups_FollowVel__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../Setups/FollowVel */ "./components/Setups/FollowVel.jsx");
-/* harmony import */ var _Setups_Balance__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../Setups/Balance */ "./components/Setups/Balance.jsx");
-/* harmony import */ var _Setups_Gait__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../Setups/Gait */ "./components/Setups/Gait.jsx");
-/* harmony import */ var _material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @material-ui/core/Grid */ "@material-ui/core/Grid");
-/* harmony import */ var _material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_16__);
-/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @material-ui/core/styles */ "@material-ui/core/styles");
-/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_17___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_17__);
-/* harmony import */ var _material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @material-ui/core/Typography */ "@material-ui/core/Typography");
-/* harmony import */ var _material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_18___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_18__);
+/* harmony import */ var _Generic_GenericButton__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Generic/GenericButton */ "./components/Generic/GenericButton.jsx");
+/* harmony import */ var _Generic_InputText__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Generic/InputText */ "./components/Generic/InputText.jsx");
+/* harmony import */ var _Generic_Dropdown__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Generic/Dropdown */ "./components/Generic/Dropdown.jsx");
+/* harmony import */ var _Setups_FollowTraj_Dev__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Setups/FollowTraj_Dev */ "./components/Setups/FollowTraj_Dev.jsx");
+/* harmony import */ var _Setups_FollowVel_Dev__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../Setups/FollowVel_Dev */ "./components/Setups/FollowVel_Dev.jsx");
+/* harmony import */ var _Setups_Balance_Dev__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../Setups/Balance_Dev */ "./components/Setups/Balance_Dev.jsx");
+/* harmony import */ var _Setups_FollowTraj__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../Setups/FollowTraj */ "./components/Setups/FollowTraj.jsx");
+/* harmony import */ var _Setups_FollowVel__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../Setups/FollowVel */ "./components/Setups/FollowVel.jsx");
+/* harmony import */ var _Setups_Balance__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../Setups/Balance */ "./components/Setups/Balance.jsx");
+/* harmony import */ var _material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @material-ui/core/Grid */ "@material-ui/core/Grid");
+/* harmony import */ var _material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @material-ui/core/styles */ "@material-ui/core/styles");
+/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var _material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @material-ui/core/Typography */ "@material-ui/core/Typography");
+/* harmony import */ var _material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_13__);
 var _jsxFileName = "C:\\Users\\nicho_000\\Documents\\RehabRobotV2\\server\\components\\Pages\\SetupPage.jsx";
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -2665,11 +1536,6 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-
-
-
-
 
 
 
@@ -2712,13 +1578,13 @@ function (_React$Component) {
             this.state.contents = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 40
+                lineNumber: 37
               },
               __self: this
-            }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Setups_FollowTraj_Dev__WEBPACK_IMPORTED_MODULE_8__["default"], {
+            }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Setups_FollowTraj_Dev__WEBPACK_IMPORTED_MODULE_5__["default"], {
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 40
+                lineNumber: 37
               },
               __self: this
             }), " ");
@@ -2728,13 +1594,13 @@ function (_React$Component) {
             this.state.contents = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 43
+                lineNumber: 40
               },
               __self: this
-            }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Setups_FollowVel_Dev__WEBPACK_IMPORTED_MODULE_9__["default"], {
+            }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Setups_FollowVel_Dev__WEBPACK_IMPORTED_MODULE_6__["default"], {
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 43
+                lineNumber: 40
               },
               __self: this
             }), " ");
@@ -2744,29 +1610,13 @@ function (_React$Component) {
             this.state.contents = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 46
+                lineNumber: 43
               },
               __self: this
-            }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Setups_Balance_Dev__WEBPACK_IMPORTED_MODULE_10__["default"], {
+            }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Setups_Balance_Dev__WEBPACK_IMPORTED_MODULE_7__["default"], {
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 46
-              },
-              __self: this
-            }), " ");
-            break;
-
-          case 4:
-            this.state.contents = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 49
-              },
-              __self: this
-            }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Setups_Gait_Dev__WEBPACK_IMPORTED_MODULE_11__["default"], {
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 49
+                lineNumber: 43
               },
               __self: this
             }), " ");
@@ -2776,7 +1626,7 @@ function (_React$Component) {
             this.state.contents = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 52
+                lineNumber: 46
               },
               __self: this
             }, " Select a Game ");
@@ -2787,13 +1637,13 @@ function (_React$Component) {
             this.state.contents = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 58
+                lineNumber: 52
               },
               __self: this
-            }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Setups_FollowTraj__WEBPACK_IMPORTED_MODULE_12__["default"], {
+            }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Setups_FollowTraj__WEBPACK_IMPORTED_MODULE_8__["default"], {
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 58
+                lineNumber: 52
               },
               __self: this
             }), " ");
@@ -2803,13 +1653,13 @@ function (_React$Component) {
             this.state.contents = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 61
+                lineNumber: 55
               },
               __self: this
-            }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Setups_FollowVel__WEBPACK_IMPORTED_MODULE_13__["default"], {
+            }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Setups_FollowVel__WEBPACK_IMPORTED_MODULE_9__["default"], {
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 61
+                lineNumber: 55
               },
               __self: this
             }), " ");
@@ -2819,29 +1669,13 @@ function (_React$Component) {
             this.state.contents = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 64
+                lineNumber: 58
               },
               __self: this
-            }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Setups_Balance__WEBPACK_IMPORTED_MODULE_14__["default"], {
+            }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Setups_Balance__WEBPACK_IMPORTED_MODULE_10__["default"], {
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 64
-              },
-              __self: this
-            }), " ");
-            break;
-
-          case 4:
-            this.state.contents = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 67
-              },
-              __self: this
-            }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Setups_Gait__WEBPACK_IMPORTED_MODULE_15__["default"], {
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 67
+                lineNumber: 58
               },
               __self: this
             }), " ");
@@ -2851,7 +1685,7 @@ function (_React$Component) {
             this.state.contents = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 70
+                lineNumber: 61
               },
               __self: this
             }, " Select a Game ");
@@ -2861,39 +1695,39 @@ function (_React$Component) {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 78
+          lineNumber: 69
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 79
+          lineNumber: 70
         },
         __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_16___default.a, {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_11___default.a, {
         container: true,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 80
+          lineNumber: 71
         },
         __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_16___default.a, {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_11___default.a, {
         item: true,
         xs: true,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 81
+          lineNumber: 72
         },
         __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_18___default.a, {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_13___default.a, {
         variant: "display1",
         gutterBottom: true,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 82
+          lineNumber: 73
         },
         __self: this
-      }, "Game Type"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_Dropdown__WEBPACK_IMPORTED_MODULE_7__["default"], {
+      }, "Game Type"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_Dropdown__WEBPACK_IMPORTED_MODULE_4__["default"], {
         text: "Game",
         id: "game",
         value: this.props.game,
@@ -2902,30 +1736,30 @@ function (_React$Component) {
         select3: "Balance",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 85
+          lineNumber: 76
         },
         __self: this
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 86
+          lineNumber: 77
         },
         __self: this
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 87
+          lineNumber: 78
         },
         __self: this
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_18___default.a, {
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_13___default.a, {
         variant: "display1",
         gutterBottom: true,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 88
+          lineNumber: 79
         },
         __self: this
-      }, "Trajectory"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_Dropdown__WEBPACK_IMPORTED_MODULE_7__["default"], {
+      }, "Trajectory"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_Dropdown__WEBPACK_IMPORTED_MODULE_4__["default"], {
         text: "Trajectory Profile",
         id: "game",
         value: this.props.game,
@@ -2934,68 +1768,97 @@ function (_React$Component) {
         select3: "Custom Trajectory 2",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 91
+          lineNumber: 82
         },
         __self: this
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_16___default.a, {
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_11___default.a, {
         item: true,
         xs: true,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 94
+          lineNumber: 85
         },
         __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_18___default.a, {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_13___default.a, {
         variant: "display1",
         gutterBottom: true,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 86
+        },
+        __self: this
+      }, "Parameters"), this.state.contents), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_11___default.a, {
+        item: true,
+        xs: true,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 91
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_13___default.a, {
+        variant: "display1",
+        gutterBottom: true,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 92
+        },
+        __self: this
+      }, "Send Commands"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_GenericButton__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        text: "Set",
+        message: "SET",
         __source: {
           fileName: _jsxFileName,
           lineNumber: 95
         },
         __self: this
-      }, "Parameters"), this.state.contents), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_16___default.a, {
-        item: true,
-        xs: true,
+      }), this.props.SET, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_GenericButton__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        text: "Home",
+        message: "HOME",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 100
+          lineNumber: 97
         },
         __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_18___default.a, {
-        variant: "display1",
-        gutterBottom: true,
+      }), this.props.HOME, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_GenericButton__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        text: "Run",
+        message: "RUN",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 99
+        },
+        __self: this
+      }), this.props.RUN, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", {
         __source: {
           fileName: _jsxFileName,
           lineNumber: 101
         },
         __self: this
-      }, "Send Commands"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_SetButton__WEBPACK_IMPORTED_MODULE_3__["default"], {
-        text: "Set",
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 104
+          lineNumber: 102
         },
         __self: this
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_HomeButton__WEBPACK_IMPORTED_MODULE_4__["default"], {
-        text: "Home",
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_13___default.a, {
+        variant: "display1",
+        gutterBottom: true,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 105
+          lineNumber: 103
         },
         __self: this
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_RunButton__WEBPACK_IMPORTED_MODULE_5__["default"], {
-        text: "Run",
+      }, "Robot Status"), "Status:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 106
+          lineNumber: 107
         },
         __self: this
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_16___default.a, {
+      }), "Total Length:"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_11___default.a, {
         item: true,
         xs: true,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 108
+          lineNumber: 110
         },
         __self: this
       }))));
@@ -3014,594 +1877,14 @@ function mapStateToProps(state) {
     B: state.B,
     M: state.M,
     game: state.game,
-    user: state.user
+    user: state.user,
+    RUN: state.RUN,
+    HOME: state.HOME,
+    SET: state.SET
   };
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, {})(SetupPage));
-
-/***/ }),
-
-/***/ "./components/Pages/UserPage.jsx":
-/*!***************************************!*\
-  !*** ./components/Pages/UserPage.jsx ***!
-  \***************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "react-redux");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_redux__WEBPACK_IMPORTED_MODULE_1__);
-var _jsxFileName = "C:\\Users\\nicho_000\\Documents\\RehabRobotV2\\server\\components\\Pages\\UserPage.jsx";
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-
-
-
-var UserPage =
-/*#__PURE__*/
-function (_React$Component) {
-  _inherits(UserPage, _React$Component);
-
-  function UserPage(props) {
-    _classCallCheck(this, UserPage);
-
-    return _possibleConstructorReturn(this, _getPrototypeOf(UserPage).call(this, props));
-  }
-
-  _createClass(UserPage, [{
-    key: "render",
-    value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 12
-        },
-        __self: this
-      }, " Test ");
-    }
-  }]);
-
-  return UserPage;
-}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
-
-function mapStateToProps(state) {
-  return {};
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, {})(UserPage));
-
-/***/ }),
-
-/***/ "./components/Pages/VisualsPage.jsx":
-/*!******************************************!*\
-  !*** ./components/Pages/VisualsPage.jsx ***!
-  \******************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "react-redux");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_redux__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _games_Follow_traj__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../games/Follow_traj */ "./games/Follow_traj.js");
-/* harmony import */ var _games_Follow_vel__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../games/Follow_vel */ "./games/Follow_vel.js");
-/* harmony import */ var _games_Follow_game__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../games/Follow_game */ "./games/Follow_game.js");
-/* harmony import */ var _games_Follow_game2__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../games/Follow_game2 */ "./games/Follow_game2.js");
-/* harmony import */ var _games_Race_game__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../games/Race_game */ "./games/Race_game.js");
-/* harmony import */ var _games_Balance_game__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../games/Balance_game */ "./games/Balance_game.js");
-/* harmony import */ var _games_Gait_game__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../games/Gait_game */ "./games/Gait_game.js");
-/* harmony import */ var _games_Block_game__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../games/Block_game */ "./games/Block_game.js");
-/* harmony import */ var _Instructions_FollowTraj_Instruction__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../Instructions/FollowTraj_Instruction */ "./components/Instructions/FollowTraj_Instruction.jsx");
-/* harmony import */ var _Instructions_FollowVel_Instruction__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../Instructions/FollowVel_Instruction */ "./components/Instructions/FollowVel_Instruction.jsx");
-/* harmony import */ var _Instructions_Race_Instruction__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../Instructions/Race_Instruction */ "./components/Instructions/Race_Instruction.jsx");
-/* harmony import */ var _Instructions_Gait_Instruction__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../Instructions/Gait_Instruction */ "./components/Instructions/Gait_Instruction.jsx");
-/* harmony import */ var _Instructions_Balance_Instruction__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../Instructions/Balance_Instruction */ "./components/Instructions/Balance_Instruction.jsx");
-/* harmony import */ var _games_Test_timer__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../../games/Test_timer */ "./games/Test_timer.js");
-/* harmony import */ var _Generic_RunButton__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../Generic/RunButton */ "./components/Generic/RunButton.jsx");
-/* harmony import */ var _Generic_HomeButton__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ../Generic/HomeButton */ "./components/Generic/HomeButton.jsx");
-/* harmony import */ var _src_actions__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ../../src/actions */ "./src/actions.js");
-var _jsxFileName = "C:\\Users\\nicho_000\\Documents\\RehabRobotV2\\server\\components\\Pages\\VisualsPage.jsx";
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-var VisualsPage =
-/*#__PURE__*/
-function (_React$Component) {
-  _inherits(VisualsPage, _React$Component);
-
-  function VisualsPage(props) {
-    var _this;
-
-    _classCallCheck(this, VisualsPage);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(VisualsPage).call(this, props));
-    _this.state = {
-      content: null
-    };
-    return _this;
-  }
-
-  _createClass(VisualsPage, [{
-    key: "render",
-    value: function render() {
-      if (this.props.run) {
-        switch (this.props.game) {
-          case 1:
-            this.state.content = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-              style: {
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              },
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 41
-              },
-              __self: this
-            }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_games_Follow_traj__WEBPACK_IMPORTED_MODULE_2__["default"], {
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 44
-              },
-              __self: this
-            }));
-            break;
-
-          case 2:
-            this.state.content = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-              style: {
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              },
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 49
-              },
-              __self: this
-            }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_games_Follow_traj__WEBPACK_IMPORTED_MODULE_2__["default"], {
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 52
-              },
-              __self: this
-            }));
-            break;
-
-          case 3:
-            this.state.content = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-              style: {
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              },
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 57
-              },
-              __self: this
-            }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_games_Follow_game2__WEBPACK_IMPORTED_MODULE_5__["default"], {
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 59
-              },
-              __self: this
-            }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_games_Follow_traj__WEBPACK_IMPORTED_MODULE_2__["default"], {
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 60
-              },
-              __self: this
-            }));
-            break;
-
-          case 4:
-            this.state.content = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-              style: {
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              },
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 65
-              },
-              __self: this
-            }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_games_Race_game__WEBPACK_IMPORTED_MODULE_6__["default"], {
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 67
-              },
-              __self: this
-            }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_games_Follow_traj__WEBPACK_IMPORTED_MODULE_2__["default"], {
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 68
-              },
-              __self: this
-            }));
-            break;
-
-          case 5:
-            this.state.content = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-              style: {
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              },
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 73
-              },
-              __self: this
-            }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_games_Balance_game__WEBPACK_IMPORTED_MODULE_7__["default"], {
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 76
-              },
-              __self: this
-            }));
-            break;
-
-          case 6:
-            this.state.content = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-              style: {
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              },
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 81
-              },
-              __self: this
-            }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_games_Block_game__WEBPACK_IMPORTED_MODULE_9__["default"], {
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 84
-              },
-              __self: this
-            }));
-
-          default:
-            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 87
-              },
-              __self: this
-            }, " Game load failed ");
-        }
-      } else {
-        switch (this.props.game) {
-          case 1:
-            this.state.content = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 95
-              },
-              __self: this
-            }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Instructions_FollowTraj_Instruction__WEBPACK_IMPORTED_MODULE_10__["default"], {
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 96
-              },
-              __self: this
-            }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-              style: {
-                display: 'inline-flex'
-              },
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 97
-              },
-              __self: this
-            }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_HomeButton__WEBPACK_IMPORTED_MODULE_17__["default"], {
-              text: "Home",
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 97
-              },
-              __self: this
-            }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_RunButton__WEBPACK_IMPORTED_MODULE_16__["default"], {
-              text: "Run",
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 97
-              },
-              __self: this
-            })));
-            break;
-
-          case 2:
-            this.state.content = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 102
-              },
-              __self: this
-            }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Instructions_FollowVel_Instruction__WEBPACK_IMPORTED_MODULE_11__["default"], {
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 103
-              },
-              __self: this
-            }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-              style: {
-                display: 'inline-flex'
-              },
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 104
-              },
-              __self: this
-            }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_HomeButton__WEBPACK_IMPORTED_MODULE_17__["default"], {
-              text: "Home",
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 104
-              },
-              __self: this
-            }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_RunButton__WEBPACK_IMPORTED_MODULE_16__["default"], {
-              text: "Run",
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 104
-              },
-              __self: this
-            })));
-            break;
-
-          case 3:
-            this.state.content = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 109
-              },
-              __self: this
-            }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Instructions_Race_Instruction__WEBPACK_IMPORTED_MODULE_12__["default"], {
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 110
-              },
-              __self: this
-            }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-              style: {
-                display: 'inline-flex'
-              },
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 111
-              },
-              __self: this
-            }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_HomeButton__WEBPACK_IMPORTED_MODULE_17__["default"], {
-              text: "Home",
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 111
-              },
-              __self: this
-            }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_RunButton__WEBPACK_IMPORTED_MODULE_16__["default"], {
-              text: "Run",
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 111
-              },
-              __self: this
-            })));
-            break;
-
-          case 4:
-            this.state.content = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 116
-              },
-              __self: this
-            }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Instructions_Race_Instruction__WEBPACK_IMPORTED_MODULE_12__["default"], {
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 117
-              },
-              __self: this
-            }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-              style: {
-                display: 'inline-flex'
-              },
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 118
-              },
-              __self: this
-            }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_HomeButton__WEBPACK_IMPORTED_MODULE_17__["default"], {
-              text: "Home",
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 118
-              },
-              __self: this
-            }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_RunButton__WEBPACK_IMPORTED_MODULE_16__["default"], {
-              text: "Run",
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 118
-              },
-              __self: this
-            })));
-            break;
-
-          case 5:
-            this.state.content = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 123
-              },
-              __self: this
-            }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Instructions_Balance_Instruction__WEBPACK_IMPORTED_MODULE_14__["default"], {
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 124
-              },
-              __self: this
-            }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-              style: {
-                display: 'inline-flex'
-              },
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 125
-              },
-              __self: this
-            }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_HomeButton__WEBPACK_IMPORTED_MODULE_17__["default"], {
-              text: "Home",
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 125
-              },
-              __self: this
-            }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_RunButton__WEBPACK_IMPORTED_MODULE_16__["default"], {
-              text: "Run",
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 125
-              },
-              __self: this
-            })));
-            break;
-
-          case 6:
-            this.state.content = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 130
-              },
-              __self: this
-            }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Instructions_Gait_Instruction__WEBPACK_IMPORTED_MODULE_13__["default"], {
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 131
-              },
-              __self: this
-            }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-              style: {
-                display: 'inline-flex'
-              },
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 132
-              },
-              __self: this
-            }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_HomeButton__WEBPACK_IMPORTED_MODULE_17__["default"], {
-              text: "Home",
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 132
-              },
-              __self: this
-            }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_RunButton__WEBPACK_IMPORTED_MODULE_16__["default"], {
-              text: "Run",
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 132
-              },
-              __self: this
-            })));
-            break;
-
-          default:
-            react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-              __source: {
-                fileName: _jsxFileName,
-                lineNumber: 136
-              },
-              __self: this
-            }, " Game load failed ");
-        }
-      }
-
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 143
-        },
-        __self: this
-      }, this.state.content);
-    }
-  }]);
-
-  return VisualsPage;
-}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
-
-function mapStateToProps(state) {
-  return {
-    game: state.game,
-    run: state.run,
-    stage: state.stage
-  };
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, {
-  setParam: _src_actions__WEBPACK_IMPORTED_MODULE_18__["setParam"]
-})(VisualsPage));
 
 /***/ }),
 
@@ -3862,161 +2145,6 @@ function mapStateToProps(state) {
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_3__["connect"])(mapStateToProps, {})(FollowVel_Dev)); //
-
-/***/ }),
-
-/***/ "./components/Setups/Experiment2019.jsx":
-/*!**********************************************!*\
-  !*** ./components/Setups/Experiment2019.jsx ***!
-  \**********************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _material_ui_core_Button__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @material-ui/core/Button */ "@material-ui/core/Button");
-/* harmony import */ var _material_ui_core_Button__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @material-ui/core/Typography */ "@material-ui/core/Typography");
-/* harmony import */ var _material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _Generic_SetButton__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Generic/SetButton */ "./components/Generic/SetButton.jsx");
-/* harmony import */ var _Generic_RunButton__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Generic/RunButton */ "./components/Generic/RunButton.jsx");
-/* harmony import */ var _Generic_HomeButton__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Generic/HomeButton */ "./components/Generic/HomeButton.jsx");
-/* harmony import */ var _Generic_Dropdown__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../Generic/Dropdown */ "./components/Generic/Dropdown.jsx");
-/* harmony import */ var _Generic_Dropdown5__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../Generic/Dropdown5 */ "./components/Generic/Dropdown5.jsx");
-/* harmony import */ var _Generic_Dropdown6__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../Generic/Dropdown6 */ "./components/Generic/Dropdown6.jsx");
-/* harmony import */ var _Generic_InputText__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../Generic/InputText */ "./components/Generic/InputText.jsx");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-redux */ "react-redux");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(react_redux__WEBPACK_IMPORTED_MODULE_10__);
-var _jsxFileName = "C:\\Users\\nicho_000\\Documents\\RehabRobotV2\\server\\components\\Setups\\Experiment2019.jsx";
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-
-
-
-
-
-
-
-
-
-
-
-
-var Experiment2019 =
-/*#__PURE__*/
-function (_React$Component) {
-  _inherits(Experiment2019, _React$Component);
-
-  function Experiment2019(props) {
-    var _this;
-
-    _classCallCheck(this, Experiment2019);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Experiment2019).call(this, props));
-    _this.state = {
-      contents: null
-    };
-    return _this;
-  }
-
-  _createClass(Experiment2019, [{
-    key: "render",
-    value: function render() {
-      if (this.props.exp == 3) {
-        this.state.contents = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_Dropdown6__WEBPACK_IMPORTED_MODULE_8__["default"], {
-          text: "Game",
-          id: "game",
-          value: this.props.game,
-          select1: "Assist",
-          select2: "Resist",
-          select3: "Cube",
-          select4: "Race",
-          select5: "Balance",
-          select6: "Block",
-          __source: {
-            fileName: _jsxFileName,
-            lineNumber: 28
-          },
-          __self: this
-        });
-      }
-
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        style: {
-          padding: 24
-        },
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 32
-        },
-        __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_2___default.a, {
-        variant: "display1",
-        gutterBottom: true,
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 33
-        },
-        __self: this
-      }, "Set Up a Session"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"], {
-        text: "Experiment",
-        id: "exp",
-        value: this.props.exp,
-        select1: "Experiment A",
-        select2: "Experiment B",
-        select3: "Practice",
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 36
-        },
-        __self: this
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 37
-        },
-        __self: this
-      }, this.state.contents), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_SetButton__WEBPACK_IMPORTED_MODULE_3__["default"], {
-        text: "Set",
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 38
-        },
-        __self: this
-      }));
-    }
-  }]);
-
-  return Experiment2019;
-}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
-
-function mapStateToProps(state) {
-  return {
-    exp: state.exp,
-    game: state.game
-  };
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_10__["connect"])(mapStateToProps, {})(Experiment2019)); //
 
 /***/ }),
 
@@ -4527,300 +2655,6 @@ function mapStateToProps(state) {
 
 /***/ }),
 
-/***/ "./components/Setups/Gait.jsx":
-/*!************************************!*\
-  !*** ./components/Setups/Gait.jsx ***!
-  \************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _material_ui_core_Button__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @material-ui/core/Button */ "@material-ui/core/Button");
-/* harmony import */ var _material_ui_core_Button__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _Generic_InputText__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Generic/InputText */ "./components/Generic/InputText.jsx");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-redux */ "react-redux");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_redux__WEBPACK_IMPORTED_MODULE_3__);
-var _jsxFileName = "C:\\Users\\nicho_000\\Documents\\RehabRobotV2\\server\\components\\Setups\\Gait.jsx";
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-
-
-
-
-
-var Gait =
-/*#__PURE__*/
-function (_React$Component) {
-  _inherits(Gait, _React$Component);
-
-  function Gait(props) {
-    _classCallCheck(this, Gait);
-
-    return _possibleConstructorReturn(this, _getPrototypeOf(Gait).call(this, props));
-  }
-
-  _createClass(Gait, [{
-    key: "render",
-    value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 17
-        },
-        __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_InputText__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        text: "Assistance Stiffness",
-        textValue: this.props.k_assist,
-        paramName: "k_assist",
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 18
-        },
-        __self: this
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_InputText__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        text: "Floor Stiffness",
-        textValue: this.props.k_floor,
-        paramName: "k_floor",
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 19
-        },
-        __self: this
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_InputText__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        text: "Gravity Stiffness",
-        textValue: this.props.k_gravity,
-        paramName: "k_gravity",
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 20
-        },
-        __self: this
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_InputText__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        text: "Admittance B",
-        textValue: this.props.B,
-        paramName: "B",
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 21
-        },
-        __self: this
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_InputText__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        text: "Admittance M",
-        textValue: this.props.M,
-        paramName: "M",
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 22
-        },
-        __self: this
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_InputText__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        text: "P Gain",
-        textValue: this.props.P,
-        paramName: "P",
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 23
-        },
-        __self: this
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_InputText__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        text: "D Gain",
-        textValue: this.props.D,
-        paramName: "D",
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 24
-        },
-        __self: this
-      }));
-    }
-  }]);
-
-  return Gait;
-}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
-
-function mapStateToProps(state) {
-  return {
-    P: state.P,
-    D: state.D,
-    k_assist: state.k_assist,
-    k_floor: state.k_floor,
-    k_gravity: state.k_gravity,
-    B: state.B,
-    M: state.M
-  };
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_3__["connect"])(mapStateToProps, {})(Gait)); //
-
-/***/ }),
-
-/***/ "./components/Setups/Gait_Dev.jsx":
-/*!****************************************!*\
-  !*** ./components/Setups/Gait_Dev.jsx ***!
-  \****************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _material_ui_core_Button__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @material-ui/core/Button */ "@material-ui/core/Button");
-/* harmony import */ var _material_ui_core_Button__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _Generic_InputText__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Generic/InputText */ "./components/Generic/InputText.jsx");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-redux */ "react-redux");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_redux__WEBPACK_IMPORTED_MODULE_3__);
-var _jsxFileName = "C:\\Users\\nicho_000\\Documents\\RehabRobotV2\\server\\components\\Setups\\Gait_Dev.jsx";
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-
-
-
-
-
-var Gait_Dev =
-/*#__PURE__*/
-function (_React$Component) {
-  _inherits(Gait_Dev, _React$Component);
-
-  function Gait_Dev(props) {
-    _classCallCheck(this, Gait_Dev);
-
-    return _possibleConstructorReturn(this, _getPrototypeOf(Gait_Dev).call(this, props));
-  }
-
-  _createClass(Gait_Dev, [{
-    key: "render",
-    value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 17
-        },
-        __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_InputText__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        text: "Assistance Stiffness",
-        textValue: this.props.k_assist,
-        paramName: "k_assist",
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 18
-        },
-        __self: this
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_InputText__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        text: "Floor Stiffness",
-        textValue: this.props.k_floor,
-        paramName: "k_floor",
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 19
-        },
-        __self: this
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_InputText__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        text: "Gravity Stiffness",
-        textValue: this.props.k_gravity,
-        paramName: "k_gravity",
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 20
-        },
-        __self: this
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_InputText__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        text: "Admittance B",
-        textValue: this.props.B,
-        paramName: "B",
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 21
-        },
-        __self: this
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_InputText__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        text: "Admittance M",
-        textValue: this.props.M,
-        paramName: "M",
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 22
-        },
-        __self: this
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_InputText__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        text: "P Gain",
-        textValue: this.props.P,
-        paramName: "P",
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 23
-        },
-        __self: this
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_InputText__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        text: "D Gain",
-        textValue: this.props.D,
-        paramName: "D",
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 24
-        },
-        __self: this
-      }));
-    }
-  }]);
-
-  return Gait_Dev;
-}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
-
-function mapStateToProps(state) {
-  return {
-    P: state.P,
-    D: state.D,
-    k_assist: state.k_assist,
-    k_floor: state.k_floor,
-    k_gravity: state.k_gravity,
-    B: state.B,
-    M: state.M
-  };
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_3__["connect"])(mapStateToProps, {})(Gait_Dev)); //
-
-/***/ }),
-
 /***/ "./components/Topbar.jsx":
 /*!*******************************!*\
   !*** ./components/Topbar.jsx ***!
@@ -4958,2047 +2792,6 @@ function mapStateToProps(state) {
 
 /***/ }),
 
-/***/ "./games/Balance_game.js":
-/*!*******************************!*\
-  !*** ./games/Balance_game.js ***!
-  \*******************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "react-redux");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_redux__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! three */ "three");
-/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(three__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _src_actions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../src/actions */ "./src/actions.js");
-var _jsxFileName = "C:\\Users\\nicho_000\\Documents\\RehabRobotV2\\server\\games\\Balance_game.js";
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-
-
- //import * as OBJLoader from 'three-obj-loader';
-
- //OBJLoader(THREE);
-//require("/home/rehab/Documents/RehabRobot/server/games/sprite/crosshair.png")
-//require("/home/rehab/Documents/RehabRobot/server/games/sprite/crosshair_yellow.png" );
-
-var Balance_game =
-/*#__PURE__*/
-function (_Component) {
-  _inherits(Balance_game, _Component);
-
-  function Balance_game(props) {
-    var _this;
-
-    _classCallCheck(this, Balance_game);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Balance_game).call(this, props));
-    _this.start = _this.start.bind(_assertThisInitialized(_this));
-    _this.stop = _this.stop.bind(_assertThisInitialized(_this));
-    _this.animate = _this.animate.bind(_assertThisInitialized(_this));
-    return _this;
-  }
-
-  _createClass(Balance_game, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      var width = this.mount.clientWidth;
-      var height = this.mount.clientHeight;
-      var scene = new three__WEBPACK_IMPORTED_MODULE_2__["Scene"]();
-      scene.background = new three__WEBPACK_IMPORTED_MODULE_2__["Color"](0xffffff);
-      var camera = new three__WEBPACK_IMPORTED_MODULE_2__["OrthographicCamera"](-width / 2, width / 2, height / 2, -height / 2, -100, 500000);
-      camera.position.set(0, 0, 5);
-      scene.add(camera);
-      var renderer = new three__WEBPACK_IMPORTED_MODULE_2__["WebGLRenderer"]({
-        antialias: true
-      });
-      renderer.setSize(width, height);
-      var columnMaterial = new three__WEBPACK_IMPORTED_MODULE_2__["MeshBasicMaterial"]({
-        color: 0xAFAFAF
-      });
-      var groundMaterial = new three__WEBPACK_IMPORTED_MODULE_2__["MeshBasicMaterial"]({
-        color: 0x137200
-      });
-      var characterMaterial = new three__WEBPACK_IMPORTED_MODULE_2__["MeshBasicMaterial"]({
-        color: 0x00A9E8
-      });
-      var ballMaterial = new three__WEBPACK_IMPORTED_MODULE_2__["MeshBasicMaterial"]({
-        color: 0xE86D00
-      }); //var column = new THREE.Mesh( new THREE.BoxBufferGeometry( 50, 200, 10 ), columnMaterial );
-      //column.position.set(0,-100,0)
-      //scene.add(column)
-
-      var ground = new three__WEBPACK_IMPORTED_MODULE_2__["Mesh"](new three__WEBPACK_IMPORTED_MODULE_2__["BoxBufferGeometry"](1000, 50, 10), groundMaterial);
-      ground.position.set(0, -175, 0);
-      scene.add(ground);
-      var character = new three__WEBPACK_IMPORTED_MODULE_2__["Mesh"](new three__WEBPACK_IMPORTED_MODULE_2__["CircleBufferGeometry"](25, 32), characterMaterial);
-      character.position.set(0, 25, 0);
-      scene.add(character);
-      var ball = new three__WEBPACK_IMPORTED_MODULE_2__["Mesh"](new three__WEBPACK_IMPORTED_MODULE_2__["CircleBufferGeometry"](10, 32), ballMaterial);
-      ball.position.set(100, 25, 0);
-      scene.add(ball);
-      var spotLight1 = new three__WEBPACK_IMPORTED_MODULE_2__["SpotLight"](0xffffff, 1);
-      spotLight1.position.set(-width / 3, 200, 200);
-      var light = new three__WEBPACK_IMPORTED_MODULE_2__["HemisphereLight"](0xffffff, 0xffffff, 1);
-      scene.add(light);
-      scene.add(spotLight1);
-      scene.add(camera);
-      var textureLoader = new three__WEBPACK_IMPORTED_MODULE_2__["TextureLoader"]();
-      var column_texture = textureLoader.load("static/textures/column.png");
-      var column_mat = new three__WEBPACK_IMPORTED_MODULE_2__["MeshBasicMaterial"]({
-        color: 0xffffff,
-        map: column_texture
-      });
-      var column = new three__WEBPACK_IMPORTED_MODULE_2__["Mesh"](new three__WEBPACK_IMPORTED_MODULE_2__["PlaneGeometry"](130, 180), column_mat);
-      column.position.set(5, -60, -200);
-      scene.add(column);
-      /*var grass_texture = textureLoader.load( "static/textures/grass_pic.jpg" );
-      var grass_mat = new THREE.MeshBasicMaterial( { color: 0xffffff, map: grass_texture } );
-      var grass = new THREE.Mesh(new THREE.PlaneGeometry(200, 100), grass_mat);
-      grass.position.set(0,0,0)
-      scene.add(grass)
-      */
-
-      var grass_geometry = new three__WEBPACK_IMPORTED_MODULE_2__["PlaneBufferGeometry"](2, 20);
-      /*for (var i = 0; i < 400; i++)
-      {
-        var material = new THREE.MeshBasicMaterial( {color: new THREE.Color().setHSL( 0.3, 0.75, ( i / 400 ) * 0.4 + 0.1 ), } );
-        var grass_height = 50*Math.random() + 20;
-        var grass_geometry = new THREE.PlaneBufferGeometry( 2, grass_height)
-        var mesh = new THREE.Mesh(grass_geometry, material)
-        mesh.position.set( 500 - 1000*Math.random() , -190 + grass_height/2, 10)
-        mesh.rotation.set(0.0, 0.0 , Math.random()*0.25)
-        scene.add(mesh)
-      }*/
-
-      this.scene = scene;
-      this.camera = camera;
-      this.renderer = renderer;
-      this.character = character;
-      this.x_prev = 0;
-      this.v_horizontal = 0;
-      this.v_verticle = 0;
-      this.ball = ball;
-      this.start_game = 0;
-      this.mount.appendChild(this.renderer.domElement);
-      this.start();
-    }
-  }, {
-    key: "componentWillUnmount",
-    value: function componentWillUnmount() {
-      this.stop();
-      this.mount.removeChild(this.renderer.domElement);
-    }
-  }, {
-    key: "start",
-    value: function start() {
-      if (!this.frameId) {
-        this.frameId = requestAnimationFrame(this.animate);
-      }
-    }
-  }, {
-    key: "stop",
-    value: function stop() {
-      cancelAnimationFrame(this.frameId);
-    }
-  }, {
-    key: "animate",
-    value: function animate() {
-      if (Math.abs(this.character.position.x) < 20 && this.start_game == 1) {
-        this.start_game = 2;
-        console.log("Game start 2");
-      }
-
-      if (this.props.xdes != 0 && this.start_game == 0) {
-        this.start_game = 1;
-        console.log("Game start 1");
-        console.log(this.props.xdes);
-      }
-
-      if (Math.abs(this.character.position.x) > 40 && this.start_game == 2) {
-        //ball should fall, game over
-        this.character.position.x += this.v_horizontal; //player continues to move horizontally 
-
-        this.v_verticle += 9.8 * 0.01; //accelerate down at  approximately g
-
-        if (this.character.position.y > -125) this.character.position.y -= this.v_verticle; //change player verticle position
-
-        console.log('fall');
-      } else {
-        //ball has not fallen, game still on
-        this.x_prev = this.character.position.x;
-        this.character.position.x = this.props.x - this.props.xdes;
-        this.ball.position.x = this.props.x_ball - this.props.xdes;
-        this.v_horizontal = this.character.x - this.x_prev;
-      }
-
-      this.renderScene();
-      this.frameId = window.requestAnimationFrame(this.animate);
-    }
-  }, {
-    key: "renderScene",
-    value: function renderScene() {
-      this.renderer.render(this.scene, this.camera);
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this2 = this;
-
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        style: {
-          width: '900px',
-          height: '400px'
-        },
-        ref: function ref(mount) {
-          _this2.mount = mount;
-        },
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 170
-        },
-        __self: this
-      });
-    }
-  }]);
-
-  return Balance_game;
-}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
-
-function mapStateToProps(state) {
-  //map state variables to the component's state 
-  return {
-    x: state.x,
-    x_ball: state.x_ball,
-    xdes: state.xdes
-  };
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, {} //add importing action functions here
-)(Balance_game));
-
-/***/ }),
-
-/***/ "./games/Block_game.js":
-/*!*****************************!*\
-  !*** ./games/Block_game.js ***!
-  \*****************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "react-redux");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_redux__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! three */ "three");
-/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(three__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _src_actions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../src/actions */ "./src/actions.js");
-var _jsxFileName = "C:\\Users\\nicho_000\\Documents\\RehabRobotV2\\server\\games\\Block_game.js";
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-
-
- //import * as OBJLoader from 'three-obj-loader';
-
- //OBJLoader(THREE);
-//require("/home/rehab/Documents/RehabRobot/server/games/sprite/crosshair.png")
-//require("/home/rehab/Documents/RehabRobot/server/games/sprite/crosshair_yellow.png" );
-
-var Follow_game =
-/*#__PURE__*/
-function (_Component) {
-  _inherits(Follow_game, _Component);
-
-  function Follow_game(props) {
-    var _this;
-
-    _classCallCheck(this, Follow_game);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Follow_game).call(this, props));
-    _this.start = _this.start.bind(_assertThisInitialized(_this));
-    _this.stop = _this.stop.bind(_assertThisInitialized(_this));
-    _this.animate = _this.animate.bind(_assertThisInitialized(_this));
-    return _this;
-  }
-
-  _createClass(Follow_game, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      var points = 0;
-      var maxStroke = 200;
-      var text;
-      var group = new three__WEBPACK_IMPORTED_MODULE_2__["Group"]();
-      var width = this.mount.clientWidth;
-      var height = this.mount.clientHeight;
-      var scene = new three__WEBPACK_IMPORTED_MODULE_2__["Scene"]();
-      scene.background = new three__WEBPACK_IMPORTED_MODULE_2__["Color"](0xf7fdff); //var camera = new THREE.OrthographicCamera( - width / 2, width / 2, height / 2, - height / 2, -100, 500000);
-
-      var camera = new three__WEBPACK_IMPORTED_MODULE_2__["PerspectiveCamera"](70, this.mount.clientWidth / this.mount.clientHeight, 0.1, 2000);
-      camera.position.set(500, 500, 200);
-      scene.add(camera);
-      var renderer = new three__WEBPACK_IMPORTED_MODULE_2__["WebGLRenderer"]({
-        antialias: true
-      });
-      renderer.setSize(width, height);
-      var geometry = new three__WEBPACK_IMPORTED_MODULE_2__["BoxGeometry"](100, 100, 100);
-      var cubeMaterial = new three__WEBPACK_IMPORTED_MODULE_2__["MeshLambertMaterial"]({
-        color: 0xE86D00
-      });
-      var cube = new three__WEBPACK_IMPORTED_MODULE_2__["Mesh"](geometry, cubeMaterial);
-      var footMaterial = new three__WEBPACK_IMPORTED_MODULE_2__["MeshLambertMaterial"]({
-        color: 0x50A2FF
-      });
-      var foot = new three__WEBPACK_IMPORTED_MODULE_2__["Mesh"](geometry, footMaterial);
-      cube.position.set(0.0, 0.0, -100);
-      foot.position.set(0.0, -200, -100);
-      foot.scale.set(1, 0.25, 1);
-      var spotLight1 = new three__WEBPACK_IMPORTED_MODULE_2__["SpotLight"](0xffffff, 1);
-      spotLight1.position.set(-width / 3, 200, 200);
-      var light = new three__WEBPACK_IMPORTED_MODULE_2__["HemisphereLight"](0xffffff, 0xffffff, 1);
-      scene.add(light);
-      scene.add(spotLight1);
-      scene.add(cube);
-      scene.add(foot);
-      this.scene = scene;
-      this.camera = camera;
-      this.renderer = renderer;
-      this.clock = new three__WEBPACK_IMPORTED_MODULE_2__["Clock"]();
-      this.timer = 0;
-      this.start_game = 0;
-      this.cube = cube;
-      this.foot = foot; //this.group = group;
-
-      this.points = points;
-      this.mount.appendChild(this.renderer.domElement);
-      this.start();
-    }
-  }, {
-    key: "componentWillUnmount",
-    value: function componentWillUnmount() {
-      this.stop();
-      this.mount.removeChild(this.renderer.domElement);
-    }
-  }, {
-    key: "start",
-    value: function start() {
-      if (!this.frameId) {
-        this.frameId = requestAnimationFrame(this.animate);
-      }
-    }
-  }, {
-    key: "stop",
-    value: function stop() {
-      cancelAnimationFrame(this.frameId);
-    }
-  }, {
-    key: "animate",
-    value: function animate() {
-      if (!this.start_game) {
-        this.timer += this.clock.getDelta();
-        var current_time = Math.round(5.8 - this.timer).toString();
-        var textMaterial = this.textMaterial; //this.camera.position.x = 500*Math.cos(this.timer/100)
-        //this.camera.position.y = 50*Math.cos(this.timer/100)
-
-        this.camera.up = new three__WEBPACK_IMPORTED_MODULE_2__["Vector3"](0, 0, 1);
-        this.camera.lookAt(this.cube.position);
-
-        if (this.timer > 4.9) {
-          this.start_game = 1;
-        }
-      } else {
-        this.cube.position.y = 137.5 - this.props.x_ball;
-        this.foot.position.y = 200.0 - this.props.x; //console.log('x_end' + this.props.x_end)
-        //console.log('x cube' + this.factor*this.props.x)
-        //console.log('xdes cube' + this.factor*this.props.xdes )
-      }
-
-      this.renderScene();
-      this.frameId = window.requestAnimationFrame(this.animate);
-    }
-  }, {
-    key: "renderScene",
-    value: function renderScene() {
-      this.renderer.render(this.scene, this.camera);
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this2 = this;
-
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        style: {
-          width: '800px',
-          height: '800px'
-        },
-        ref: function ref(mount) {
-          _this2.mount = mount;
-        },
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 138
-        },
-        __self: this
-      });
-    }
-  }]);
-
-  return Follow_game;
-}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
-
-function mapStateToProps(state) {
-  //map state variables to the component's state 
-  return {
-    x: state.x,
-    xdes: state.xdes,
-    x_end: state.x_end,
-    range: state.range
-  };
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, {} //add importing action functions here
-)(Follow_game));
-
-/***/ }),
-
-/***/ "./games/Follow_game.js":
-/*!******************************!*\
-  !*** ./games/Follow_game.js ***!
-  \******************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "react-redux");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_redux__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! three */ "three");
-/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(three__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _src_actions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../src/actions */ "./src/actions.js");
-var _jsxFileName = "C:\\Users\\nicho_000\\Documents\\RehabRobotV2\\server\\games\\Follow_game.js";
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-
-
- //import * as OBJLoader from 'three-obj-loader';
-
- //OBJLoader(THREE);
-//require("/home/rehab/Documents/RehabRobot/server/games/sprite/crosshair.png")
-//require("/home/rehab/Documents/RehabRobot/server/games/sprite/crosshair_yellow.png" );
-
-var Follow_game =
-/*#__PURE__*/
-function (_Component) {
-  _inherits(Follow_game, _Component);
-
-  function Follow_game(props) {
-    var _this;
-
-    _classCallCheck(this, Follow_game);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Follow_game).call(this, props));
-    _this.start = _this.start.bind(_assertThisInitialized(_this));
-    _this.stop = _this.stop.bind(_assertThisInitialized(_this));
-    _this.animate = _this.animate.bind(_assertThisInitialized(_this));
-    return _this;
-  }
-
-  _createClass(Follow_game, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      var points = 0;
-      var maxStroke = 200;
-      var text;
-      var group = new three__WEBPACK_IMPORTED_MODULE_2__["Group"]();
-      var width = this.mount.clientWidth;
-      var height = this.mount.clientHeight;
-      var scene = new three__WEBPACK_IMPORTED_MODULE_2__["Scene"]();
-      scene.background = new three__WEBPACK_IMPORTED_MODULE_2__["Color"](0xf7fdff);
-      var camera = new three__WEBPACK_IMPORTED_MODULE_2__["OrthographicCamera"](-width / 2, width / 2, height / 2, -height / 2, -100, 500000);
-      camera.position.set(0, 0, 5);
-      scene.add(camera);
-      var renderer = new three__WEBPACK_IMPORTED_MODULE_2__["WebGLRenderer"]({
-        antialias: true
-      });
-      renderer.setSize(width, height);
-      var geometry = new three__WEBPACK_IMPORTED_MODULE_2__["BoxGeometry"](100, 100, 100);
-      var cubeMaterial = new three__WEBPACK_IMPORTED_MODULE_2__["MeshLambertMaterial"]({
-        color: 0xE86D00
-      });
-      var cube = new three__WEBPACK_IMPORTED_MODULE_2__["Mesh"](geometry, cubeMaterial);
-      cube.position.set(0.0, 0.0, -70);
-      var spotLight1 = new three__WEBPACK_IMPORTED_MODULE_2__["SpotLight"](0xffffff, 1);
-      spotLight1.position.set(-width / 3, 200, 200);
-      var light = new three__WEBPACK_IMPORTED_MODULE_2__["HemisphereLight"](0xffffff, 0xffffff, 1);
-      scene.add(light);
-      scene.add(spotLight1);
-      scene.add(cube);
-      this.scene = scene;
-      this.camera = camera;
-      this.renderer = renderer;
-      this.clock = new three__WEBPACK_IMPORTED_MODULE_2__["Clock"]();
-      this.timer = 0;
-      this.start_game = 0;
-      this.cube = cube; //this.group = group;
-
-      this.points = points;
-      this.mount.appendChild(this.renderer.domElement);
-      this.start();
-    }
-  }, {
-    key: "componentWillUnmount",
-    value: function componentWillUnmount() {
-      this.stop();
-      this.mount.removeChild(this.renderer.domElement);
-    }
-  }, {
-    key: "start",
-    value: function start() {
-      if (!this.frameId) {
-        this.frameId = requestAnimationFrame(this.animate);
-      }
-    }
-  }, {
-    key: "stop",
-    value: function stop() {
-      cancelAnimationFrame(this.frameId);
-    }
-  }, {
-    key: "animate",
-    value: function animate() {
-      if (!this.start_game) {
-        this.timer += this.clock.getDelta();
-        var current_time = Math.round(5.8 - this.timer).toString();
-        var textMaterial = this.textMaterial;
-
-        if (this.timer > 4.9) {
-          this.start_game = 1;
-        }
-      } else {
-        this.factor = 280.0 / this.props.x_end;
-        console.log('x_end' + this.props.x_end);
-        console.log('x cube' + this.factor * this.props.x);
-        console.log('xdes cube' + this.factor * this.props.xdes);
-
-        if (this.factor * this.props.x > this.factor * this.props.xdes - this.props.range && this.factor * this.props.x < this.factor * this.props.xdes + this.props.range) {
-          if (this.points < 6000) this.points += 1; //this.cube.rotation.x += 0.02;
-          //this.cube.rotation.y += 0.01;
-          //this.cube.rotation.z += 0.015;
-        } else {
-          if (this.points > 0) this.points -= 3;
-        }
-
-        this.cube.rotation.x += 0.02 * this.points / 2000;
-        this.cube.rotation.y += 0.01 * this.points / 2000;
-        this.cube.rotation.z += 0.015 * this.points / 2000;
-        this.cube.scale.set(1 + this.points / 3000, 1 + this.points / 3000, 1 + this.points / 3000);
-      }
-
-      this.renderScene();
-      this.frameId = window.requestAnimationFrame(this.animate);
-    }
-  }, {
-    key: "renderScene",
-    value: function renderScene() {
-      this.renderer.render(this.scene, this.camera);
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this2 = this;
-
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        style: {
-          width: '800px',
-          height: '800px'
-        },
-        ref: function ref(mount) {
-          _this2.mount = mount;
-        },
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 147
-        },
-        __self: this
-      });
-    }
-  }]);
-
-  return Follow_game;
-}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
-
-function mapStateToProps(state) {
-  //map state variables to the component's state 
-  return {
-    x: state.x,
-    xdes: state.xdes,
-    x_end: state.x_end,
-    range: state.range
-  };
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, {} //add importing action functions here
-)(Follow_game));
-
-/***/ }),
-
-/***/ "./games/Follow_game2.js":
-/*!*******************************!*\
-  !*** ./games/Follow_game2.js ***!
-  \*******************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "react-redux");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_redux__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! three */ "three");
-/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(three__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _src_actions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../src/actions */ "./src/actions.js");
-var _jsxFileName = "C:\\Users\\nicho_000\\Documents\\RehabRobotV2\\server\\games\\Follow_game2.js";
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-
-
- //import * as OBJLoader from 'three-obj-loader';
-
- //OBJLoader(THREE);
-//require("/home/rehab/Documents/RehabRobot/server/games/sprite/crosshair.png")
-//require("/home/rehab/Documents/RehabRobot/server/games/sprite/crosshair_yellow.png" );
-
-var Follow_game =
-/*#__PURE__*/
-function (_Component) {
-  _inherits(Follow_game, _Component);
-
-  function Follow_game(props) {
-    var _this;
-
-    _classCallCheck(this, Follow_game);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Follow_game).call(this, props));
-    _this.start = _this.start.bind(_assertThisInitialized(_this));
-    _this.stop = _this.stop.bind(_assertThisInitialized(_this));
-    _this.animate = _this.animate.bind(_assertThisInitialized(_this));
-    return _this;
-  }
-
-  _createClass(Follow_game, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      var points = 0;
-      var maxStroke = 200;
-      var text;
-      var group = new three__WEBPACK_IMPORTED_MODULE_2__["Group"]();
-      var width = this.mount.clientWidth;
-      var height = this.mount.clientHeight;
-      var scene = new three__WEBPACK_IMPORTED_MODULE_2__["Scene"]();
-      scene.background = new three__WEBPACK_IMPORTED_MODULE_2__["Color"](0xf7fdff); //var camera = new THREE.OrthographicCamera( - width / 2, width / 2, height / 2, - height / 2, -100, 500000);
-
-      var camera = new three__WEBPACK_IMPORTED_MODULE_2__["PerspectiveCamera"](70, this.mount.clientWidth / this.mount.clientHeight, 0.1, 2000);
-      camera.position.set(0, 0, 600);
-      scene.add(camera);
-      var renderer = new three__WEBPACK_IMPORTED_MODULE_2__["WebGLRenderer"]({
-        antialias: true
-      });
-      renderer.setSize(width, height);
-      var geometry = new three__WEBPACK_IMPORTED_MODULE_2__["BoxGeometry"](100, 100, 100);
-      var cubeMaterial = new three__WEBPACK_IMPORTED_MODULE_2__["MeshLambertMaterial"]({
-        color: 0xE86D00
-      });
-      var cube = new three__WEBPACK_IMPORTED_MODULE_2__["Mesh"](geometry, cubeMaterial);
-      var cube2 = new three__WEBPACK_IMPORTED_MODULE_2__["Mesh"](geometry, cubeMaterial);
-      cube.position.set(0.0, 0.0, -400);
-      cube2.position.set(100.0, 100.0, -1200);
-      var spotLight1 = new three__WEBPACK_IMPORTED_MODULE_2__["SpotLight"](0xffffff, 1);
-      spotLight1.position.set(-width / 3, 200, 200);
-      var light = new three__WEBPACK_IMPORTED_MODULE_2__["HemisphereLight"](0xffffff, 0xffffff, 1);
-      scene.add(light);
-      scene.add(spotLight1);
-      scene.add(cube);
-      scene.add(cube2);
-      this.scene = scene;
-      this.camera = camera;
-      this.renderer = renderer;
-      this.clock = new three__WEBPACK_IMPORTED_MODULE_2__["Clock"]();
-      this.timer = 0;
-      this.start_game = 0;
-      this.cube = cube; //this.group = group;
-
-      this.points = points;
-      this.mount.appendChild(this.renderer.domElement);
-      this.start();
-    }
-  }, {
-    key: "componentWillUnmount",
-    value: function componentWillUnmount() {
-      this.stop();
-      this.mount.removeChild(this.renderer.domElement);
-    }
-  }, {
-    key: "start",
-    value: function start() {
-      if (!this.frameId) {
-        this.frameId = requestAnimationFrame(this.animate);
-      }
-    }
-  }, {
-    key: "stop",
-    value: function stop() {
-      cancelAnimationFrame(this.frameId);
-    }
-  }, {
-    key: "animate",
-    value: function animate() {
-      this.cube.rotation.x += 0.02;
-      this.cube.rotation.y += 0.01;
-      this.cube.rotation.z += 0.015; //if(!this.start_game)
-
-      if (1) {
-        this.timer += this.clock.getDelta();
-        var current_time = Math.round(5.8 - this.timer).toString();
-        var textMaterial = this.textMaterial;
-        this.camera.position.x = 500 * Math.cos(this.timer / 100);
-        this.camera.position.y = 50 * Math.cos(this.timer / 100);
-        this.camera.up = new three__WEBPACK_IMPORTED_MODULE_2__["Vector3"](0, 0, 1);
-        this.camera.lookAt(this.cube.position);
-
-        if (this.timer > 4.9) {
-          this.start_game = 1;
-        }
-      } else {}
-
-      this.renderScene();
-      this.frameId = window.requestAnimationFrame(this.animate);
-    }
-  }, {
-    key: "renderScene",
-    value: function renderScene() {
-      this.renderer.render(this.scene, this.camera);
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this2 = this;
-
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        style: {
-          width: '800px',
-          height: '800px'
-        },
-        ref: function ref(mount) {
-          _this2.mount = mount;
-        },
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 162
-        },
-        __self: this
-      });
-    }
-  }]);
-
-  return Follow_game;
-}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
-
-function mapStateToProps(state) {
-  //map state variables to the component's state 
-  return {
-    x: state.x,
-    xdes: state.xdes,
-    x_end: state.x_end,
-    range: state.range
-  };
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, {} //add importing action functions here
-)(Follow_game));
-
-/***/ }),
-
-/***/ "./games/Follow_traj.js":
-/*!******************************!*\
-  !*** ./games/Follow_traj.js ***!
-  \******************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "react-redux");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_redux__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! three */ "three");
-/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(three__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _src_actions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../src/actions */ "./src/actions.js");
-/* harmony import */ var _components_Generic_RunButton__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/Generic/RunButton */ "./components/Generic/RunButton.jsx");
-var _jsxFileName = "C:\\Users\\nicho_000\\Documents\\RehabRobotV2\\server\\games\\Follow_traj.js";
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-
-
- //import * as OBJLoader from 'three-obj-loader';
-
- //OBJLoader(THREE);
-
- //require("/home/rehab/Documents/RehabRobot/server/games/sprite/crosshair.png")
-//require("/home/rehab/Documents/RehabRobot/server/games/sprite/crosshair_yellow.png" );
-
-var Follow_traj =
-/*#__PURE__*/
-function (_Component) {
-  _inherits(Follow_traj, _Component);
-
-  function Follow_traj(props) {
-    var _this;
-
-    _classCallCheck(this, Follow_traj);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Follow_traj).call(this, props));
-    _this.start = _this.start.bind(_assertThisInitialized(_this));
-    _this.stop = _this.stop.bind(_assertThisInitialized(_this));
-    _this.animate = _this.animate.bind(_assertThisInitialized(_this));
-    return _this;
-  }
-
-  _createClass(Follow_traj, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      var points = 0;
-      var maxStroke = 200;
-      var text5;
-      var Geometry4;
-      var Geometry3;
-      var Geometry2;
-      var Geometry1;
-      var group = new three__WEBPACK_IMPORTED_MODULE_2__["Group"]();
-      var width = this.mount.clientWidth;
-      var height = this.mount.clientHeight;
-      var scene = new three__WEBPACK_IMPORTED_MODULE_2__["Scene"]();
-      scene.background = new three__WEBPACK_IMPORTED_MODULE_2__["Color"](0xf7fdff);
-      var camera = new three__WEBPACK_IMPORTED_MODULE_2__["OrthographicCamera"](-width / 2, width / 2, height / 2, -height / 2, -100, 500000);
-      camera.position.set(0, 0, 5);
-      scene.add(camera);
-      var renderer = new three__WEBPACK_IMPORTED_MODULE_2__["WebGLRenderer"]({
-        antialias: true
-      });
-      renderer.setSize(width, height);
-      var geometry = new three__WEBPACK_IMPORTED_MODULE_2__["BoxGeometry"](70, 70, 70);
-      var textMaterial = new three__WEBPACK_IMPORTED_MODULE_2__["MeshBasicMaterial"]({
-        color: 0x86a5d6
-      });
-      var plateMaterial = new three__WEBPACK_IMPORTED_MODULE_2__["MeshBasicMaterial"]({
-        color: 0x86a5d6
-      });
-      var barMaterial = new three__WEBPACK_IMPORTED_MODULE_2__["MeshBasicMaterial"]({
-        color: 0xd1d1d1
-      });
-      var desMaterial = new three__WEBPACK_IMPORTED_MODULE_2__["MeshBasicMaterial"]({
-        color: 0xff7272,
-        transparent: true,
-        opacity: 0.7
-      });
-      var plate = new three__WEBPACK_IMPORTED_MODULE_2__["Mesh"](geometry, plateMaterial);
-      var bar = new three__WEBPACK_IMPORTED_MODULE_2__["Mesh"](geometry, barMaterial);
-      var desPos = new three__WEBPACK_IMPORTED_MODULE_2__["Mesh"](geometry, desMaterial);
-      plate.position.set(0.0, 0.0, 50);
-      plate.scale.set(1.25, 0.25, 1.0);
-      bar.position.set(0.0, 0.0, -200);
-      bar.scale.set(0.75, 4.0, 1.0);
-      desPos.position.set(0.0, 0.0, 10);
-      desPos.scale.set(1.5, 0.75, 1.0);
-      var spotLight1 = new three__WEBPACK_IMPORTED_MODULE_2__["SpotLight"](0xffffff, 1);
-      spotLight1.position.set(-width / 3, 200, 200);
-      var light = new three__WEBPACK_IMPORTED_MODULE_2__["HemisphereLight"](0xffffff, 0xffffff, 1);
-      scene.add(light);
-      scene.add(spotLight1); //group.add( plate );
-
-      scene.add(bar);
-      scene.add(desPos);
-      scene.add(plate);
-      var loader = new three__WEBPACK_IMPORTED_MODULE_2__["FontLoader"]();
-      this.loader = loader;
-      loader.load('static/fonts/helvetiker_regular.typeface.json', function (font) {
-        var Geometry5 = new three__WEBPACK_IMPORTED_MODULE_2__["TextGeometry"]('5', {
-          font: font,
-          size: 50,
-          height: 10,
-          curveSegments: 12,
-          bevelEnabled: false
-        });
-        text5 = new three__WEBPACK_IMPORTED_MODULE_2__["Mesh"](Geometry5, textMaterial);
-        text5.position.set(-20, 0, 0);
-      });
-      this.scene = scene;
-      this.camera = camera;
-      this.renderer = renderer;
-      this.plate = plate;
-      this.bar = bar;
-      this.desPos = desPos;
-      this.points = points;
-      this.textMaterial = textMaterial;
-      this.clock = new three__WEBPACK_IMPORTED_MODULE_2__["Clock"]();
-      this.timer = 0.0;
-      this.start_game = 0;
-      this.mount.appendChild(this.renderer.domElement);
-      console.log('Component Mount');
-      this.start();
-      console.log('Component Mount Done');
-    }
-  }, {
-    key: "componentWillUnmount",
-    value: function componentWillUnmount() {
-      this.stop();
-      this.mount.removeChild(this.renderer.domElement);
-    }
-  }, {
-    key: "start",
-    value: function start() {
-      if (!this.frameId) {
-        this.frameId = requestAnimationFrame(this.animate);
-      }
-    }
-  }, {
-    key: "stop",
-    value: function stop() {
-      cancelAnimationFrame(this.frameId);
-    }
-  }, {
-    key: "animate",
-    value: function animate() {
-      if (!this.start_game) {
-        //this.props.setParam('xdes', this.props.x_end)
-        //this.props.setParam('x', this.props.x_end)
-        this.props.setParam('xdes', 1000);
-        this.props.setParam('x', 400);
-        this.timer += this.clock.getDelta();
-        var current_time = Math.round(5.8 - this.timer).toString();
-        var textMaterial = this.textMaterial;
-        var scene = this.scene;
-        var text;
-        var start_game = 0;
-
-        if (this.timer > 4.9) {
-          this.start_game = 1;
-          start_game = 1;
-        }
-
-        this.loader.load('static/fonts/helvetiker_regular.typeface.json', function (font) {
-          var Geometry5 = new three__WEBPACK_IMPORTED_MODULE_2__["TextGeometry"](current_time, {
-            font: font,
-            size: 50,
-            height: 10,
-            curveSegments: 12,
-            bevelEnabled: false
-          });
-          var selectedObject = scene.getObjectByName('text');
-          scene.remove(selectedObject);
-
-          if (start_game == 0) {
-            text = new three__WEBPACK_IMPORTED_MODULE_2__["Mesh"](Geometry5, textMaterial);
-            text.position.set(-20, 0, 0);
-            text.name = 'text';
-            scene.add(text);
-          }
-        });
-      }
-
-      this.factor = 280.0 / this.props.x_end; //console.log(this.props.x_end)
-      //console.log(this.factor)
-
-      this.desPos.position.y = this.factor * this.props.xdes - 140.0;
-      this.plate.position.y = this.factor * this.props.x - 140.0; //console.log(this.plate.position.y)
-
-      if (this.plate.position.y > this.desPos.position.y - this.props.range && this.plate.position.y < this.desPos.position.y + this.props.range) {
-        this.desPos.material.color.setHex(0x7fffa3);
-        if (this.points < 6000) this.points += 2;
-      } else {
-        this.desPos.material.color.setHex(0xff7272);
-        if (this.points > 0) this.points -= 4;
-      }
-
-      var range = -(this.points - 6000) * 30.0 / 6000.0 + 5.0;
-      this.props.setParam('range', range);
-      this.desPos.scale.set(1.5, 0.75 * ((this.props.range + 7) / 35.0), 1.0);
-      this.renderScene();
-      this.frameId = window.requestAnimationFrame(this.animate);
-    }
-  }, {
-    key: "renderScene",
-    value: function renderScene() {
-      this.renderer.render(this.scene, this.camera);
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this2 = this;
-
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        style: {
-          width: '400px',
-          height: '800px'
-        },
-        ref: function ref(mount) {
-          _this2.mount = mount;
-        },
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 215
-        },
-        __self: this
-      });
-    }
-  }]);
-
-  return Follow_traj;
-}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
-
-function mapStateToProps(state) {
-  //map state variables to the component's state 
-  return {
-    x: state.x,
-    xdes: state.xdes,
-    x_end: state.x_end,
-    range: state.range
-  };
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, {
-  setParam: _src_actions__WEBPACK_IMPORTED_MODULE_3__["setParam"] //add importing action functions here
-
-})(Follow_traj));
-
-/***/ }),
-
-/***/ "./games/Follow_vel.js":
-/*!*****************************!*\
-  !*** ./games/Follow_vel.js ***!
-  \*****************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "react-redux");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_redux__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! three */ "three");
-/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(three__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _src_actions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../src/actions */ "./src/actions.js");
-var _jsxFileName = "C:\\Users\\nicho_000\\Documents\\RehabRobotV2\\server\\games\\Follow_vel.js";
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-
-
- //import * as OBJLoader from 'three-obj-loader';
-
- //OBJLoader(THREE);
-//require("/home/rehab/Documents/RehabRobot/server/games/sprite/crosshair.png")
-//require("/home/rehab/Documents/RehabRobot/server/games/sprite/crosshair_yellow.png" );
-
-var Follow_vel =
-/*#__PURE__*/
-function (_Component) {
-  _inherits(Follow_vel, _Component);
-
-  function Follow_vel(props) {
-    var _this;
-
-    _classCallCheck(this, Follow_vel);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Follow_vel).call(this, props));
-    _this.start = _this.start.bind(_assertThisInitialized(_this));
-    _this.stop = _this.stop.bind(_assertThisInitialized(_this));
-    _this.animate = _this.animate.bind(_assertThisInitialized(_this));
-    return _this;
-  }
-
-  _createClass(Follow_vel, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      var bar_width = 75.0;
-      var bar_height = 200.0;
-      var init = 0;
-      var falling = 0;
-      var fall_dir = 0;
-      var fall_speed = 0;
-      var bar;
-      var group = new three__WEBPACK_IMPORTED_MODULE_2__["Group"]();
-      var width = this.mount.clientWidth;
-      var height = this.mount.clientHeight;
-      var scene = new three__WEBPACK_IMPORTED_MODULE_2__["Scene"]();
-      scene.background = new three__WEBPACK_IMPORTED_MODULE_2__["Color"](0x99ccff);
-      var camera = new three__WEBPACK_IMPORTED_MODULE_2__["OrthographicCamera"](-width / 2, width / 2, height / 2, -height / 2, -100, 500000);
-      camera.position.set(0, 0, 10);
-      var renderer = new three__WEBPACK_IMPORTED_MODULE_2__["WebGLRenderer"]({
-        antialias: true
-      });
-      renderer.setSize(width, height);
-      scene.add(camera);
-      var blockGeometry = new three__WEBPACK_IMPORTED_MODULE_2__["BoxGeometry"](bar_width, bar_height, 200);
-      var blockMaterial = new three__WEBPACK_IMPORTED_MODULE_2__["MeshLambertMaterial"]({
-        color: 0x51677F
-      });
-      var block = new three__WEBPACK_IMPORTED_MODULE_2__["Mesh"](blockGeometry, blockMaterial);
-      var blockGeometry2 = new three__WEBPACK_IMPORTED_MODULE_2__["BoxGeometry"](bar_width - 25, bar_height - 25, 200);
-      var blockMaterial2 = new three__WEBPACK_IMPORTED_MODULE_2__["MeshLambertMaterial"]({
-        color: 0xFEFFD1
-      });
-      var block2 = new three__WEBPACK_IMPORTED_MODULE_2__["Mesh"](blockGeometry2, blockMaterial2);
-      var blockGeometry3 = new three__WEBPACK_IMPORTED_MODULE_2__["BoxGeometry"](bar_width - 25, 5, 200);
-      var blockMaterial3 = new three__WEBPACK_IMPORTED_MODULE_2__["MeshLambertMaterial"]({
-        color: 0x000000
-      });
-      var block3 = new three__WEBPACK_IMPORTED_MODULE_2__["Mesh"](blockGeometry3, blockMaterial3);
-      var barGeometry = new three__WEBPACK_IMPORTED_MODULE_2__["BoxGeometry"](bar_width - 25, 1, 210);
-      var barMaterial = new three__WEBPACK_IMPORTED_MODULE_2__["MeshLambertMaterial"]({
-        color: 0x458B74
-      });
-      bar = new three__WEBPACK_IMPORTED_MODULE_2__["Mesh"](barGeometry, barMaterial);
-      block.position.set(0.0, 0.0, 0.0);
-      scene.add(block);
-      block2.position.set(0.0, 0.0, 0.0);
-      scene.add(block2);
-      block3.position.set(0.0, 0.0, 0.0);
-      scene.add(block3);
-      bar.position.set(0.0, 0.0, 0.0);
-      scene.add(bar);
-      var spotLight1 = new three__WEBPACK_IMPORTED_MODULE_2__["SpotLight"](0xffffff, 1);
-      spotLight1.position.set(-width / 3, 200, 200);
-      var spotLight2 = new three__WEBPACK_IMPORTED_MODULE_2__["SpotLight"](0xffffff, 1);
-      spotLight2.position.set(-width / 3, -200, 200);
-      spotLight2.rotation.set(-180, 0, 0); //var directionalLight = new THREE.DirectionalLight( 0xffffff, 2 );
-      //scene.add( directionalLight );
-
-      var light = new three__WEBPACK_IMPORTED_MODULE_2__["HemisphereLight"](0xffffff, 0xffffff, 1);
-      scene.add(light);
-      scene.add(spotLight1);
-      this.scene = scene;
-      this.camera = camera;
-      this.renderer = renderer;
-      this.bar = bar;
-      this.mount.appendChild(this.renderer.domElement);
-      this.start();
-    }
-  }, {
-    key: "componentWillUnmount",
-    value: function componentWillUnmount() {
-      this.stop();
-      this.mount.removeChild(this.renderer.domElement);
-    }
-  }, {
-    key: "start",
-    value: function start() {
-      if (!this.frameId) {
-        this.frameId = requestAnimationFrame(this.animate);
-      }
-    }
-  }, {
-    key: "stop",
-    value: function stop() {
-      cancelAnimationFrame(this.frameId);
-    }
-  }, {
-    key: "animate",
-    value: function animate() {
-      var bar_set = Math.abs(this.props.v - this.props.vdes);
-      this.bar.scale.set(1, bar_set + 0.01, 1);
-      this.bar.position.set(0, bar_set / 2.0, 0);
-      this.renderScene();
-      this.frameId = window.requestAnimationFrame(this.animate);
-    }
-  }, {
-    key: "renderScene",
-    value: function renderScene() {
-      this.renderer.render(this.scene, this.camera);
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this2 = this;
-
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        style: {
-          width: '300px',
-          height: '400px'
-        },
-        ref: function ref(mount) {
-          _this2.mount = mount;
-        },
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 129
-        },
-        __self: this
-      });
-    }
-  }]);
-
-  return Follow_vel;
-}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
-
-function mapStateToProps(state) {
-  //map state variables to the component's state 
-  return {
-    v: state.v,
-    vdes: state.vdes
-  };
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, {} //add importing action functions here
-)(Follow_vel));
-
-/***/ }),
-
-/***/ "./games/Gait_game.js":
-/*!****************************!*\
-  !*** ./games/Gait_game.js ***!
-  \****************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "react-redux");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_redux__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! three */ "three");
-/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(three__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _src_actions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../src/actions */ "./src/actions.js");
-var _jsxFileName = "C:\\Users\\nicho_000\\Documents\\RehabRobotV2\\server\\games\\Gait_game.js";
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-
-
- //import * as OBJLoader from 'three-obj-loader';
-
- //OBJLoader(THREE);
-//require("/home/rehab/Documents/RehabRobot/server/games/sprite/crosshair.png")
-//require("/home/rehab/Documents/RehabRobot/server/games/sprite/crosshair_yellow.png" );
-
-var Gait_game =
-/*#__PURE__*/
-function (_Component) {
-  _inherits(Gait_game, _Component);
-
-  function Gait_game(props) {
-    var _this;
-
-    _classCallCheck(this, Gait_game);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Gait_game).call(this, props));
-    _this.start = _this.start.bind(_assertThisInitialized(_this));
-    _this.stop = _this.stop.bind(_assertThisInitialized(_this));
-    _this.animate = _this.animate.bind(_assertThisInitialized(_this));
-    _this.move_object = _this.move_object.bind(_assertThisInitialized(_this));
-    return _this;
-  }
-
-  _createClass(Gait_game, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      var theta1 = 0.0;
-      var theta2 = 0.0;
-      var theta3 = 0.0;
-      var race_speed1 = 0.5;
-      var race_speed2 = 0.55;
-      var race_speed3 = 0.48;
-      var prev_x;
-      var prev_time;
-      var curr_time;
-      var group = new three__WEBPACK_IMPORTED_MODULE_2__["Group"]();
-      var width = this.mount.clientWidth;
-      var height = this.mount.clientHeight;
-      var scene = new three__WEBPACK_IMPORTED_MODULE_2__["Scene"]();
-      scene.background = new three__WEBPACK_IMPORTED_MODULE_2__["Color"](0x99ccff);
-      var camera = new three__WEBPACK_IMPORTED_MODULE_2__["PerspectiveCamera"](90, window.innerWidth / window.innerHeight, 0.1, 800);
-      camera.position.set(-95, -50, 30);
-      camera.rotation.set(1.5, 0.0, 0.0);
-      scene.add(camera);
-      var renderer = new three__WEBPACK_IMPORTED_MODULE_2__["WebGLRenderer"]({
-        antialias: true
-      });
-      renderer.setSize(width, height);
-      var plateMaterial = new three__WEBPACK_IMPORTED_MODULE_2__["MeshBasicMaterial"]({
-        color: 0xcc6600
-      });
-      var plateMaterial2 = new three__WEBPACK_IMPORTED_MODULE_2__["MeshBasicMaterial"]({
-        color: 0x009933
-      });
-      var other1Material = new three__WEBPACK_IMPORTED_MODULE_2__["MeshLambertMaterial"]({
-        color: 0xff7272
-      });
-      var mainMaterial = new three__WEBPACK_IMPORTED_MODULE_2__["MeshLambertMaterial"]({
-        color: 0xFFA500
-      });
-      var other2Material = new three__WEBPACK_IMPORTED_MODULE_2__["MeshLambertMaterial"]({
-        color: 0xD4D1C8
-      });
-      var boxMaterial = new three__WEBPACK_IMPORTED_MODULE_2__["MeshLambertMaterial"]({
-        color: 0x99ccff
-      });
-      var circle = new three__WEBPACK_IMPORTED_MODULE_2__["Mesh"](new three__WEBPACK_IMPORTED_MODULE_2__["CircleBufferGeometry"](100, 20, 0, Math.PI * 2), plateMaterial);
-      circle.position.set(0, -100, 0);
-      scene.add(circle);
-      var circle2 = new three__WEBPACK_IMPORTED_MODULE_2__["Mesh"](new three__WEBPACK_IMPORTED_MODULE_2__["CircleBufferGeometry"](100, 20, 0, Math.PI * 2), plateMaterial);
-      circle2.position.set(0, 100, 0);
-      scene.add(circle2);
-      var plate = new three__WEBPACK_IMPORTED_MODULE_2__["Mesh"](new three__WEBPACK_IMPORTED_MODULE_2__["PlaneBufferGeometry"](200, 200, 4, 4), plateMaterial);
-      plate.position.set(0, 0, 0);
-      scene.add(plate);
-      var circle3 = new three__WEBPACK_IMPORTED_MODULE_2__["Mesh"](new three__WEBPACK_IMPORTED_MODULE_2__["CircleBufferGeometry"](60, 20, 0, Math.PI * 2), plateMaterial2);
-      circle3.position.set(0, -100, 0.1);
-      scene.add(circle3);
-      var circle4 = new three__WEBPACK_IMPORTED_MODULE_2__["Mesh"](new three__WEBPACK_IMPORTED_MODULE_2__["CircleBufferGeometry"](60, 20, 0, Math.PI * 2), plateMaterial2);
-      circle4.position.set(0, 100, 0.1);
-      scene.add(circle4);
-      var plate2 = new three__WEBPACK_IMPORTED_MODULE_2__["Mesh"](new three__WEBPACK_IMPORTED_MODULE_2__["PlaneBufferGeometry"](120, 200, 4, 4), plateMaterial2);
-      plate2.position.set(0, 0, 0.1);
-      scene.add(plate2);
-      var ground = new three__WEBPACK_IMPORTED_MODULE_2__["Mesh"](new three__WEBPACK_IMPORTED_MODULE_2__["PlaneBufferGeometry"](2000, 2000, 4, 4), plateMaterial2);
-      ground.position.set(0, 0, -0.1);
-      scene.add(ground);
-      var character = new three__WEBPACK_IMPORTED_MODULE_2__["Mesh"](new three__WEBPACK_IMPORTED_MODULE_2__["TetrahedronBufferGeometry"](5, 0), mainMaterial);
-      character.position.set(-80, 0, 5);
-      scene.add(character);
-      var other = new three__WEBPACK_IMPORTED_MODULE_2__["Mesh"](new three__WEBPACK_IMPORTED_MODULE_2__["BoxBufferGeometry"](5, 5, 5, 4, 4, 4), other1Material);
-      other.position.set(-90, 0, 5);
-      scene.add(other);
-      var other2 = new three__WEBPACK_IMPORTED_MODULE_2__["Mesh"](new three__WEBPACK_IMPORTED_MODULE_2__["BoxBufferGeometry"](5, 5, 5, 4, 4, 4), other2Material);
-      other2.position.set(-70, 0, 5);
-      scene.add(other2);
-      var box1 = new three__WEBPACK_IMPORTED_MODULE_2__["Mesh"](new three__WEBPACK_IMPORTED_MODULE_2__["BoxBufferGeometry"](5000, 5, 1000), boxMaterial);
-      box1.position.set(0, 350, 0);
-      scene.add(box1);
-      var spotLight1 = new three__WEBPACK_IMPORTED_MODULE_2__["SpotLight"](0xffffff, 1);
-      spotLight1.position.set(-width / 3, 200, 200);
-      var light = new three__WEBPACK_IMPORTED_MODULE_2__["HemisphereLight"](0xffffff, 0xffffff, 1);
-      scene.add(light);
-      scene.add(spotLight1);
-      scene.add(camera);
-      this.character = character;
-      this.other = other;
-      this.other2 = other2;
-      this.scene = scene;
-      this.camera = camera;
-      this.renderer = renderer;
-      this.theta1 = theta1;
-      this.theta2 = theta2;
-      this.theta3 = theta3;
-      this.race_speed1 = race_speed1;
-      this.race_speed2 = race_speed2;
-      this.race_speed3 = race_speed3;
-      this.prev_x = prev_x;
-      this.prev_time = prev_time;
-      this.curr_time = curr_time;
-      this.mount.appendChild(this.renderer.domElement);
-      this.start();
-    }
-  }, {
-    key: "componentWillUnmount",
-    value: function componentWillUnmount() {
-      this.stop();
-      this.mount.removeChild(this.renderer.domElement);
-    }
-  }, {
-    key: "start",
-    value: function start() {
-      if (!this.frameId) {
-        this.frameId = requestAnimationFrame(this.animate);
-      }
-    }
-  }, {
-    key: "stop",
-    value: function stop() {
-      cancelAnimationFrame(this.frameId);
-    }
-  }, {
-    key: "move_object",
-    value: function move_object(object, theta, radius, race_speed) {
-      if (object.position.x > 0) {
-        var race_dir = 1.0;
-      } else {
-        var race_dir = -1.0;
-      }
-
-      if (object.position.y > 0) {
-        var turn_dir = 1.0;
-      } else {
-        var turn_dir = -1.0;
-      }
-
-      if (Math.abs(object.position.y) < 100) {
-        object.position.y -= race_speed * race_dir;
-      } else {
-        object.position.x = -turn_dir * radius * Math.cos(theta);
-        object.position.y = turn_dir * (100.0 + radius * Math.sin(theta));
-        object.rotation.z = theta;
-      }
-    }
-  }, {
-    key: "animate",
-    value: function animate() {
-      this.race_speed1 = (200.0 - Math.abs(this.props.v - this.props.vdes)) / 300.0;
-
-      if (Math.abs(this.character.position.y) >= 100) {
-        this.theta1 += this.race_speed1 / 90.0;
-      } else {
-        this.theta1 = 0.0;
-      }
-
-      if (Math.abs(this.other.position.y) >= 100) {
-        this.theta2 += this.race_speed2 / 90.0;
-      } else {
-        this.theta2 = 0.0;
-      }
-
-      if (Math.abs(this.other2.position.y) >= 100) {
-        this.theta3 += this.race_speed3 / 90.0;
-      } else {
-        this.theta3 = 0.0;
-      }
-
-      this.move_object(this.character, this.theta1, 80.0, this.race_speed1);
-      this.move_object(this.other, this.theta2, 90.0, this.race_speed2);
-      this.move_object(this.other2, this.theta3, 70.0, this.race_speed3);
-      this.camera.position.x = this.character.position.x;
-      this.camera.position.y = this.character.position.y - 40.0;
-      this.character.rotation.x += 0.1;
-      this.character.rotation.y += 0.05;
-      this.other.rotation.x += 0.1;
-      this.other.rotation.y += 0.05;
-      this.other2.rotation.x += 0.1;
-      this.other2.rotation.y += 0.05;
-      this.camera.lookAt(this.character.position);
-      this.renderScene();
-      this.frameId = window.requestAnimationFrame(this.animate);
-    }
-  }, {
-    key: "renderScene",
-    value: function renderScene() {
-      this.renderer.render(this.scene, this.camera);
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this2 = this;
-
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        style: {
-          width: '900px',
-          height: '400px'
-        },
-        ref: function ref(mount) {
-          _this2.mount = mount;
-        },
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 231
-        },
-        __self: this
-      });
-    }
-  }]);
-
-  return Gait_game;
-}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
-
-function mapStateToProps(state) {
-  //map state variables to the component's state 
-  return {
-    x: state.x,
-    xdes: state.xdes,
-    v: state.v,
-    vdes: state.vdes
-  };
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, {} //add importing action functions here
-)(Gait_game));
-
-/***/ }),
-
-/***/ "./games/Race_game.js":
-/*!****************************!*\
-  !*** ./games/Race_game.js ***!
-  \****************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "react-redux");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_redux__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! three */ "three");
-/* harmony import */ var three__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(three__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _src_actions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../src/actions */ "./src/actions.js");
-var _jsxFileName = "C:\\Users\\nicho_000\\Documents\\RehabRobotV2\\server\\games\\Race_game.js";
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-
-
- //import * as OBJLoader from 'three-obj-loader';
-
- //OBJLoader(THREE);
-//require("/home/rehab/Documents/RehabRobot/server/games/sprite/crosshair.png")
-//require("/home/rehab/Documents/RehabRobot/server/games/sprite/crosshair_yellow.png" );
-
-var Race_game =
-/*#__PURE__*/
-function (_Component) {
-  _inherits(Race_game, _Component);
-
-  function Race_game(props) {
-    var _this;
-
-    _classCallCheck(this, Race_game);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Race_game).call(this, props));
-    _this.start = _this.start.bind(_assertThisInitialized(_this));
-    _this.stop = _this.stop.bind(_assertThisInitialized(_this));
-    _this.animate = _this.animate.bind(_assertThisInitialized(_this));
-    _this.move_object = _this.move_object.bind(_assertThisInitialized(_this));
-    return _this;
-  }
-
-  _createClass(Race_game, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      var theta1 = 0.0;
-      var theta2 = 0.0;
-      var theta3 = 0.0;
-      var race_speed1 = 0.5;
-      var race_speed2 = 0.55;
-      var race_speed3 = 0.6;
-      var prev_x;
-      var prev_time;
-      var curr_time;
-      var group = new three__WEBPACK_IMPORTED_MODULE_2__["Group"]();
-      var width = this.mount.clientWidth;
-      var height = this.mount.clientHeight;
-      var scene = new three__WEBPACK_IMPORTED_MODULE_2__["Scene"]();
-      var fogColor = new three__WEBPACK_IMPORTED_MODULE_2__["Color"](0x99ccff);
-      scene.background = fogColor;
-      scene.background = new three__WEBPACK_IMPORTED_MODULE_2__["Color"](fogColor); //scene.fog = new THREE.Fog(fogColor, 0.0025, 500);
-
-      var camera = new three__WEBPACK_IMPORTED_MODULE_2__["PerspectiveCamera"](90, window.innerWidth / window.innerHeight, 0.1, 800);
-      camera.position.set(-95, -50, 30); //camera.rotation.set(1.5,0.0,0.0);
-
-      scene.add(camera);
-      var renderer = new three__WEBPACK_IMPORTED_MODULE_2__["WebGLRenderer"]({
-        antialias: true
-      });
-      renderer.setSize(width, height);
-      var plateMaterial = new three__WEBPACK_IMPORTED_MODULE_2__["MeshBasicMaterial"]({
-        color: 0xcc6600
-      });
-      var plateMaterial2 = new three__WEBPACK_IMPORTED_MODULE_2__["MeshBasicMaterial"]({
-        color: 0x009933
-      });
-      var other1Material = new three__WEBPACK_IMPORTED_MODULE_2__["MeshLambertMaterial"]({
-        color: 0xff7272
-      });
-      var mainMaterial = new three__WEBPACK_IMPORTED_MODULE_2__["MeshLambertMaterial"]({
-        color: 0xFFA500
-      });
-      var other2Material = new three__WEBPACK_IMPORTED_MODULE_2__["MeshLambertMaterial"]({
-        color: 0xD4D1C8
-      });
-      var boxMaterial = new three__WEBPACK_IMPORTED_MODULE_2__["MeshLambertMaterial"]({
-        color: 0x99ccff
-      }); //var textureLoader = new THREE.TextureLoader();
-      //var texture_grass = textureLoader.load( "static/textures/grass.jpg" );
-      //var material_grass = new THREE.MeshBasicMaterial( { color: 0xffffff, map: texture_grass } );
-
-      var material_grass = new three__WEBPACK_IMPORTED_MODULE_2__["MeshBasicMaterial"]({
-        color: 0x009933
-      }); //var texture_track = textureLoader.load( "static/textures/track.jpg" );
-      //var material_track = new THREE.MeshBasicMaterial( { color: 0xffffff, map: texture_track } );
-
-      var material_track = new three__WEBPACK_IMPORTED_MODULE_2__["MeshBasicMaterial"]({
-        color: 0xcc6600
-      }); // texture_grass.wrapS = texture_grass.wrapT = THREE.RepeatWrapping;
-      //texture_grass.repeat.set( 64, 64 );
-      //var texture_grass2 = textureLoader.load( "static/textures/grass.jpg" );
-      //texture_grass2.wrapS = texture_grass2.wrapT = THREE.RepeatWrapping;
-      //texture_grass2.repeat.set( 4, 4);
-      //var material_grass2 = new THREE.MeshBasicMaterial( { color: 0xffffff, map: texture_grass2 } );
-
-      var material_grass2 = new three__WEBPACK_IMPORTED_MODULE_2__["MeshBasicMaterial"]({
-        color: 0x009933
-      }); //texture_track.wrapS = texture_track.wrapT = THREE.RepeatWrapping;
-      // texture_track.repeat.set( 8, 8 );
-
-      var circle = new three__WEBPACK_IMPORTED_MODULE_2__["Mesh"](new three__WEBPACK_IMPORTED_MODULE_2__["CircleBufferGeometry"](100, 20, 0, Math.PI * 2), material_track);
-      circle.position.set(0, -100, 0);
-      scene.add(circle);
-      var circle2 = new three__WEBPACK_IMPORTED_MODULE_2__["Mesh"](new three__WEBPACK_IMPORTED_MODULE_2__["CircleBufferGeometry"](100, 20, 0, Math.PI * 2), material_track);
-      circle2.position.set(0, 100, 0);
-      scene.add(circle2);
-      var plate = new three__WEBPACK_IMPORTED_MODULE_2__["Mesh"](new three__WEBPACK_IMPORTED_MODULE_2__["PlaneBufferGeometry"](200, 200, 4, 4), material_track);
-      plate.position.set(0, 0, 0);
-      scene.add(plate);
-      var circle3 = new three__WEBPACK_IMPORTED_MODULE_2__["Mesh"](new three__WEBPACK_IMPORTED_MODULE_2__["CircleBufferGeometry"](60, 20, 0, Math.PI * 2), material_grass2);
-      circle3.position.set(0, -100, 0.11);
-      scene.add(circle3);
-      var circle4 = new three__WEBPACK_IMPORTED_MODULE_2__["Mesh"](new three__WEBPACK_IMPORTED_MODULE_2__["CircleBufferGeometry"](60, 20, 0, Math.PI * 2), material_grass2);
-      circle4.position.set(0, 100, 0.11);
-      scene.add(circle4);
-      var plate2 = new three__WEBPACK_IMPORTED_MODULE_2__["Mesh"](new three__WEBPACK_IMPORTED_MODULE_2__["PlaneBufferGeometry"](120, 200, 4, 4), material_grass2);
-      plate2.position.set(0, 0, 0.10);
-      scene.add(plate2);
-      var ground = new three__WEBPACK_IMPORTED_MODULE_2__["Mesh"](new three__WEBPACK_IMPORTED_MODULE_2__["PlaneBufferGeometry"](5000, 5000, 4, 4), material_grass);
-      ground.position.set(-500, -500, -0.1);
-      scene.add(ground);
-      var character = new three__WEBPACK_IMPORTED_MODULE_2__["Mesh"](new three__WEBPACK_IMPORTED_MODULE_2__["TetrahedronBufferGeometry"](5, 0), mainMaterial);
-      character.position.set(-80, 0, 5);
-      scene.add(character);
-      var other = new three__WEBPACK_IMPORTED_MODULE_2__["Mesh"](new three__WEBPACK_IMPORTED_MODULE_2__["BoxBufferGeometry"](5, 5, 5, 4, 4, 4), other1Material);
-      other.position.set(-90, 0, 5);
-      scene.add(other);
-      var other2 = new three__WEBPACK_IMPORTED_MODULE_2__["Mesh"](new three__WEBPACK_IMPORTED_MODULE_2__["BoxBufferGeometry"](5, 5, 5, 4, 4, 4), other2Material);
-      other2.position.set(-70, 0, 5);
-      scene.add(other2);
-      var box1 = new three__WEBPACK_IMPORTED_MODULE_2__["Mesh"](new three__WEBPACK_IMPORTED_MODULE_2__["BoxBufferGeometry"](5000, 5, 1000), boxMaterial);
-      box1.position.set(0, 350, 0);
-      scene.add(box1);
-      var spotLight1 = new three__WEBPACK_IMPORTED_MODULE_2__["SpotLight"](0xffffff, 1);
-      spotLight1.position.set(-width / 3, 200, 200);
-      var light = new three__WEBPACK_IMPORTED_MODULE_2__["HemisphereLight"](0xffffff, 0xffffff, 1);
-      scene.add(light);
-      scene.add(spotLight1);
-      scene.add(camera);
-      this.character = character;
-      this.other = other;
-      this.other2 = other2;
-      this.scene = scene;
-      this.camera = camera;
-      this.renderer = renderer;
-      this.theta1 = theta1;
-      this.theta2 = theta2;
-      this.theta3 = theta3;
-      this.race_speed1 = race_speed1;
-      this.race_speed2 = race_speed2;
-      this.race_speed3 = race_speed3;
-      this.prev_x = prev_x;
-      this.prev_time = prev_time;
-      this.curr_time = curr_time;
-      this.timer = 0.0;
-      this.clock = new three__WEBPACK_IMPORTED_MODULE_2__["Clock"]();
-      this.begin = 0;
-      this.mount.appendChild(this.renderer.domElement);
-      this.start();
-    }
-  }, {
-    key: "componentWillUnmount",
-    value: function componentWillUnmount() {
-      this.stop();
-      this.mount.removeChild(this.renderer.domElement);
-    }
-  }, {
-    key: "start",
-    value: function start() {
-      if (!this.frameId) {
-        this.frameId = requestAnimationFrame(this.animate);
-      }
-    }
-  }, {
-    key: "stop",
-    value: function stop() {
-      cancelAnimationFrame(this.frameId);
-    }
-  }, {
-    key: "move_object",
-    value: function move_object(object, theta, radius, race_speed) {
-      if (object.position.x > 0) {
-        var race_dir = 1.0;
-      } else {
-        var race_dir = -1.0;
-      }
-
-      if (object.position.y > 0) {
-        var turn_dir = 1.0;
-      } else {
-        var turn_dir = -1.0;
-      }
-
-      if (Math.abs(object.position.y) < 100) {
-        object.position.y -= race_speed * race_dir;
-      } else {
-        object.position.x = -turn_dir * radius * Math.cos(theta);
-        object.position.y = turn_dir * (100.0 + radius * Math.sin(theta));
-        object.rotation.z = theta;
-      }
-    }
-  }, {
-    key: "animate",
-    value: function animate() {
-      //wait for 10 sec before beginning 
-      this.timer += this.clock.getDelta();
-      if (this.timer >= 5) this.begin = 1;
-      console.log(this.timer);
-
-      if (this.begin) {
-        this.race_speed1 = (150.0 - 5.0 - Math.abs(this.props.x - this.props.xdes)) / 250.0; //this.race_speed2 = this.race_speed2
-
-        if (this.timer > 6) {
-          if (this.race_speed1 > this.race_speed2) {
-            this.race_speed2 = this.race_speed1;
-          } else {
-            this.race_speed2 -= 0.03 * Math.random();
-          }
-
-          this.race_speed3 = 0.57 - 5 * Math.random() / 25 + 5 * Math.random() / 25;
-          this.timer = 0;
-        } //else this.race_speed3 = 0.57
-
-
-        if (this.character.position.y >= 100) {
-          this.theta1 += this.race_speed1 / 90.0;
-          this.camera.position.x = this.character.position.x - 40.0 * Math.sin(this.theta1);
-          this.camera.position.y = this.character.position.y - 40.0 * Math.cos(this.theta1);
-        } else if (this.character.position.y <= -100) {
-          this.theta1 += this.race_speed1 / 90.0;
-          this.camera.position.x = this.character.position.x + 40.0 * Math.sin(this.theta1);
-          this.camera.position.y = this.character.position.y + 40.0 * Math.cos(this.theta1);
-        } else if (this.character.position.x > 10) {
-          this.theta1 = 0.0;
-          this.camera.position.x = this.character.position.x + 40.0 * Math.sin(this.theta1);
-          this.camera.position.y = this.character.position.y + 40.0 * Math.cos(this.theta1);
-        } else {
-          this.theta1 = 0.0;
-          this.camera.position.x = this.character.position.x - 40.0 * Math.sin(this.theta1);
-          this.camera.position.y = this.character.position.y - 40.0 * Math.cos(this.theta1);
-        }
-
-        if (Math.abs(this.other.position.y) >= 100) {
-          this.theta2 += this.race_speed2 / 90.0;
-        } else {
-          this.theta2 = 0.0;
-        }
-
-        if (Math.abs(this.other2.position.y) >= 100) {
-          this.theta3 += this.race_speed3 / 90.0;
-        } else {
-          this.theta3 = 0.0;
-        }
-
-        this.move_object(this.character, this.theta1, 80.0, this.race_speed1);
-        this.move_object(this.other, this.theta2, 90.0, this.race_speed2);
-        this.move_object(this.other2, this.theta3, 70.0, this.race_speed3);
-        console.log(this.character.rotation.z);
-        this.character.rotation.x += 0.1;
-        this.character.rotation.y += 0.05;
-        this.other.rotation.x += 0.1;
-        this.other.rotation.y += 0.05;
-        this.other2.rotation.x += 0.1;
-        this.other2.rotation.y += 0.05;
-      }
-
-      this.camera.up = new three__WEBPACK_IMPORTED_MODULE_2__["Vector3"](0, 0, 1);
-      this.camera.lookAt(this.character.position);
-      this.renderScene();
-      this.frameId = window.requestAnimationFrame(this.animate);
-    }
-  }, {
-    key: "renderScene",
-    value: function renderScene() {
-      this.renderer.render(this.scene, this.camera);
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this2 = this;
-
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        style: {
-          width: '800px',
-          height: '400px'
-        },
-        ref: function ref(mount) {
-          _this2.mount = mount;
-        },
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 298
-        },
-        __self: this
-      });
-    }
-  }]);
-
-  return Race_game;
-}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
-
-function mapStateToProps(state) {
-  //map state variables to the component's state 
-  return {
-    x: state.x,
-    xdes: state.xdes,
-    v: state.v,
-    vdes: state.vdes
-  };
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, {} //add importing action functions here
-)(Race_game));
-
-/***/ }),
-
-/***/ "./games/Test_timer.js":
-/*!*****************************!*\
-  !*** ./games/Test_timer.js ***!
-  \*****************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "react-redux");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_redux__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _src_actions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../src/actions */ "./src/actions.js");
-/* harmony import */ var _components_Generic_RunButton__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/Generic/RunButton */ "./components/Generic/RunButton.jsx");
-var _jsxFileName = "C:\\Users\\nicho_000\\Documents\\RehabRobotV2\\server\\games\\Test_timer.js";
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-
-
- //OBJLoader(THREE);
-
- //require("/home/rehab/Documents/RehabRobot/server/games/sprite/crosshair.png")
-//require("/home/rehab/Documents/RehabRobot/server/games/sprite/crosshair_yellow.png" );
-
-var Test_timer =
-/*#__PURE__*/
-function (_Component) {
-  _inherits(Test_timer, _Component);
-
-  function Test_timer(props) {
-    _classCallCheck(this, Test_timer);
-
-    return _possibleConstructorReturn(this, _getPrototypeOf(Test_timer).call(this, props));
-  }
-
-  _createClass(Test_timer, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      var _this = this;
-
-      this.timerID = setInterval(function () {
-        return _this.tick();
-      }, 50);
-    }
-  }, {
-    key: "componentWillUnmount",
-    value: function componentWillUnmount() {
-      clearInterval(this.timerID);
-    }
-  }, {
-    key: "tick",
-    value: function tick() {
-      this.props.setParam('x', this.props.x + 3);
-      this.props.setParam('xdes', this.props.xdes + 3);
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 35
-        },
-        __self: this
-      }, "Test Timer Active");
-    }
-  }]);
-
-  return Test_timer;
-}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
-
-function mapStateToProps(state) {
-  //map state variables to the component's state 
-  return {
-    x: state.x,
-    xdes: state.xdes
-  };
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, {
-  setParam: _src_actions__WEBPACK_IMPORTED_MODULE_2__["setParam"] //add importing action functions here
-
-})(Test_timer));
-
-/***/ }),
-
 /***/ "./pages/index.jsx":
 /*!*************************!*\
   !*** ./pages/index.jsx ***!
@@ -7092,43 +2885,22 @@ function (_React$Component) {
 /*!************************!*\
   !*** ./src/actions.js ***!
   \************************/
-/*! exports provided: CHANGE_TEXT, TOGGLE_DRAWER, OPEN_PAGE, SELECT_CONTROLLER, SET_PARAM, RUN_ROBOT, SET_SOCKET, SET_USER, SET_GAME, SET_VALUE, changeText, toggleDrawer, openPage, setParam, selectController, runRobot, setSocket, setUser, setGame, setValue */
+/*! exports provided: CHANGE_TEXT, TOGGLE_DRAWER, SET_VALUE, changeText, toggleDrawer, setValue */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CHANGE_TEXT", function() { return CHANGE_TEXT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TOGGLE_DRAWER", function() { return TOGGLE_DRAWER; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "OPEN_PAGE", function() { return OPEN_PAGE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SELECT_CONTROLLER", function() { return SELECT_CONTROLLER; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_PARAM", function() { return SET_PARAM; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RUN_ROBOT", function() { return RUN_ROBOT; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_SOCKET", function() { return SET_SOCKET; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_USER", function() { return SET_USER; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_GAME", function() { return SET_GAME; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_VALUE", function() { return SET_VALUE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "changeText", function() { return changeText; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "toggleDrawer", function() { return toggleDrawer; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "openPage", function() { return openPage; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setParam", function() { return setParam; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "selectController", function() { return selectController; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "runRobot", function() { return runRobot; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setSocket", function() { return setSocket; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setUser", function() { return setUser; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setGame", function() { return setGame; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setValue", function() { return setValue; });
 /*
  * action types
  */
 var CHANGE_TEXT = 'CHANGE_TEXT';
 var TOGGLE_DRAWER = 'TOGGLE_DRAWER';
-var OPEN_PAGE = 'OPEN_PAGE';
-var SELECT_CONTROLLER = 'SELECT_CONTROLLER';
-var SET_PARAM = 'SET_PARAM';
-var RUN_ROBOT = 'RUN_ROBOT';
-var SET_SOCKET = 'SET_SOCKET';
-var SET_USER = 'SET_USER';
-var SET_GAME = 'SET_GAME';
 var SET_VALUE = 'SET_VALUE';
 /*
  * action creators
@@ -7143,48 +2915,6 @@ function changeText() {
 function toggleDrawer() {
   return {
     type: TOGGLE_DRAWER
-  };
-}
-function openPage(id) {
-  return {
-    type: OPEN_PAGE,
-    id: id
-  };
-}
-function setParam(id, param) {
-  return {
-    type: SET_PARAM,
-    param: param,
-    id: id
-  };
-}
-var selectController = function selectController(controller) {
-  return {
-    type: SELECT_CONTROLLER,
-    controller: controller
-  };
-};
-function runRobot() {
-  return {
-    type: RUN_ROBOT
-  };
-}
-function setSocket(socket) {
-  return {
-    type: SET_SOCKET,
-    socket: socket
-  };
-}
-function setUser(value) {
-  return {
-    type: SET_USER,
-    value: value
-  };
-}
-function setGame(game) {
-  return {
-    type: SET_GAME,
-    game: game
   };
 }
 function setValue(id, value) {
@@ -7218,30 +2948,19 @@ var initState = {
   menuOpen: false,
   activePage: 1,
   socket: null,
-  run: 0,
   P: 2,
   D: 1,
-  xdes: 1000,
   K: 10,
   B: 0.5,
   M: 0.09,
-  x: 0.5,
-  v: 0,
-  vdes: 0,
   game: 1,
   xmax: 100.0,
   vmax: 0.0,
   k_contact: 0.0,
   m_contact: 0.0,
-  k_assist: 0.0,
-  k_floor: 0.0,
-  k_gravity: 0.0,
-  exp: 1,
-  stage: 1,
-  home: 0,
-  x_ball: -60,
-  x_end: 400.0,
-  range: 30
+  SET: 0,
+  HOME: 0,
+  RUN: 0
 };
 
 function todoApp() {
@@ -7252,50 +2971,6 @@ function todoApp() {
     case _actions__WEBPACK_IMPORTED_MODULE_1__["TOGGLE_DRAWER"]:
       return Object.assign({}, state, {
         menuOpen: !state.menuOpen
-      });
-      break;
-
-    case _actions__WEBPACK_IMPORTED_MODULE_1__["OPEN_PAGE"]:
-      return Object.assign({}, state, {
-        activePage: action.id
-      });
-      break;
-
-    case _actions__WEBPACK_IMPORTED_MODULE_1__["SELECT_CONTROLLER"]:
-      console.log(action.controller);
-      return Object.assign({}, state, {
-        controller: action.controller
-      });
-      break;
-
-    case _actions__WEBPACK_IMPORTED_MODULE_1__["SET_PARAM"]:
-      console.log(action.id);
-      console.log(action.param);
-      return Object.assign({}, state, _defineProperty({}, action.id, action.param));
-      break;
-
-    case _actions__WEBPACK_IMPORTED_MODULE_1__["RUN_ROBOT"]:
-      console.log("Run!");
-      return Object.assign({}, state, {
-        run: 1
-      });
-      break;
-
-    case _actions__WEBPACK_IMPORTED_MODULE_1__["SET_SOCKET"]:
-      return Object.assign({}, state, {
-        socket: action.socket
-      });
-      break;
-
-    case _actions__WEBPACK_IMPORTED_MODULE_1__["SET_USER"]:
-      return Object.assign({}, state, {
-        user: action.value
-      });
-      break;
-
-    case _actions__WEBPACK_IMPORTED_MODULE_1__["SET_GAME"]:
-      return Object.assign({}, state, {
-        game: action.game
       });
       break;
 
@@ -7588,6 +3263,17 @@ module.exports = require("@material-ui/icons/ChevronLeft");
 
 /***/ }),
 
+/***/ "@material-ui/icons/InsertChartOutlined":
+/*!*********************************************************!*\
+  !*** external "@material-ui/icons/InsertChartOutlined" ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("@material-ui/icons/InsertChartOutlined");
+
+/***/ }),
+
 /***/ "@material-ui/icons/Menu":
 /*!******************************************!*\
   !*** external "@material-ui/icons/Menu" ***!
@@ -7684,17 +3370,6 @@ module.exports = require("redux");
 /***/ (function(module, exports) {
 
 module.exports = require("socket.io-client");
-
-/***/ }),
-
-/***/ "three":
-/*!************************!*\
-  !*** external "three" ***!
-  \************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = require("three");
 
 /***/ })
 
