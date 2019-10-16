@@ -166,50 +166,50 @@ function (_React$Component) {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 29
+          lineNumber: 30
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Drawer__WEBPACK_IMPORTED_MODULE_2__["default"], {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 30
+          lineNumber: 31
         },
         __self: this
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Topbar__WEBPACK_IMPORTED_MODULE_3__["default"], {
         title: "Rehab Robot",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 31
-        },
-        __self: this
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", {
-        __source: {
-          fileName: _jsxFileName,
           lineNumber: 32
         },
         __self: this
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 32
+          lineNumber: 33
         },
         __self: this
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 32
+          lineNumber: 33
         },
         __self: this
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 32
+          lineNumber: 33
+        },
+        __self: this
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 33
         },
         __self: this
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ContentWindow__WEBPACK_IMPORTED_MODULE_4__["default"], {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 33
+          lineNumber: 34
         },
         __self: this
       }));
@@ -1275,8 +1275,16 @@ function mapStateToProps(state) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "react-redux");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_redux__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var d3_shape__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! d3-shape */ "d3-shape");
+/* harmony import */ var d3_shape__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(d3_shape__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-redux */ "react-redux");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_redux__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! next/head */ "next/head");
+/* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(next_head__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _data_data_test__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../data/data_test */ "./data/data_test.json");
+var _data_data_test__WEBPACK_IMPORTED_MODULE_4___namespace = /*#__PURE__*/__webpack_require__.t(/*! ../../data/data_test */ "./data/data_test.json", 1);
+/* harmony import */ var react_vis__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-vis */ "react-vis");
+/* harmony import */ var react_vis__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(react_vis__WEBPACK_IMPORTED_MODULE_5__);
 var _jsxFileName = "C:\\Users\\nicho_000\\Documents\\RehabRobotV2\\server\\components\\Pages\\DataPage.jsx";
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -1299,6 +1307,18 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+ //import "react-vis/dist/style.css";
+
+
+
+
+/* import XAxis from 'react-vis/dist/index.js';
+import YAxis from 'react-vis/dist/index.js';
+import ChartLabel from 'react-vis/dist/index.js';
+import HorizontalGridLines from 'react-vis/dist/index.js';
+import VerticalGridLines from 'react-vis/dist/index.js';
+import LineSeries from 'react-vis/dist/index.js';
+import LineSeriesCanvas from 'react-vis/dist/index.js'; */
 
 var DataPage =
 /*#__PURE__*/
@@ -1306,21 +1326,129 @@ function (_React$Component) {
   _inherits(DataPage, _React$Component);
 
   function DataPage(props) {
+    var _this;
+
     _classCallCheck(this, DataPage);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(DataPage).call(this, props));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(DataPage).call(this, props));
+    console.log(_data_data_test__WEBPACK_IMPORTED_MODULE_4__.data);
+    return _this;
   }
 
   _createClass(DataPage, [{
     key: "render",
     value: function render() {
+      var Line = react_vis__WEBPACK_IMPORTED_MODULE_5__["LineSeriesCanvas"];
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 12
+          lineNumber: 34
         },
         __self: this
-      }, " Data Page");
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(next_head__WEBPACK_IMPORTED_MODULE_3___default.a, {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 35
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("link", {
+        href: "https://unpkg.com/react-vis/dist/style.css",
+        rel: "stylesheet",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 36
+        },
+        __self: this
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_vis__WEBPACK_IMPORTED_MODULE_5__["XYPlot"], {
+        width: 300,
+        height: 300,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 41
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_vis__WEBPACK_IMPORTED_MODULE_5__["HorizontalGridLines"], {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 42
+        },
+        __self: this
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_vis__WEBPACK_IMPORTED_MODULE_5__["VerticalGridLines"], {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 43
+        },
+        __self: this
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_vis__WEBPACK_IMPORTED_MODULE_5__["XAxis"], {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 44
+        },
+        __self: this
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_vis__WEBPACK_IMPORTED_MODULE_5__["YAxis"], {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 45
+        },
+        __self: this
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Line, {
+        className: "first-series",
+        data: _data_data_test__WEBPACK_IMPORTED_MODULE_4__.data //{[{x: 1, y: 3}, {x: 2, y: 5}, {x: 3, y: 15}, {x: 4, y: 12}]}
+        ,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 46
+        },
+        __self: this
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_vis__WEBPACK_IMPORTED_MODULE_5__["LineSeries"], {
+        className: "third-series",
+        curve: 'curveMonotoneX',
+        data: [{
+          x: 1,
+          y: 10
+        }, {
+          x: 2,
+          y: 4
+        }, {
+          x: 3,
+          y: 2
+        }, {
+          x: 4,
+          y: 15
+        }],
+        strokeDasharray: "7, 3",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 50
+        },
+        __self: this
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_vis__WEBPACK_IMPORTED_MODULE_5__["ChartLabel"], {
+        text: "X Axis",
+        className: "alt-x-label",
+        includeMargin: false,
+        xPercent: 0.025,
+        yPercent: 1.01,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 56
+        },
+        __self: this
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_vis__WEBPACK_IMPORTED_MODULE_5__["ChartLabel"], {
+        text: "Y Axis",
+        className: "alt-y-label",
+        includeMargin: false,
+        xPercent: 0.06,
+        yPercent: 0.06,
+        style: {
+          transform: 'rotate(-90)',
+          textAnchor: 'end'
+        },
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 64
+        },
+        __self: this
+      })));
     }
   }]);
 
@@ -1331,7 +1459,7 @@ function mapStateToProps(state) {
   return {};
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, {})(DataPage));
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(mapStateToProps, {})(DataPage));
 
 /***/ }),
 
@@ -1761,8 +1889,8 @@ function (_React$Component) {
         __self: this
       }, "Trajectory"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_Dropdown__WEBPACK_IMPORTED_MODULE_4__["default"], {
         text: "Trajectory Profile",
-        id: "game",
-        value: this.props.game,
+        id: "traj",
+        value: this.props.traj,
         select1: "Standard Trajectory",
         select2: "Custom Trajectory 1",
         select3: "Custom Trajectory 2",
@@ -1880,7 +2008,8 @@ function mapStateToProps(state) {
     user: state.user,
     RUN: state.RUN,
     HOME: state.HOME,
-    SET: state.SET
+    SET: state.SET,
+    traj: state.traj
   };
 }
 
@@ -2792,6 +2921,17 @@ function mapStateToProps(state) {
 
 /***/ }),
 
+/***/ "./data/data_test.json":
+/*!*****************************!*\
+  !*** ./data/data_test.json ***!
+  \*****************************/
+/*! exports provided: data, default */
+/***/ (function(module) {
+
+module.exports = {"data":[{"x":1,"y":10},{"x":2,"y":4},{"x":3,"y":1},{"x":4,"y":9}]};
+
+/***/ }),
+
 /***/ "./pages/index.jsx":
 /*!*************************!*\
   !*** ./pages/index.jsx ***!
@@ -2861,13 +3001,13 @@ function (_React$Component) {
         store: store,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 17
+          lineNumber: 18
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_App__WEBPACK_IMPORTED_MODULE_5__["default"], {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 18
+          lineNumber: 19
         },
         __self: this
       }));
@@ -2958,6 +3098,7 @@ var initState = {
   vmax: 0.0,
   k_contact: 0.0,
   m_contact: 0.0,
+  traj: 1,
   SET: 0,
   HOME: 0,
   RUN: 0
@@ -3307,6 +3448,28 @@ module.exports = require("@material-ui/icons/Settings");
 
 /***/ }),
 
+/***/ "d3-shape":
+/*!***************************!*\
+  !*** external "d3-shape" ***!
+  \***************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("d3-shape");
+
+/***/ }),
+
+/***/ "next/head":
+/*!****************************!*\
+  !*** external "next/head" ***!
+  \****************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("next/head");
+
+/***/ }),
+
 /***/ "react":
 /*!************************!*\
   !*** external "react" ***!
@@ -3337,6 +3500,17 @@ module.exports = require("react-dom");
 /***/ (function(module, exports) {
 
 module.exports = require("react-redux");
+
+/***/ }),
+
+/***/ "react-vis":
+/*!****************************!*\
+  !*** external "react-vis" ***!
+  \****************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("react-vis");
 
 /***/ }),
 

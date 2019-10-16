@@ -79,7 +79,7 @@ class SetupPage extends React.Component {
 			      		<Typography variant="display1" gutterBottom>
 				    			Trajectory  
 			      		</Typography>
-			      		<Dropdown text="Trajectory Profile" id="game" value={this.props.game} select1="Standard Trajectory" select2 = "Custom Trajectory 1" select3 = "Custom Trajectory 2" />
+			      		<Dropdown text="Trajectory Profile" id="traj" value={this.props.traj} select1="Standard Trajectory" select2 = "Custom Trajectory 1" select3 = "Custom Trajectory 2" />
 
 			      	</Grid>
 			      	<Grid item xs>
@@ -131,7 +131,8 @@ function mapStateToProps(state) {
   	user: state.user,
   	RUN: state.RUN,
   	HOME: state.HOME,
-  	SET: state.SET
+  	SET: state.SET,
+  	traj: state.traj
 
   }
 }

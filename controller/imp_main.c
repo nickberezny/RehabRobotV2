@@ -127,7 +127,8 @@ int main(int argc, char* argv[]) {
 		.xmax = "_xmax([0-9]*.[0-9]*)_",
 		.vmax = "_vmax([0-9]*.[0-9]*)_",
 		.game = "_game([0-9]*)_",
-		.exp = "_exp([0-9]*)_"
+		.exp = "_exp([0-9]*)_",
+		.traj = "_traj([0-9]*)_"
 	} ; //regex matches
 
 	regex_t compiled;
@@ -509,6 +510,9 @@ while(1){
     printf("Ad: %.4f, %.4f, %.4f, %.4f\n", Ad[0], Ad[1], Ad[2], Ad[3]);
     printf("Bd: %.4f, %.4f\n", Bd[0], Bd[1]);
 
+    sprintf(sendBuff,"SET");
+	send(connfd, sendBuff, strlen(sendBuff), 0);
+
   	
 /**********************************************************************
 					   	Home to front then to back
@@ -572,9 +576,8 @@ while(1){
 
 	    curr_pos = 0.0;
 
-	    sprintf(sendBuff,"HOME");
-		send(connfd, sendBuff, strlen(sendBuff), 0);
-	}
+
+	} 
 
     //home to front
     
@@ -642,7 +645,8 @@ while(1){
 		sleep(0.01);
 	}
 
-
+    sprintf(sendBuff,"RUN");
+	send(connfd, sendBuff, strlen(sendBuff), 0);
 
 
 /**********************************************************************
@@ -682,10 +686,6 @@ while(1){
 
 	return 0;
 }
-
-/**********************************************************************
-				   	Thread 1: Controller 
-***********************************************************************/
 
 void *controller(void * d)
 {

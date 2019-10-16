@@ -6,7 +6,7 @@ import {
 
 var initState = {user: 1, menuOpen: false, activePage: 1, socket: null, 
                     P: 2, D:1, K:10, B:0.5, M:0.09, game:1, xmax: 100.0, vmax: 0.0,  
-                    k_contact: 0.0, m_contact: 0.0, SET: 0, HOME: 0, RUN: 0
+                    k_contact: 0.0, m_contact: 0.0, traj: 1, SET: 0, HOME: 0, RUN: 0
                 };
 
 function todoApp(state = initState, action) {

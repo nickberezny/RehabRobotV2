@@ -9,6 +9,7 @@ import {bindActionCreators} from "redux";
 import rootReducer from "../src/reducers.js";
 import App from "../components/App"
 
+
 const store = createStore(rootReducer);
 
 export default class extends React.Component {
