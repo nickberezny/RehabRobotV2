@@ -11,7 +11,8 @@ class InputText extends React.Component {
 	constructor(props) {
 	    super(props);
 	    this.state = {
-	    	err: false
+	    	err: false,
+	    	disabled: false
 	    }
 	}
 
@@ -34,9 +35,15 @@ class InputText extends React.Component {
     }
 
 	render() {
+
+		if(this.props.set == 1){
+			this.state.disabled = true
+		}
+
 		return (
 			<div>
 	            <TextField
+	            disabled={this.state.disabled}
 					id="TextInput"
 					label={this.props.text}
 					value={this.props.textValue}
@@ -53,6 +60,7 @@ class InputText extends React.Component {
 
 function mapStateToProps(state) {
   return {
+  	set: state.SET
   }
 }
 

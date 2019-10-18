@@ -54,6 +54,17 @@ class WindowContent extends React.Component {
 	handleConfirm = (message) => {
 		//var test = <div>Back Home Complete</div> 
 		this.setValue(message.toString(), 2 );
+		this.setValue('response', 0 );
+		this.setValue('status', 'WAITING FOR INPUT...' );
+
+		switch(message){
+			case 'SET':
+				this.setValue('status', 'READY TO RUN' );
+				break;
+			case 'RUN':
+				this.setValue('status', 'RUNNING...' );
+				break;
+		}
 	}
 
 
@@ -108,6 +119,7 @@ function mapStateToProps(state) {
  		stage: state.stage,
  		exp: state.exp,
  		game: state.game,
+ 		response: state.response
  	}
 }
 

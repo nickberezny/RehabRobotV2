@@ -1,6 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
+import {setValue} from '../../src/actions'
+
 import GenericButton from '../Generic/GenericButton'
 import InputText from '../Generic/InputText'
 import Dropdown from '../Generic/Dropdown'
@@ -8,8 +10,6 @@ import Dropdown from '../Generic/Dropdown'
 import FollowTraj_Dev from '../Setups/FollowTraj_Dev'
 import FollowVel_Dev from '../Setups/FollowVel_Dev'
 import Balance_Dev from '../Setups/Balance_Dev'
-
-
 import FollowTraj from '../Setups/FollowTraj'
 import FollowVel from '../Setups/FollowVel'
 import Balance from '../Setups/Balance'
@@ -26,10 +26,29 @@ class SetupPage extends React.Component {
 	    super(props);
 	    this.state = { 
 	    	contents: null,
+	    	color: 'secondary',
+	    	button: null,
+	    	disabled: false
 	    };  
 	}
 
 	render() {
+
+		if(this.props.SET>0) this.state.disabled = true
+		if(this.props.status == 'READY TO RUN') this.setState({ color: 'primary' });
+		if(this.props.response == 1) this.props.setValue('status', 'WAITING FOR RESPONSE...');
+
+		if(this.props.traj > 2)
+		{
+			var temp1 = <GenericButton disabled={this.state.disabled} text="Record" message="RECORD" /> 
+			
+		}else
+		{ 
+			var temp1 = null
+		}
+
+		this.state.button =  temp1;
+		
 
 		if(this.props.user == 1){
 			switch(this.props.game) {
@@ -73,14 +92,14 @@ class SetupPage extends React.Component {
 			      		<Typography variant="display1" gutterBottom>
 			    			Game Type  
 		      			</Typography>
-			      		<Dropdown text="Game" id="game" value={this.props.game} select1="Follow Trajectory" select2 = "Racing" select3 = "Balance" />
+			      		<Dropdown disabled={this.state.disabled} text="Game" id="game" value={this.props.game} select1="Follow Trajectory" select2 = "Racing" select3 = "Balance" />
 			      		<br/>
 			      		<br/>
 			      		<Typography variant="display1" gutterBottom>
 				    			Trajectory  
 			      		</Typography>
-			      		<Dropdown text="Trajectory Profile" id="traj" value={this.props.traj} select1="Standard Trajectory" select2 = "Custom Trajectory 1" select3 = "Custom Trajectory 2" />
-
+			      		<Dropdown disabled={this.state.disabled} text="Trajectory Profile" id="traj" value={this.props.traj} select1="Standard Trajectory" select2 = "Standard Trajectory 2" select3 = "Custom Trajectory" />
+			      		{this.state.button}
 			      	</Grid>
 			      	<Grid item xs>
 				      	<Typography variant="display1" gutterBottom>
@@ -93,21 +112,25 @@ class SetupPage extends React.Component {
 				    		Send Commands
 			      		</Typography>
 					    <GenericButton text="Set" message="SET" /> 
-					    Set: {this.props.SET}
 					    <GenericButton text="Home" message="HOME" />
-					    Home: {this.props.HOME} 
-					    <GenericButton text="Run" message="RUN" /> 
-					    Run: {this.props.RUN}
+					    <GenericButton text="Calibrate" message="CAL" /> 
+					    <GenericButton text="Run" message="RUN" />  
+					    <GenericButton text="Stop" message="END" disabled={!this.props.RUN} /> 
 					    <br/>
-					    Error: {this.props.err}
 					    <br/>
-			      		<br/>
 					    <Typography variant="display1" gutterBottom>
-				    		Robot Status
+				    		Status
 			      		</Typography>
-			      		Status:
-			      		<br/> 
-			      		Total Length: 
+			      		<Typography color='secondary'>
+			      		{this.props.status}
+			      		</Typography>
+			      		<Typography>
+			      		Total Length (cm): {this.props.force_offset}
+			      		</Typography>
+			      		<Typography>
+			      		Force Offset (lb): {this.props.total_length}
+			      		</Typography>
+
 					</Grid>
 					<Grid item xs>
 
@@ -133,14 +156,18 @@ function mapStateToProps(state) {
   	user: state.user,
   	RUN: state.RUN,
   	HOME: state.HOME,
+  	CAL: state.CAL,
   	SET: state.SET,
   	traj: state.traj,
-  	err: state.param_error
-
+  	err: state.param_error,
+  	status: state.status,
+  	force_offset: state.force_offset,
+  	total_length: state.total_length,
+  	response: state.response
   }
 }
 
 export default connect(
   mapStateToProps,
-  {}
+  {setValue}
 )(SetupPage);

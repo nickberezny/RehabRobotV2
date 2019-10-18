@@ -22,15 +22,12 @@ class Dropdown extends React.Component {
 	render() {
 		return (
 			<div style={{padding: 12}}>
-			<FormControl>
+			<FormControl disabled={this.props.disabled}>
 	          <InputLabel>{this.props.text}</InputLabel>
 	          <Select
 	            value={this.props.value}
 	            onChange={this.handleChange}
 	          >
-	            <MenuItem value="">
-	              <em>None</em>
-	            </MenuItem>
 	            <MenuItem value={1}>{this.props.select1}</MenuItem>
 	            <MenuItem value={2}>{this.props.select2}</MenuItem>
 	            <MenuItem value={3}>{this.props.select3}</MenuItem>

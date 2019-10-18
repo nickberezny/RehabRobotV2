@@ -103,6 +103,11 @@ struct gait_sim {
 void *controller(void * d);
 void *server(void * d);
 void *logger(void * d);
+
+void home();
+void record_trajectory(); 
+void get_parameters();
+
 int init_daq();
 
 bool init_thread(pthread_attr_t * attr, struct sched_param * param, int priority);

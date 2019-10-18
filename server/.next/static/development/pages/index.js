@@ -219,6 +219,22 @@ function (_React$Component) {
     _defineProperty(_assertThisInitialized(_this), "handleConfirm", function (message) {
       //var test = <div>Back Home Complete</div> 
       _this.setValue(message.toString(), 2);
+
+      _this.setValue('response', 0);
+
+      _this.setValue('status', 'WAITING FOR INPUT...');
+
+      switch (message) {
+        case 'SET':
+          _this.setValue('status', 'READY TO RUN');
+
+          break;
+
+        case 'RUN':
+          _this.setValue('status', 'RUNNING...');
+
+          break;
+      }
     });
 
     _this.handleInfo = _this.handleInfo.bind(_assertThisInitialized(_this));
@@ -272,13 +288,13 @@ function (_React$Component) {
               style: this.state.style,
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 78
+                lineNumber: 89
               },
               __self: this
             }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Pages_SetupPage__WEBPACK_IMPORTED_MODULE_4__["default"], {
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 78
+                lineNumber: 89
               },
               __self: this
             }), " ");
@@ -289,13 +305,13 @@ function (_React$Component) {
               style: this.state.style,
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 79
+                lineNumber: 90
               },
               __self: this
             }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Pages_SetupPage__WEBPACK_IMPORTED_MODULE_4__["default"], {
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 79
+                lineNumber: 90
               },
               __self: this
             }), " ");
@@ -308,13 +324,13 @@ function (_React$Component) {
             style: this.state.style,
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 82
+              lineNumber: 93
             },
             __self: this
           }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Pages_DataPage__WEBPACK_IMPORTED_MODULE_5__["default"], {
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 82
+              lineNumber: 93
             },
             __self: this
           }), " ", this.state.home, " ", this.state.info, "  ");
@@ -325,13 +341,13 @@ function (_React$Component) {
             style: this.state.style,
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 85
+              lineNumber: 96
             },
             __self: this
           }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Pages_SettingsPage__WEBPACK_IMPORTED_MODULE_6__["default"], {
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 85
+              lineNumber: 96
             },
             __self: this
           }), " ");
@@ -342,7 +358,7 @@ function (_React$Component) {
             style: this.state.style,
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 88
+              lineNumber: 99
             },
             __self: this
           }, " Page Load Failed ");
@@ -351,7 +367,7 @@ function (_React$Component) {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 92
+          lineNumber: 103
         },
         __self: this
       }, this.state.content);
@@ -370,7 +386,8 @@ function mapStateToProps(state) {
     user: state.user,
     stage: state.stage,
     exp: state.exp,
-    game: state.game
+    game: state.game,
+    response: state.response
   };
 }
 
@@ -646,16 +663,21 @@ function (_React$Component) {
     key: "pageOne",
     value: function pageOne() {
       this.props.setValue('activePage', 1);
+      window.location.reload();
     }
   }, {
     key: "pageTwo",
     value: function pageTwo() {
-      this.props.setValue('activePage', 2);
+      if (window.confirm('This will cancel any settings, do you wish to continue?')) {
+        this.props.setValue('activePage', 2);
+      }
     }
   }, {
     key: "pageThree",
     value: function pageThree() {
-      this.props.setValue('activePage', 3);
+      if (window.confirm('This will cancel any settings, do you wish to continue?')) {
+        this.props.setValue('activePage', 3);
+      }
     }
   }, {
     key: "render",
@@ -664,14 +686,14 @@ function (_React$Component) {
         style: ListStyles,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 46
+          lineNumber: 53
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_List__WEBPACK_IMPORTED_MODULE_4___default.a, {
         component: "nav",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 47
+          lineNumber: 54
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5___default.a, {
@@ -679,26 +701,26 @@ function (_React$Component) {
         onClick: this.pageOne,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 48
+          lineNumber: 55
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemIcon__WEBPACK_IMPORTED_MODULE_6___default.a, {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 49
+          lineNumber: 56
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_Build__WEBPACK_IMPORTED_MODULE_9___default.a, {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 50
+          lineNumber: 57
         },
         __self: this
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_7___default.a, {
         primary: "Setup",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 52
+          lineNumber: 59
         },
         __self: this
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5___default.a, {
@@ -706,26 +728,26 @@ function (_React$Component) {
         onClick: this.pageTwo,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 54
+          lineNumber: 61
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemIcon__WEBPACK_IMPORTED_MODULE_6___default.a, {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 55
+          lineNumber: 62
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_InsertChartOutlined__WEBPACK_IMPORTED_MODULE_11___default.a, {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 56
+          lineNumber: 63
         },
         __self: this
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_7___default.a, {
         primary: "Data",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 58
+          lineNumber: 65
         },
         __self: this
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5___default.a, {
@@ -733,26 +755,26 @@ function (_React$Component) {
         onClick: this.pageThree,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 60
+          lineNumber: 67
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemIcon__WEBPACK_IMPORTED_MODULE_6___default.a, {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 61
+          lineNumber: 68
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_Settings__WEBPACK_IMPORTED_MODULE_12___default.a, {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 62
+          lineNumber: 69
         },
         __self: this
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_7___default.a, {
         primary: "Settings",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 64
+          lineNumber: 71
         },
         __self: this
       }))));
@@ -854,6 +876,7 @@ function (_React$Component) {
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_FormControl__WEBPACK_IMPORTED_MODULE_3___default.a, {
+        disabled: this.props.disabled,
         __source: {
           fileName: _jsxFileName,
           lineNumber: 25
@@ -874,37 +897,24 @@ function (_React$Component) {
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_4___default.a, {
-        value: "",
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 31
-        },
-        __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("em", {
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 32
-        },
-        __self: this
-      }, "None")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_4___default.a, {
         value: 1,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 34
+          lineNumber: 31
         },
         __self: this
       }, this.props.select1), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_4___default.a, {
         value: 2,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 35
+          lineNumber: 32
         },
         __self: this
       }, this.props.select2), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_4___default.a, {
         value: 3,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 36
+          lineNumber: 33
         },
         __self: this
       }, this.props.select3))));
@@ -981,6 +991,9 @@ function (_React$Component) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(GenericButton).call(this, props));
     _this.run = _this.run.bind(_assertThisInitialized(_this));
+    _this.state = {
+      color: 'secondary'
+    };
     return _this;
   }
 
@@ -989,28 +1002,63 @@ function (_React$Component) {
     value: function run() {
       var dataToSend = 0;
 
-      if (this.props.err == 0) {
+      if (this.props.err == 0 && this.props.response == 0) {
+        this.props.setValue('response', 1);
+
         switch (this.props.message) {
+          case "RECORD":
+            if (this.props.RUN == 0) {
+              dataToSend = this.props.message;
+              this.props.setValue(this.props.message, 1);
+              this.setState({
+                color: 'primary'
+              });
+            }
+
           case "SET":
-            if (this.props.HOME == 0 && this.props.RUN == 0) {
+            if (this.props.RUN == 0) {
               dataToSend = 'SET_exp' + this.props.exp + '_' + '_game' + this.props.game + '_';
               this.props.setValue(this.props.message, 1);
+              this.setState({
+                color: 'primary'
+              });
             }
 
             break;
 
           case "HOME":
-            if (this.props.SET == 1 && this.props.RUN == 0) {
+            if (this.props.RUN == 0) {
+              if (window.confirm('Are you sure you are ready to home the robot?')) {
+                dataToSend = this.props.message;
+                this.props.setValue(this.props.message, 1);
+                this.setState({
+                  color: 'primary'
+                });
+              }
+            }
+
+            break;
+
+          case "CAL":
+            if (this.props.RUN == 0) {
               dataToSend = this.props.message;
               this.props.setValue(this.props.message, 1);
+              this.setState({
+                color: 'primary'
+              });
             }
 
             break;
 
           case "RUN":
-            if (this.props.SET == 1 && this.props.HOME == 1) {
-              dataToSend = this.props.message;
-              this.props.setValue(this.props.message, 1);
+            if (this.props.SET == 2 && this.props.HOME == 2 && this.props.CAL == 2) {
+              if (window.confirm('Are you sure you are ready to run the robot?')) {
+                dataToSend = this.props.message;
+                this.props.setValue(this.props.message, 1);
+                this.setState({
+                  color: 'primary'
+                });
+              }
             }
 
             break;
@@ -1028,16 +1076,17 @@ function (_React$Component) {
         },
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 57
+          lineNumber: 91
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_1___default.a, {
         variant: "contained",
-        color: "primary",
+        color: this.state.color,
         onClick: this.run,
+        disabled: this.props.disabled,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 58
+          lineNumber: 92
         },
         __self: this
       }, this.props.text));
@@ -1053,7 +1102,9 @@ function mapStateToProps(state) {
     SET: state.SET,
     HOME: state.HOME,
     RUN: state.RUN,
-    err: state.param_error
+    CAL: state.CAL,
+    err: state.param_error,
+    response: state.response
   };
 }
 
@@ -1144,7 +1195,8 @@ function (_React$Component) {
     });
 
     _this.state = {
-      err: false
+      err: false,
+      disabled: false
     };
     return _this;
   }
@@ -1152,13 +1204,18 @@ function (_React$Component) {
   _createClass(InputText, [{
     key: "render",
     value: function render() {
+      if (this.props.set == 1) {
+        this.state.disabled = true;
+      }
+
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 38
+          lineNumber: 44
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_TextField__WEBPACK_IMPORTED_MODULE_3___default.a, {
+        disabled: this.state.disabled,
         id: "TextInput",
         label: this.props.text,
         value: this.props.textValue,
@@ -1167,7 +1224,7 @@ function (_React$Component) {
         error: this.state.err,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 39
+          lineNumber: 45
         },
         __self: this
       }));
@@ -1178,7 +1235,9 @@ function (_React$Component) {
 }(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
 
 function mapStateToProps(state) {
-  return {};
+  return {
+    set: state.SET
+  };
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, {
@@ -1539,21 +1598,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var _Generic_GenericButton__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Generic/GenericButton */ "./components/Generic/GenericButton.jsx");
-/* harmony import */ var _Generic_InputText__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Generic/InputText */ "./components/Generic/InputText.jsx");
-/* harmony import */ var _Generic_Dropdown__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Generic/Dropdown */ "./components/Generic/Dropdown.jsx");
-/* harmony import */ var _Setups_FollowTraj_Dev__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Setups/FollowTraj_Dev */ "./components/Setups/FollowTraj_Dev.jsx");
-/* harmony import */ var _Setups_FollowVel_Dev__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../Setups/FollowVel_Dev */ "./components/Setups/FollowVel_Dev.jsx");
-/* harmony import */ var _Setups_Balance_Dev__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../Setups/Balance_Dev */ "./components/Setups/Balance_Dev.jsx");
-/* harmony import */ var _Setups_FollowTraj__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../Setups/FollowTraj */ "./components/Setups/FollowTraj.jsx");
-/* harmony import */ var _Setups_FollowVel__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../Setups/FollowVel */ "./components/Setups/FollowVel.jsx");
-/* harmony import */ var _Setups_Balance__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../Setups/Balance */ "./components/Setups/Balance.jsx");
-/* harmony import */ var _material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @material-ui/core/Grid */ "./node_modules/@material-ui/core/Grid/index.js");
-/* harmony import */ var _material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_11__);
-/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/styles/index.js");
-/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_12__);
-/* harmony import */ var _material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @material-ui/core/Typography */ "./node_modules/@material-ui/core/Typography/index.js");
-/* harmony import */ var _material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_13__);
+/* harmony import */ var _src_actions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../src/actions */ "./src/actions.js");
+/* harmony import */ var _Generic_GenericButton__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Generic/GenericButton */ "./components/Generic/GenericButton.jsx");
+/* harmony import */ var _Generic_InputText__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Generic/InputText */ "./components/Generic/InputText.jsx");
+/* harmony import */ var _Generic_Dropdown__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Generic/Dropdown */ "./components/Generic/Dropdown.jsx");
+/* harmony import */ var _Setups_FollowTraj_Dev__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../Setups/FollowTraj_Dev */ "./components/Setups/FollowTraj_Dev.jsx");
+/* harmony import */ var _Setups_FollowVel_Dev__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../Setups/FollowVel_Dev */ "./components/Setups/FollowVel_Dev.jsx");
+/* harmony import */ var _Setups_Balance_Dev__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../Setups/Balance_Dev */ "./components/Setups/Balance_Dev.jsx");
+/* harmony import */ var _Setups_FollowTraj__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../Setups/FollowTraj */ "./components/Setups/FollowTraj.jsx");
+/* harmony import */ var _Setups_FollowVel__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../Setups/FollowVel */ "./components/Setups/FollowVel.jsx");
+/* harmony import */ var _Setups_Balance__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../Setups/Balance */ "./components/Setups/Balance.jsx");
+/* harmony import */ var _material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @material-ui/core/Grid */ "./node_modules/@material-ui/core/Grid/index.js");
+/* harmony import */ var _material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/styles/index.js");
+/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_13__);
+/* harmony import */ var _material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @material-ui/core/Typography */ "./node_modules/@material-ui/core/Typography/index.js");
+/* harmony import */ var _material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_14__);
 var _jsxFileName = "C:\\Users\\nicho_000\\Documents\\RehabRobotV2\\server\\components\\Pages\\SetupPage.jsx";
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -1589,6 +1649,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
 var SetupPage =
 /*#__PURE__*/
 function (_React$Component) {
@@ -1601,7 +1662,10 @@ function (_React$Component) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(SetupPage).call(this, props));
     _this.state = {
-      contents: null
+      contents: null,
+      color: 'secondary',
+      button: null,
+      disabled: false
     };
     return _this;
   }
@@ -1609,19 +1673,42 @@ function (_React$Component) {
   _createClass(SetupPage, [{
     key: "render",
     value: function render() {
+      if (this.props.SET > 0) this.state.disabled = true;
+      if (this.props.status == 'READY TO RUN') this.setState({
+        color: 'primary'
+      });
+      if (this.props.response == 1) this.props.setValue('status', 'WAITING FOR RESPONSE...');
+
+      if (this.props.traj > 2) {
+        var temp1 = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_GenericButton__WEBPACK_IMPORTED_MODULE_3__["default"], {
+          disabled: this.state.disabled,
+          text: "Record",
+          message: "RECORD",
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 43
+          },
+          __self: this
+        });
+      } else {
+        var temp1 = null;
+      }
+
+      this.state.button = temp1;
+
       if (this.props.user == 1) {
         switch (this.props.game) {
           case 1:
             this.state.contents = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 37
+                lineNumber: 56
               },
               __self: this
-            }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Setups_FollowTraj_Dev__WEBPACK_IMPORTED_MODULE_5__["default"], {
+            }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Setups_FollowTraj_Dev__WEBPACK_IMPORTED_MODULE_6__["default"], {
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 37
+                lineNumber: 56
               },
               __self: this
             }), " ");
@@ -1631,13 +1718,13 @@ function (_React$Component) {
             this.state.contents = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 40
+                lineNumber: 59
               },
               __self: this
-            }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Setups_FollowVel_Dev__WEBPACK_IMPORTED_MODULE_6__["default"], {
+            }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Setups_FollowVel_Dev__WEBPACK_IMPORTED_MODULE_7__["default"], {
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 40
+                lineNumber: 59
               },
               __self: this
             }), " ");
@@ -1647,13 +1734,13 @@ function (_React$Component) {
             this.state.contents = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 43
+                lineNumber: 62
               },
               __self: this
-            }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Setups_Balance_Dev__WEBPACK_IMPORTED_MODULE_7__["default"], {
+            }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Setups_Balance_Dev__WEBPACK_IMPORTED_MODULE_8__["default"], {
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 43
+                lineNumber: 62
               },
               __self: this
             }), " ");
@@ -1663,7 +1750,7 @@ function (_React$Component) {
             this.state.contents = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 46
+                lineNumber: 65
               },
               __self: this
             }, " Select a Game ");
@@ -1674,13 +1761,13 @@ function (_React$Component) {
             this.state.contents = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 52
+                lineNumber: 71
               },
               __self: this
-            }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Setups_FollowTraj__WEBPACK_IMPORTED_MODULE_8__["default"], {
+            }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Setups_FollowTraj__WEBPACK_IMPORTED_MODULE_9__["default"], {
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 52
+                lineNumber: 71
               },
               __self: this
             }), " ");
@@ -1690,13 +1777,13 @@ function (_React$Component) {
             this.state.contents = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 55
+                lineNumber: 74
               },
               __self: this
-            }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Setups_FollowVel__WEBPACK_IMPORTED_MODULE_9__["default"], {
+            }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Setups_FollowVel__WEBPACK_IMPORTED_MODULE_10__["default"], {
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 55
+                lineNumber: 74
               },
               __self: this
             }), " ");
@@ -1706,13 +1793,13 @@ function (_React$Component) {
             this.state.contents = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 58
+                lineNumber: 77
               },
               __self: this
-            }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Setups_Balance__WEBPACK_IMPORTED_MODULE_10__["default"], {
+            }, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Setups_Balance__WEBPACK_IMPORTED_MODULE_11__["default"], {
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 58
+                lineNumber: 77
               },
               __self: this
             }), " ");
@@ -1722,7 +1809,7 @@ function (_React$Component) {
             this.state.contents = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 61
+                lineNumber: 80
               },
               __self: this
             }, " Select a Game ");
@@ -1732,39 +1819,40 @@ function (_React$Component) {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 69
+          lineNumber: 88
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 70
+          lineNumber: 89
         },
         __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_11___default.a, {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_12___default.a, {
         container: true,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 71
+          lineNumber: 90
         },
         __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_11___default.a, {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_12___default.a, {
         item: true,
         xs: true,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 72
+          lineNumber: 91
         },
         __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_13___default.a, {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_14___default.a, {
         variant: "display1",
         gutterBottom: true,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 73
+          lineNumber: 92
         },
         __self: this
-      }, "Game Type"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_Dropdown__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      }, "Game Type"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_Dropdown__WEBPACK_IMPORTED_MODULE_5__["default"], {
+        disabled: this.state.disabled,
         text: "Game",
         id: "game",
         value: this.props.game,
@@ -1773,116 +1861,51 @@ function (_React$Component) {
         select3: "Balance",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 76
-        },
-        __self: this
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", {
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 77
-        },
-        __self: this
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", {
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 78
-        },
-        __self: this
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_13___default.a, {
-        variant: "display1",
-        gutterBottom: true,
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 79
-        },
-        __self: this
-      }, "Trajectory"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_Dropdown__WEBPACK_IMPORTED_MODULE_4__["default"], {
-        text: "Trajectory Profile",
-        id: "traj",
-        value: this.props.traj,
-        select1: "Standard Trajectory",
-        select2: "Custom Trajectory 1",
-        select3: "Custom Trajectory 2",
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 82
-        },
-        __self: this
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_11___default.a, {
-        item: true,
-        xs: true,
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 85
-        },
-        __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_13___default.a, {
-        variant: "display1",
-        gutterBottom: true,
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 86
-        },
-        __self: this
-      }, "Parameters"), this.state.contents), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_11___default.a, {
-        item: true,
-        xs: true,
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 91
-        },
-        __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_13___default.a, {
-        variant: "display1",
-        gutterBottom: true,
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 92
-        },
-        __self: this
-      }, "Send Commands"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_GenericButton__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        text: "Set",
-        message: "SET",
-        __source: {
-          fileName: _jsxFileName,
           lineNumber: 95
         },
         __self: this
-      }), "Set: ", this.props.SET, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_GenericButton__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        text: "Home",
-        message: "HOME",
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 96
+        },
+        __self: this
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", {
         __source: {
           fileName: _jsxFileName,
           lineNumber: 97
         },
         __self: this
-      }), "Home: ", this.props.HOME, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_GenericButton__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        text: "Run",
-        message: "RUN",
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_14___default.a, {
+        variant: "display1",
+        gutterBottom: true,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 99
+          lineNumber: 98
         },
         __self: this
-      }), "Run: ", this.props.RUN, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", {
+      }, "Trajectory"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_Dropdown__WEBPACK_IMPORTED_MODULE_5__["default"], {
+        disabled: this.state.disabled,
+        text: "Trajectory Profile",
+        id: "traj",
+        value: this.props.traj,
+        select1: "Standard Trajectory",
+        select2: "Standard Trajectory 2",
+        select3: "Custom Trajectory",
         __source: {
           fileName: _jsxFileName,
           lineNumber: 101
         },
         __self: this
-      }), "Error: ", this.props.err, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", {
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 103
-        },
-        __self: this
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", {
+      }), this.state.button), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_12___default.a, {
+        item: true,
+        xs: true,
         __source: {
           fileName: _jsxFileName,
           lineNumber: 104
         },
         __self: this
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_13___default.a, {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_14___default.a, {
         variant: "display1",
         gutterBottom: true,
         __source: {
@@ -1890,18 +1913,108 @@ function (_React$Component) {
           lineNumber: 105
         },
         __self: this
-      }, "Robot Status"), "Status:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", {
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 109
-        },
-        __self: this
-      }), "Total Length:"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_11___default.a, {
+      }, "Parameters"), this.state.contents), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_12___default.a, {
         item: true,
         xs: true,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 112
+          lineNumber: 110
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_14___default.a, {
+        variant: "display1",
+        gutterBottom: true,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 111
+        },
+        __self: this
+      }, "Send Commands"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_GenericButton__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        text: "Set",
+        message: "SET",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 114
+        },
+        __self: this
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_GenericButton__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        text: "Home",
+        message: "HOME",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 115
+        },
+        __self: this
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_GenericButton__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        text: "Calibrate",
+        message: "CAL",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 116
+        },
+        __self: this
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_GenericButton__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        text: "Run",
+        message: "RUN",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 117
+        },
+        __self: this
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_GenericButton__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        text: "Stop",
+        message: "END",
+        disabled: !this.props.RUN,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 118
+        },
+        __self: this
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 119
+        },
+        __self: this
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 120
+        },
+        __self: this
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_14___default.a, {
+        variant: "display1",
+        gutterBottom: true,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 121
+        },
+        __self: this
+      }, "Status"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_14___default.a, {
+        color: "secondary",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 124
+        },
+        __self: this
+      }, this.props.status), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_14___default.a, {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 127
+        },
+        __self: this
+      }, "Total Length (cm): ", this.props.force_offset), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_14___default.a, {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 130
+        },
+        __self: this
+      }, "Force Offset (lb): ", this.props.total_length)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_12___default.a, {
+        item: true,
+        xs: true,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 135
         },
         __self: this
       }))));
@@ -1923,13 +2036,20 @@ function mapStateToProps(state) {
     user: state.user,
     RUN: state.RUN,
     HOME: state.HOME,
+    CAL: state.CAL,
     SET: state.SET,
     traj: state.traj,
-    err: state.param_error
+    err: state.param_error,
+    status: state.status,
+    force_offset: state.force_offset,
+    total_length: state.total_length,
+    response: state.response
   };
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, {})(SetupPage));
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, {
+  setValue: _src_actions__WEBPACK_IMPORTED_MODULE_2__["setValue"]
+})(SetupPage));
 
 /***/ }),
 
@@ -2726,7 +2846,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _material_ui_core_IconButton__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_IconButton__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var _material_ui_icons_Menu__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @material-ui/icons/Menu */ "./node_modules/@material-ui/icons/Menu.js");
 /* harmony import */ var _material_ui_icons_Menu__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_Menu__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _src_actions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../src/actions */ "./src/actions.js");
+/* harmony import */ var _material_ui_icons_PowerSettingsNew__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @material-ui/icons/PowerSettingsNew */ "./node_modules/@material-ui/icons/PowerSettingsNew.js");
+/* harmony import */ var _material_ui_icons_PowerSettingsNew__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_PowerSettingsNew__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _src_actions__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../src/actions */ "./src/actions.js");
 var _jsxFileName = "C:\\Users\\nicho_000\\Documents\\RehabRobotV2\\server\\components\\Topbar.jsx";
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -2756,6 +2878,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
 var Topbar =
 /*#__PURE__*/
 function (_React$Component) {
@@ -2770,11 +2893,11 @@ function (_React$Component) {
     _this.state = {
       menuIconStyle: {
         marginLeft: 6,
-        marginRight: 20
+        marginRight: 2
       },
       appbarStyle: {
         display: 'flex',
-        flexGrow: 1
+        flexGrow: 0
       }
     };
     return _this;
@@ -2783,45 +2906,71 @@ function (_React$Component) {
   _createClass(Topbar, [{
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_AppBar__WEBPACK_IMPORTED_MODULE_2___default.a, {
-        position: "fixed",
-        style: this.state.appbarStyle,
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 28
-        },
-        __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Toolbar__WEBPACK_IMPORTED_MODULE_3___default.a, {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         __source: {
           fileName: _jsxFileName,
           lineNumber: 29
         },
         __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_IconButton__WEBPACK_IMPORTED_MODULE_5___default.a, {
-        color: "inherit",
-        "aria-label": "Menu",
-        style: this.state.menuIconStyle,
-        onClick: this.props.toggleDrawer,
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_AppBar__WEBPACK_IMPORTED_MODULE_2___default.a, {
+        position: "fixed",
         __source: {
           fileName: _jsxFileName,
           lineNumber: 30
         },
         __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_Menu__WEBPACK_IMPORTED_MODULE_6___default.a, {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Toolbar__WEBPACK_IMPORTED_MODULE_3___default.a, {
         __source: {
           fileName: _jsxFileName,
           lineNumber: 31
         },
         __self: this
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_4___default.a, {
-        variant: "title",
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_IconButton__WEBPACK_IMPORTED_MODULE_5___default.a, {
         color: "inherit",
+        "aria-label": "Menu",
+        onClick: this.props.toggleDrawer,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 32
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_Menu__WEBPACK_IMPORTED_MODULE_6___default.a, {
         __source: {
           fileName: _jsxFileName,
           lineNumber: 33
         },
         __self: this
-      }, this.props.title)));
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_4___default.a, {
+        variant: "title",
+        color: "inherit",
+        style: {
+          flex: 1
+        },
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 35
+        },
+        __self: this
+      }, this.props.title), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 38
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_IconButton__WEBPACK_IMPORTED_MODULE_5___default.a, {
+        color: "inherit",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 39
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_PowerSettingsNew__WEBPACK_IMPORTED_MODULE_7___default.a, {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 40
+        },
+        __self: this
+      }))))));
     }
   }]);
 
@@ -2834,7 +2983,7 @@ function mapStateToProps(state) {
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, {
-  toggleDrawer: _src_actions__WEBPACK_IMPORTED_MODULE_7__["toggleDrawer"] //add importing action functions here
+  toggleDrawer: _src_actions__WEBPACK_IMPORTED_MODULE_8__["toggleDrawer"] //add importing action functions here
 
 })(Topbar));
 
@@ -21771,6 +21920,38 @@ var _default = (0, _createSvgIcon.default)(_react.default.createElement(_react.d
   fill: "none",
   d: "M0 0h24v24H0z"
 })), 'Movie');
+
+exports.default = _default;
+
+/***/ }),
+
+/***/ "./node_modules/@material-ui/icons/PowerSettingsNew.js":
+/*!*************************************************************!*\
+  !*** ./node_modules/@material-ui/icons/PowerSettingsNew.js ***!
+  \*************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var _createSvgIcon = _interopRequireDefault(__webpack_require__(/*! ./utils/createSvgIcon */ "./node_modules/@material-ui/icons/utils/createSvgIcon.js"));
+
+var _default = (0, _createSvgIcon.default)(_react.default.createElement(_react.default.Fragment, null, _react.default.createElement("path", {
+  fill: "none",
+  d: "M0 0h24v24H0z"
+}), _react.default.createElement("path", {
+  d: "M13 3h-2v10h2V3zm4.83 2.17l-1.42 1.42C17.99 7.86 19 9.81 19 12c0 3.87-3.13 7-7 7s-7-3.13-7-7c0-2.19 1.01-4.14 2.58-5.42L6.17 5.17C4.23 6.82 3 9.26 3 12c0 4.97 4.03 9 9 9s9-4.03 9-9c0-2.74-1.23-5.18-3.17-6.83z"
+})), 'PowerSettingsNew');
 
 exports.default = _default;
 
@@ -82322,7 +82503,13 @@ var initState = {
   SET: 0,
   HOME: 0,
   RUN: 0,
-  user_data: 1
+  CAL: 0,
+  TRAJ: 0,
+  user_data: 1,
+  status: 'WAITING FOR INPUT...',
+  force_offset: null,
+  total_length: null,
+  response: 0
 };
 
 function todoApp() {

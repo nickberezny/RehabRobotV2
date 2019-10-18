@@ -49,6 +49,10 @@ int game_number = 0;
 int game_type = 0;
 int exp_iteration = 0;
 
+int finished_home = 0;
+int finished_set = 0;
+int finished_calibrate = 0; 
+
 int terminate_program = 0;
 
 pthread_mutex_t lock[BUFFER_SIZE]; 
@@ -275,417 +279,143 @@ int main(int argc, char* argv[]) {
 	//system("gnome-terminal --working-directory=Documents/RehabRobot/server -e 'sudo NODE_ENV='production' node server.js'");
 	system("gnome-terminal --working-directory=Documents/RehabRobot/server -e 'sudo node server.js'");
 
-//start top level while loop 
-
-while(1){
+	//start top level while loop 
 	while(1)
 	{
-		connfd = accept(listenfd, (struct sockaddr*)NULL, NULL);
-		if(read(connfd, recvBuff, sizeof(recvBuff)))
+
+		//TODO: reset after run 
+
+		while(1)
 		{
-			if(recvBuff[0] == 'S'){
-				//recieved settings 
-				if(DEBUG) printf("recieved data: %s\n", recvBuff);
-				
-				regcomp(&compiled, regex.exp, REG_EXTENDED);
-				if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
-					sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
-					sscanf(matchBuffer, "%d", &exp_number);
-				    if(DEBUG) { printf("Experiment set to: %d\n", exp_number); }
-				}
-				if(exp_number == 3)
-				{
-					regcomp(&compiled, regex.game, REG_EXTENDED);
-						if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
-						sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
-						sscanf(matchBuffer, "%d", &game_number);
-					    if(DEBUG) { printf("Game set to: %d\n", game_number); }
-					}
-				}
-			}else if(recvBuff[0] == 'E'){
-				//end loop, exit program
-			}
-
-			
-			break;
-		}
-
-		sleep(0.01);
-	}
-
-	
-/*----------------------------------------------------------------------------
-	Prepare and run experiments
------------------------------------------------------------------------------*/
-while(1){
-	while(!terminate_program){
-
-  
-	gait.k_assist = K_GAIN;
-	gait.k_gravity = K_GAIN - 0.15;
-	gait.k_floor = K_GAIN + 0.3;
-	gait.x_floor = 300.0;
-	gait.x_thresh = 20.0;
-	gait.f_thresh = 7.0;
-	gait.phase = 1;
-	gait.v_traj = 25.0;
-
-		game_type = 1;
-		max_count = 60000; //1.5 min = 90000
-		temp_counter = 0;
-		game_wait_sec = 5.0;
-		v_max = V_MAX; 
-
-		
-	/*
-	//set default values if not connecting to UI (for testing)
-    for(int i = 0; i < BUFFER_SIZE; i++)
-	{
-		imp[i].P = P_GAIN;
-		imp[i].D = D_GAIN;
-		imp[i].M = M_GAIN;
-		imp[i].b = B_GAIN;
-		imp[i].m = M_GAIN;
-		if(game_type == 2 && environment == 1) 
-		{
-			imp[i].xdes = BALANCE_POINT; //set balance game set point
-		}else{
-			imp[i].xdes = 0.0;
-		}
-		imp[i].vdes = 0.0;
-		imp[i].fdes = 0.0;
-		imp[i].fp = imp[0].fp;
-		imp[i].vmax = v_max;
-		imp[i].F_Gain = F_GAIN;
-		imp[i].xa = 0.0;
-		imp[i].T = STEP_NSEC/NSEC_IN_SEC;
-		imp[i].va_1 = 0.0;
-		imp[i].va = 0.0;
-		imp[i].Fk_1= 0.0;
-		imp[i].Fa_1 = 0.0;
-		imp[i].Fa = 0.0;
-	}
-	*/
-
-	if(GET_PARAMS_FROM_UI){
-			while(1)
-		    {
-				if(DEBUG) printf("Waiting for run signal from UI ... \n");
-
-				//wait for game settings
-				connfd = accept(listenfd, (struct sockaddr*)NULL, NULL); 
-				if(read(connfd, recvBuff, sizeof(recvBuff)) && recvBuff[0] == 'S')
-				{
+			connfd = accept(listenfd, (struct sockaddr*)NULL, NULL);
+			if(read(connfd, recvBuff, sizeof(recvBuff)))
+			{
+				if(recvBuff[0] == 'S'){
+					
 					//recieved settings 
-					if(DEBUG) printf("recieved data: %s\n", recvBuff);
-					start_controller = 1;
+					recvBuff[0] == 'X'
+					get_parameters();
 
-					//find set parameters in message using regular expreesions 
-					regcomp(&compiled, regex.P, REG_EXTENDED);
-					if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
-						sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
-						sscanf(matchBuffer, "%lf", &imp[0].P);
-					    if(DEBUG) { printf("P gain is: %lf\n", imp[0].P); }
-					}
+					sprintf(sendBuff,"SET");
+					send(connfd, sendBuff, strlen(sendBuff), 0);
 
-					regcomp(&compiled, regex.D, REG_EXTENDED);
-					if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
-						sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
-						sscanf(matchBuffer, "%lf", &imp[0].D);
-					    if(DEBUG) { printf("D gain is: %f\n", imp[0].D); }
-					}
-
-					regcomp(&compiled, regex.xdes, REG_EXTENDED);
-					if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
-						sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
-						sscanf(matchBuffer, "%lf", &imp[0].xdes);
-					    if(DEBUG) { printf("xdes is: %f\n", imp[0].xdes); }
-					}
-
-					regcomp(&compiled, regex.xmax, REG_EXTENDED);
-					if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
-						sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
-						sscanf(matchBuffer, "%lf", &imp[0].xmax);
-					    if(DEBUG) { printf("Xmax is: %f\n", imp[0].xmax); }
-					}
-
-					regcomp(&compiled, regex.vmax, REG_EXTENDED);
-					if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
-						sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
-						sscanf(matchBuffer, "%lf", &imp[0].vmax);
-					    if(DEBUG) { printf("Vmax is: %f\n", imp[0].vmax); }
-					}
-
-					regcomp(&compiled, regex.K, REG_EXTENDED);
-					if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
-						sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
-						sscanf(matchBuffer, "%lf", &imp[0].K);
-					    if(DEBUG) { printf("K is: %f\n", imp[0].K); }
-					}
+				}else if(recvBuff[0] == 'H'){
 					
-					regcomp(&compiled, regex.B, REG_EXTENDED);
-					if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
-						sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
-						sscanf(matchBuffer, "%lf", &imp[0].B);
-					    if(DEBUG) { printf("B is: %f\n", imp[0].B); }
-					}
+					//received homing command 
+					recvBuff[0] == 'X'
+					home();
+
+					sprintf(sendBuff,"HOME_%d",x_end);
+					send(connfd, sendBuff, strlen(sendBuff), 0);
+
+				}else if(recvBuff[0] == 'C'){
 					
-					regcomp(&compiled, regex.M, REG_EXTENDED);
-					if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
-						sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
-						sscanf(matchBuffer, "%lf", &imp[0].M);
-					    if(DEBUG) { printf("M is: %f\n", imp[0].M); }
-					}
+					//received homing command 
+					recvBuff[0] == 'X'
+					calibrate();
 
-					regcomp(&compiled, regex.game, REG_EXTENDED);
-					if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
-						sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
-						sscanf(matchBuffer, "%lf", &imp[0].game);
-					    if(DEBUG) { printf("Game set to: %f\n", imp[0].game); }
-					}
-				}
+					sprintf(sendBuff,"CAL_%d",ft_offset);
+					send(connfd, sendBuff, strlen(sendBuff), 0);
+
+				}else if(recvBuff[0] == 'T'){
 					
+					//recieved trajectory record command 
+					recvBuff[0] == 'X'
+					record_trajectory(); 
+
+					sprintf(sendBuff,"TRAJ");
+					send(connfd, sendBuff, strlen(sendBuff), 0);
+
+				}else if(recvBuff[0] == 'R'){
 					
+					//end loop, exit program
+					recvBuff[0] == 'X'
+					if() break;
 
-				for(int i = 1; i < BUFFER_SIZE; i++)
-				{
-					imp[i].P = imp[0].P;
-					imp[i].D = imp[0].D;
-					imp[i].K = imp[0].K;
-					imp[i].B = imp[0].B;
-					imp[i].M = imp[0].M;
-					imp[i].xdes = imp[0].xdes;
-					imp[i].fp = imp[0].fp;
+					sprintf(sendBuff,"RUN");
+					send(connfd, sendBuff, strlen(sendBuff), 0); 	
 
-					imp[i].xmax = imp[0].xmax;
-					imp[i].vmax = imp[0].vmax;
-					imp[i].game = imp[0].game;
-							
-				}
+				}else if(recvBuff[0] == 'E'){
+					
+					//end loop, exit program
+					//finished sessions, begin shutdown
+					LJM_eStreamStop(daqHandle);
+					LJM_Close(daqHandle);
+					fclose(imp[0].fp);
+					shutdown(connfd, 2);
+				    if(DEBUG) printf("Finished, terminating program... \n");
 
-				/*if(DEBUG) printf("Set All Parameters (From UI)...\n");
-
-				//wait for run signal before starting controller
-				if(read(connfd, recvBuff, sizeof(recvBuff)) && recvBuff[0] == 'R' && start_controller == 1)
-				{
-					//everything set, begin therapy 
-					if(DEBUG) printf("Start signal recieved \n");
-					break;
-				}
-
-				close(connfd);
-				printf("TEST01\n");
-				sleep(0.01);
-				printf("TEST01\n");
+				    return;
+				}		
 			}
-		*/
-				
-	    }
-	}
-	
 
-	if(DEBUG) printf("Set All Parameters...\n");
-	
-    /**********************************************************************
-					   	Calculate Ad, Bd
-	***********************************************************************/
-
-    //descrete state space for admittance control (x(k+1) = Ad*x(k) + Bd*u(k))
-   	
-    double A[2][2] = {{0.0, 1.0},{-k_gain/imp[0].M, -b_gain/imp[0].M}};
-    double B[2] = {0.0, 1.0/M_GAIN};
-
-    matrix_exp(A, Ad);
-
-    printf("a to invert 1: %.2f,%.2f,%.2f,%.2f\n", A[0][0], A[0][1], A[1][0], A[1][1]);
-
-    imp_calc_Bd(Ad, A, B, Bd);
-
-    for(int i = 0; i < BUFFER_SIZE; i++)
-    {
-    	imp[i].Ad = Ad;
-    	imp[i].Bd = Bd;
-    }
-
-    printf("Ad: %.4f, %.4f, %.4f, %.4f\n", Ad[0], Ad[1], Ad[2], Ad[3]);
-    printf("Bd: %.4f, %.4f\n", Bd[0], Bd[1]);
-
-    sprintf(sendBuff,"SET");
-	send(connfd, sendBuff, strlen(sendBuff), 0);
-
-  	
-/**********************************************************************
-					   	Home to front then to back
-***********************************************************************/
-
-    while(1)
-	{
-		//connfd = accept(listenfd, (struct sockaddr*)NULL, NULL);
-		if(read(connfd, recvBuff, sizeof(recvBuff)) && recvBuff[0] == 'H')
-		{
-			//recieved settings 
-			if(DEBUG) printf("recieved data: %s\n", recvBuff);
-			break;
+			sleep(0.01);
 		}
-		sleep(0.01);
-	}
 
-    sleep(2);
-    if(DEBUG) printf("Homing...\n" );  
 
-    if(exp_iteration == 1) //only calibrate & home to back if xend has not been set (first run)
-    {
-
-    	/**********************************************************************
-						   	Calibrate Force Sensor (get offset)
+	    /**********************************************************************
+						   	Calculate Ad, Bd
 		***********************************************************************/
 
-	    if(DEBUG) printf("Calibrating Force Sensor, Keep motor enabled ...\n"); 
+	    //descrete state space for admittance control (x(k+1) = Ad*x(k) + Bd*u(k))
+	   	
+	    double A[2][2] = {{0.0, 1.0},{-k_gain/imp[0].M, -b_gain/imp[0].M}};
+	    double B[2] = {0.0, 1.0/M_GAIN};
 
-	    LJM_eNames(daqHandle, 5, aNames, aWrites, aNumValues, aValues, &errorAddress);
-	    ft_offset = FT_GAIN*aValues[1]; 
+	    matrix_exp(A, Ad);
 
-	    for(int i = 1; i < 20; i++)
+	    printf("a to invert 1: %.2f,%.2f,%.2f,%.2f\n", A[0][0], A[0][1], A[1][0], A[1][1]);
+
+	    imp_calc_Bd(Ad, A, B, Bd);
+
+	    for(int i = 0; i < BUFFER_SIZE; i++)
 	    {
-	    	LJM_eNames(daqHandle, 5, aNames, aWrites, aNumValues, aValues, &errorAddress);
-	    	//printf("Force: %.3f\n", ft_offset);
-	    	ft_offset = ( (ft_offset*(double)i) + FT_GAIN*aValues[1] ) / ((double)i + 1.0);
-	    	usleep(1000); //sleep to space out measurements
-	    }
-	    ft_offset = 2.66;
-	    if(DEBUG) printf("Force sensor offset: %.3f\n", ft_offset);
-
-	    //home to back
-	    aValues[0] = MOTOR_ZERO; 
-	    LJM_eNames(daqHandle, 5, aNames, aWrites, aNumValues, aValues, &errorAddress);
-	    imp[9].LSB[0] = aValues[3];
-
-	    printf("%f\n", aValues[3]);
-	    curr_pos = 0.0;
-	    home_decrease = 0.0;
-
-	    while(imp[9].LSB[0] == 0)
-	    {
-	    	curr_pos = curr_pos + ENC_TO_MM * (double)aValues[4];
-	    	aValues[0] = MOTOR_ZERO_BWD + 0.02 - home_decrease;
-	    	if(aValues[0] > MOTOR_ZERO_BWD + 0.005) home_decrease += 0.0001; //decrease home command to prevent acceleration
-
-	    	LJM_eNames(daqHandle, 5, aNames, aWrites, aNumValues, aValues, &errorAddress);
-	    	imp[9].LSB[0] = aValues[3];
+	    	imp[i].Ad = Ad;
+	    	imp[i].Bd = Bd;
 	    }
 
-	    curr_pos = 0.0;
+	    printf("Ad: %.4f, %.4f, %.4f, %.4f\n", Ad[0], Ad[1], Ad[2], Ad[3]);
+	    printf("Bd: %.4f, %.4f\n", Bd[0], Bd[1]);
+
+	    sprintf(sendBuff,"SET");
+		send(connfd, sendBuff, strlen(sendBuff), 0);
+
+	  	
+
+		/**********************************************************************
+							   	Wait for RUN command from UI
+		***********************************************************************/
+
+	    sprintf(sendBuff,"RUN");
+		send(connfd, sendBuff, strlen(sendBuff), 0);
 
 
-	} 
-
-    //home to front
-    
-    aValues[0] = MOTOR_ZERO; 
-    LJM_eNames(daqHandle, 5, aNames, aWrites, aNumValues, aValues, &errorAddress);
-    imp[9].LSB[0] = aValues[2];
-
-    printf("%f\n", aValues[2]);
-
-    while(imp[9].LSF[0] == 0)
-    {
-    	curr_pos = curr_pos + ENC_TO_MM * (double)aValues[4];
-    	aValues[0] = MOTOR_ZERO_FWD - 0.05 + home_decrease;
-    	if(aValues[0] > MOTOR_ZERO_FWD - 0.005) home_decrease += 0.0001; //decrease home command to prevent acceleration
-
-    	LJM_eNames(daqHandle, 5, aNames, aWrites, aNumValues, aValues, &errorAddress);
-    	imp[9].LSF[0] = aValues[2];
-    }
-
-    if(exp_iteration == 1)
-    {
-	    //set x_end to curr_pos somehow
-	   	if(!USE_DEFINED_X_RANGE) x_end = curr_pos;
-	   	else x_end = X_END;
-
-	    if(DEBUG) printf("X MAX (mm): %.2f\n", x_end);
-	}
-    
-    aValues[0] = MOTOR_ZERO; 
-
-    for(int i = 0; i < BUFFER_SIZE; i++)
-	{
-		if(game_type == 2 && environment == 1) 
-		{
-			imp[i].xdes = BALANCE_POINT; //set balance game set point
-		}else{
-			imp[i].xdes = x_end;
-		}
-	}
-    //Robot should not be homed, reading the encoder will zero the position here.
-    
-    LJM_eNames(daqHandle, 5, aNames, aWrites, aNumValues, aValues, &errorAddress);
-    LJM_eNames(daqHandle, 5, aNames, aWrites, aNumValues, aValues, &errorAddress);
-    LJM_eNames(daqHandle, 5, aNames, aWrites, aNumValues, aValues, &errorAddress);
-
-    sprintf(sendBuff,"INFO,%.2f,%.2f", ft_offset, x_end);
-	send(connfd, sendBuff, strlen(sendBuff), 0);
+		/**********************************************************************
+							   	Create and join threads
+		***********************************************************************/
 
 
-/**********************************************************************
-					   	Wait for RUN command from UI
-***********************************************************************/
+		sleep(game_wait_sec);
 
-    while(1)
-	{
+	    if(DEBUG) printf("Joining Threads ...\n"); 
+	   	// sleep(10);
+		//create and join threads 
+		pthread_create(&thread[0], &attr[0], controller, (void *)imp);
+		pthread_create(&thread[1], &attr[1], server, (void *)imp);
+		pthread_create(&thread[2], &attr[2], logger, (void *)imp);
+	    pthread_join(thread[0], NULL);
+		pthread_join(thread[1], NULL);
+		pthread_join(thread[2], NULL);
 		
-		if(read(connfd, recvBuff, sizeof(recvBuff)) && recvBuff[0] == 'R')
-		{
-			//recieved settings 
-			if(DEBUG) printf("recieved data: %s\n", recvBuff);
-			break;
-		}
-
-		close(connfd);
-		sleep(0.01);
 	}
-
-    sprintf(sendBuff,"RUN");
-	send(connfd, sendBuff, strlen(sendBuff), 0);
-
-
-/**********************************************************************
-					   	Create and join threads
-***********************************************************************/
-
-
-	sleep(game_wait_sec);
-
-    if(DEBUG) printf("Joining Threads ...\n"); 
-   	// sleep(10);
-	//create and join threads 
-	pthread_create(&thread[0], &attr[0], controller, (void *)imp);
-	pthread_create(&thread[1], &attr[1], server, (void *)imp);
-	pthread_create(&thread[2], &attr[2], logger, (void *)imp);
-    pthread_join(thread[0], NULL);
-	pthread_join(thread[1], NULL);
-	pthread_join(thread[2], NULL);
-	
-}
-}
-	//finished sessions, begin shutdown
-	LJM_eStreamStop(daqHandle);
-	LJM_Close(daqHandle);
-	fclose(imp[0].fp);
-	shutdown(connfd, 2);
-    if(DEBUG) printf("Finished, terminating program... \n");
-
-    //char data_command[] = "gnome-terminal --working-directory=Documents/RehabRobot/controller/data -e 'sudo python data_test_plot.py data2.txt";
-    //char apostrophe[] = "'";
-    //strcat(data_command, data_file_name);
-    //strcat(data_command, apostrophe);
-
-    //printf("%s\n", data_command);
-
-    //system(data_command); //automatically run python plotting script on data
 
 	return 0;
 }
+
+
+/**********************************************************************
+						THREADS  
+***********************************************************************/
 
 void *controller(void * d)
 {
@@ -899,45 +629,239 @@ void *logger(void * d)
 
 //TODO: set up homing, position thread 
 
-void *home(void * d)
+void home(void * d)
 {
-	pthread_mutex_lock(&lock[9]);
-   	imp_cont = &((struct impStruct*)d)[9];
 
-   	if(DEBUG) printf("Homing ...\n"); 
-    sleep(10);
+    sleep(2);
+    if(DEBUG) printf("Homing...\n" );  
 
+    //home to back
     aValues[0] = MOTOR_ZERO; 
     LJM_eNames(daqHandle, 5, aNames, aWrites, aNumValues, aValues, &errorAddress);
-    imp_cont->LSB[0] = aValues[3];
+    imp[9].LSB[0] = aValues[3];
 
-    while(imp_cont->LSB[0] == 0)
+    printf("%f\n", aValues[3]);
+    curr_pos = 0.0;
+    home_decrease = 0.0;
+
+    while(imp[9].LSB[0] == 0)
     {
-    	aValues[0] = 2.43; 
-    	LJM_eNames(daqHandle, 5, aNames, aWrites, aNumValues, aValues, &errorAddress);
-    	imp_cont->LSB[0] = aValues[3];
+    	curr_pos = curr_pos + ENC_TO_MM * (double)aValues[4];
+    	aValues[0] = MOTOR_ZERO_BWD + 0.02 - home_decrease;
+    	if(aValues[0] > MOTOR_ZERO_BWD + 0.005) home_decrease += 0.0001; //decrease home command to prevent acceleration
 
+    	LJM_eNames(daqHandle, 5, aNames, aWrites, aNumValues, aValues, &errorAddress);
+    	imp[9].LSB[0] = aValues[3];
     }
 
+    curr_pos = 0.0;
+
+    //home to front
+    
     aValues[0] = MOTOR_ZERO; 
-    //Robot should not be homed, reading the encoder will zero the position here.
     LJM_eNames(daqHandle, 5, aNames, aWrites, aNumValues, aValues, &errorAddress);
-	
-	if(DEBUG) printf("Device is home.\n"); 
-	pthread_mutex_unlock(&lock[9]);
+    imp[9].LSB[0] = aValues[2];
+
+    printf("%f\n", aValues[2]);
+
+    while(imp[9].LSF[0] == 0)
+    {
+    	curr_pos = curr_pos + ENC_TO_MM * (double)aValues[4];
+    	aValues[0] = MOTOR_ZERO_FWD - 0.05 + home_decrease;
+    	if(aValues[0] > MOTOR_ZERO_FWD - 0.005) home_decrease += 0.0001; //decrease home command to prevent acceleration
+
+    	LJM_eNames(daqHandle, 5, aNames, aWrites, aNumValues, aValues, &errorAddress);
+    	imp[9].LSF[0] = aValues[2];
+    }
+
+    if(exp_iteration == 1)
+    {
+	    //set x_end to curr_pos somehow
+	   	if(!USE_DEFINED_X_RANGE) x_end = curr_pos;
+	   	else x_end = X_END;
+
+	    if(DEBUG) printf("X MAX (mm): %.2f\n", x_end);
+	}
+    
+    aValues[0] = MOTOR_ZERO; 
+
+    for(int i = 0; i < BUFFER_SIZE; i++)
+	{
+		if(game_type == 2 && environment == 1) 
+		{
+			imp[i].xdes = BALANCE_POINT; //set balance game set point
+		}else{
+			imp[i].xdes = x_end;
+		}
+	}
+    //Robot should not be homed, reading the encoder will zero the position here.
+    
+    LJM_eNames(daqHandle, 5, aNames, aWrites, aNumValues, aValues, &errorAddress);
+    LJM_eNames(daqHandle, 5, aNames, aWrites, aNumValues, aValues, &errorAddress);
+    LJM_eNames(daqHandle, 5, aNames, aWrites, aNumValues, aValues, &errorAddress);
+
+    sprintf(sendBuff,"INFO,%.2f,%.2f", ft_offset, x_end);
+	send(connfd, sendBuff, strlen(sendBuff), 0);
+
+	finished_home = 1;
 
 	return NULL;
 
 }
 
-void *goto_position(void * d)
+
+void record_trajectory()
 {
-	if(DEBUG) printf("Going to desired position ...\n");     
-   
-    sleep(10);
-	
-	return NULL;
-
+	return;
 }
 
+void get_parameters()
+{
+	if(DEBUG) printf("recieved data: %s\n", recvBuff);
+				
+	regcomp(&compiled, regex.exp, REG_EXTENDED);
+	if(regexec(&compiled, recvBuff, 2, matches, 0)==0)
+	{
+		sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
+		sscanf(matchBuffer, "%d", &exp_number);
+	    if(DEBUG) { printf("Experiment set to: %d\n", exp_number); }
+	}
+	if(exp_number == 3)
+	{
+		regcomp(&compiled, regex.game, REG_EXTENDED);
+			if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
+			sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
+			sscanf(matchBuffer, "%d", &game_number);
+		    if(DEBUG) { printf("Game set to: %d\n", game_number); }
+		}
+	}
 
+	while(1)
+    {
+		if(DEBUG) printf("Waiting for run signal from UI ... \n");
+
+		//wait for game settings
+		connfd = accept(listenfd, (struct sockaddr*)NULL, NULL); 
+		if(read(connfd, recvBuff, sizeof(recvBuff)) && recvBuff[0] == 'S')
+		{
+			//recieved settings 
+			if(DEBUG) printf("recieved data: %s\n", recvBuff);
+			start_controller = 1;
+
+			//find set parameters in message using regular expreesions 
+			regcomp(&compiled, regex.P, REG_EXTENDED);
+			if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
+				sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
+				sscanf(matchBuffer, "%lf", &imp[0].P);
+			    if(DEBUG) { printf("P gain is: %lf\n", imp[0].P); }
+			}
+
+			regcomp(&compiled, regex.D, REG_EXTENDED);
+			if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
+				sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
+				sscanf(matchBuffer, "%lf", &imp[0].D);
+			    if(DEBUG) { printf("D gain is: %f\n", imp[0].D); }
+			}
+
+			regcomp(&compiled, regex.xdes, REG_EXTENDED);
+			if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
+				sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
+				sscanf(matchBuffer, "%lf", &imp[0].xdes);
+			    if(DEBUG) { printf("xdes is: %f\n", imp[0].xdes); }
+			}
+
+			regcomp(&compiled, regex.xmax, REG_EXTENDED);
+			if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
+				sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
+				sscanf(matchBuffer, "%lf", &imp[0].xmax);
+			    if(DEBUG) { printf("Xmax is: %f\n", imp[0].xmax); }
+			}
+
+			regcomp(&compiled, regex.vmax, REG_EXTENDED);
+			if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
+				sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
+				sscanf(matchBuffer, "%lf", &imp[0].vmax);
+			    if(DEBUG) { printf("Vmax is: %f\n", imp[0].vmax); }
+			}
+
+			regcomp(&compiled, regex.K, REG_EXTENDED);
+			if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
+				sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
+				sscanf(matchBuffer, "%lf", &imp[0].K);
+			    if(DEBUG) { printf("K is: %f\n", imp[0].K); }
+			}
+			
+			regcomp(&compiled, regex.B, REG_EXTENDED);
+			if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
+				sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
+				sscanf(matchBuffer, "%lf", &imp[0].B);
+			    if(DEBUG) { printf("B is: %f\n", imp[0].B); }
+			}
+			
+			regcomp(&compiled, regex.M, REG_EXTENDED);
+			if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
+				sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
+				sscanf(matchBuffer, "%lf", &imp[0].M);
+			    if(DEBUG) { printf("M is: %f\n", imp[0].M); }
+			}
+
+			regcomp(&compiled, regex.game, REG_EXTENDED);
+			if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
+				sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
+				sscanf(matchBuffer, "%lf", &imp[0].game);
+			    if(DEBUG) { printf("Game set to: %f\n", imp[0].game); }
+			}
+		}
+			
+			
+
+		for(int i = 1; i < BUFFER_SIZE; i++)
+		{
+			imp[i].P = imp[0].P;
+			imp[i].D = imp[0].D;
+			imp[i].K = imp[0].K;
+			imp[i].B = imp[0].B;
+			imp[i].M = imp[0].M;
+			imp[i].xdes = imp[0].xdes;
+			imp[i].fp = imp[0].fp;
+
+			imp[i].xmax = imp[0].xmax;
+			imp[i].vmax = imp[0].vmax;
+			imp[i].game = imp[0].game;
+					
+		}
+
+		if(DEBUG) printf("Set All Parameters...\n");
+		finished_set = 1;
+	
+	}
+
+	return;
+}
+
+void calibrate()
+{
+
+	/**********************************************************************
+					   	Calibrate Force Sensor (get offset)
+	***********************************************************************/
+
+    if(DEBUG) printf("Calibrating Force Sensor, Keep motor enabled ...\n"); 
+
+    LJM_eNames(daqHandle, 5, aNames, aWrites, aNumValues, aValues, &errorAddress);
+    ft_offset = FT_GAIN*aValues[1]; 
+
+    for(int i = 1; i < 20; i++)
+    {
+    	LJM_eNames(daqHandle, 5, aNames, aWrites, aNumValues, aValues, &errorAddress);
+    	//printf("Force: %.3f\n", ft_offset);
+    	ft_offset = ( (ft_offset*(double)i) + FT_GAIN*aValues[1] ) / ((double)i + 1.0);
+    	usleep(1000); //sleep to space out measurements
+    }
+    ft_offset = 2.66;
+    if(DEBUG) printf("Force sensor offset: %.3f\n", ft_offset);
+
+    finished_calibrate = 1;
+
+	return;
+}

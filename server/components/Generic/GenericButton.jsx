@@ -11,39 +11,73 @@ class GenericButton extends React.Component {
   constructor(props) {
     super(props);
     this.run = this.run.bind(this);
+
+    this.state =
+    {
+      color: 'secondary'
+    }
   }
 
   run() {
 
     var dataToSend = 0;
 
-    if(this.props.err == 0){ 
-    switch(this.props.message)
-    {
-      
-      case "SET":
-        if(this.props.HOME == 0 && this.props.RUN == 0)
-        {
-          dataToSend = 'SET_exp' + this.props.exp + '_' + '_game' + this.props.game + '_'
-          this.props.setValue(this.props.message, 1)
-        }
-        break;
+    if(this.props.err == 0 && this.props.response == 0){ 
+      this.props.setValue('response', 1)
+      switch(this.props.message)
+      {
+        case "RECORD":
+          if(this.props.RUN == 0)
+          {
+            dataToSend = this.props.message
+            this.props.setValue(this.props.message, 1)
+            this.setState({ color: 'primary' });
+          }
+        
+        case "SET":
+          if(this.props.RUN == 0)
+          {
+            dataToSend = 'SET_exp' + this.props.exp + '_' + '_game' + this.props.game + '_'
+            this.props.setValue(this.props.message, 1)
+            this.setState({ color: 'primary' });
+          }
+          break;
 
-      case "HOME":
-        if(this.props.SET == 1 && this.props.RUN == 0)
-        {
-          dataToSend = this.props.message
-          this.props.setValue(this.props.message, 1)
-        }
-        break;
+        case "HOME":
+          if(this.props.RUN == 0)
+          {
+            if(window.confirm('Are you sure you are ready to home the robot?'))
+            {
+              dataToSend = this.props.message
+              this.props.setValue(this.props.message, 1)
+              this.setState({ color: 'primary' });
 
-      case "RUN":
-        if(this.props.SET == 1 && this.props.HOME == 1)
-        {
-          dataToSend = this.props.message
-          this.props.setValue(this.props.message, 1)
-        }
-        break;
+            }
+            
+          }
+          break;
+
+        case "CAL":
+          if(this.props.RUN == 0)
+          {
+            dataToSend = this.props.message
+            this.props.setValue(this.props.message, 1)
+            this.setState({ color: 'primary' });
+          }
+          break;
+
+        case "RUN":
+          if(this.props.SET == 2 && this.props.HOME == 2 && this.props.CAL == 2)
+          {
+            if(window.confirm('Are you sure you are ready to run the robot?'))
+            {
+              dataToSend = this.props.message
+              this.props.setValue(this.props.message, 1)
+              this.setState({ color: 'primary' });
+            }
+            
+          }
+          break;
     }
     
     if(dataToSend != 0) this.props.socket.emit('MESSAGE',dataToSend);
@@ -55,7 +89,7 @@ class GenericButton extends React.Component {
 
     return (
       <div style={{padding: 12}}>
-      <Button variant="contained" color="primary" onClick={this.run}>
+      <Button variant="contained" color={this.state.color} onClick={this.run} disabled={this.props.disabled}>
         {this.props.text}
       </Button>
       </div>
@@ -69,7 +103,9 @@ function mapStateToProps(state) {
     SET: state.SET,
     HOME: state.HOME,
     RUN: state.RUN,
-    err: state.param_error
+    CAL: state.CAL,
+    err: state.param_error,
+    response: state.response
   }
 }
 

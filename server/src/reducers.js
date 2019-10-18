@@ -7,7 +7,9 @@ import {
 
 var initState = {user: 1, menuOpen: false, activePage: 1, socket: null, param_error: 0,
                     P: 2, D:1, K:10, B:0.5, M:0.09, game:1, xmax: 100.0, vmax: 0.0,  
-                    k_contact: 0.0, m_contact: 0.0, traj: 1, SET: 0, HOME: 0, RUN: 0, user_data: 1
+                    k_contact: 0.0, m_contact: 0.0, traj: 1, SET: 0, HOME: 0, RUN: 0, 
+                    CAL: 0, TRAJ: 0, user_data: 1, status: 'WAITING FOR INPUT...',
+                    force_offset: null, total_length: null, response: 0
                 };
 
 function todoApp(state = initState, action) {

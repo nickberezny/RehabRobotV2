@@ -29,15 +29,22 @@ class DrawerList extends React.Component {
   }
 
   pageOne() {
+
     this.props.setValue('activePage',1);
+    window.location.reload();
   }
 
   pageTwo() {
-    this.props.setValue('activePage',2);
+    if(window.confirm('This will cancel any settings, do you wish to continue?')){
+      this.props.setValue('activePage',2);
+    }
+    
   }
 
   pageThree() {
-    this.props.setValue('activePage',3);
+    if(window.confirm('This will cancel any settings, do you wish to continue?')){
+      this.props.setValue('activePage',3);
+    }
   }
 
 

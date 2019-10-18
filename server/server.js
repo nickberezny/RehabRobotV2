@@ -32,11 +32,13 @@ if(TEST) {
 
   client.on('data', function(data){
 
-    var res = data.toString().split(",");
+    var res = data.toString().split("_");
 
     if(data.toString() == 'SET') { io.emit('CONFIRM', 'SET'; }
     else if(data.toString() == 'RUN') { io.emit('CONFIRM', 'RUN'; }
-    else if(data.toString() == 'HOME') { io.emit('CONFIRM', 'HOME'; }
+    else if(res[0] == 'HOME') { io.emit('CONFIRM', 'HOME'; }
+    else if(res[0] == 'CAL') { io.emit('CONFIRM', 'CAL'; }
+    else if(data.toString() == 'TRAJ') { io.emit('CONFIRM', 'TRAJ'; }
     else if(data.toString() == 'END') { io.emit('CONFIRM', 'END'; }
     if(res[0] == 'INFO') {
       io.emit('INFO',data.toString());
