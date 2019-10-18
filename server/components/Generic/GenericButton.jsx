@@ -17,6 +17,7 @@ class GenericButton extends React.Component {
 
     var dataToSend = 0;
 
+    if(this.props.err == 0){ 
     switch(this.props.message)
     {
       
@@ -46,7 +47,7 @@ class GenericButton extends React.Component {
     }
     
     if(dataToSend != 0) this.props.socket.emit('MESSAGE',dataToSend);
-
+  }
   
   }
 
@@ -68,6 +69,7 @@ function mapStateToProps(state) {
     SET: state.SET,
     HOME: state.HOME,
     RUN: state.RUN,
+    err: state.param_error
   }
 }
 

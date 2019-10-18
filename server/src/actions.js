@@ -4,6 +4,7 @@
 export const CHANGE_TEXT = 'CHANGE_TEXT'
 export const TOGGLE_DRAWER = 'TOGGLE_DRAWER'
 export const SET_VALUE = 'SET_VALUE'
+export const PARAM_COUNTER = 'PARAM_COUNTER'
 
 
 /*
@@ -23,5 +24,11 @@ export function setValue(id, value) {
   return {
   type: SET_VALUE,
   id,
+  value }
+}
+
+export function paramCounter(value) {
+  return {
+  type: PARAM_COUNTER,
   value }
 }

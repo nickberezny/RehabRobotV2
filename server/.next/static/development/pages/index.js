@@ -989,33 +989,35 @@ function (_React$Component) {
     value: function run() {
       var dataToSend = 0;
 
-      switch (this.props.message) {
-        case "SET":
-          if (this.props.HOME == 0 && this.props.RUN == 0) {
-            dataToSend = 'SET_exp' + this.props.exp + '_' + '_game' + this.props.game + '_';
-            this.props.setValue(this.props.message, 1);
-          }
+      if (this.props.err == 0) {
+        switch (this.props.message) {
+          case "SET":
+            if (this.props.HOME == 0 && this.props.RUN == 0) {
+              dataToSend = 'SET_exp' + this.props.exp + '_' + '_game' + this.props.game + '_';
+              this.props.setValue(this.props.message, 1);
+            }
 
-          break;
+            break;
 
-        case "HOME":
-          if (this.props.SET == 1 && this.props.RUN == 0) {
-            dataToSend = this.props.message;
-            this.props.setValue(this.props.message, 1);
-          }
+          case "HOME":
+            if (this.props.SET == 1 && this.props.RUN == 0) {
+              dataToSend = this.props.message;
+              this.props.setValue(this.props.message, 1);
+            }
 
-          break;
+            break;
 
-        case "RUN":
-          if (this.props.SET == 1 && this.props.HOME == 1) {
-            dataToSend = this.props.message;
-            this.props.setValue(this.props.message, 1);
-          }
+          case "RUN":
+            if (this.props.SET == 1 && this.props.HOME == 1) {
+              dataToSend = this.props.message;
+              this.props.setValue(this.props.message, 1);
+            }
 
-          break;
+            break;
+        }
+
+        if (dataToSend != 0) this.props.socket.emit('MESSAGE', dataToSend);
       }
-
-      if (dataToSend != 0) this.props.socket.emit('MESSAGE', dataToSend);
     }
   }, {
     key: "render",
@@ -1026,7 +1028,7 @@ function (_React$Component) {
         },
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 56
+          lineNumber: 57
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_1___default.a, {
@@ -1035,7 +1037,7 @@ function (_React$Component) {
         onClick: this.run,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 57
+          lineNumber: 58
         },
         __self: this
       }, this.props.text));
@@ -1050,7 +1052,8 @@ function mapStateToProps(state) {
     socket: state.socket,
     SET: state.SET,
     HOME: state.HOME,
-    RUN: state.RUN
+    RUN: state.RUN,
+    err: state.param_error
   };
 }
 
@@ -1105,6 +1108,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
+
 var InputText =
 /*#__PURE__*/
 function (_React$Component) {
@@ -1120,10 +1124,28 @@ function (_React$Component) {
     _defineProperty(_assertThisInitialized(_this), "onInputChange", function (event) {
       console.log("New parameter");
       var name = _this.props.paramName;
+      var val = event.target.value;
+
+      if (val > _this.props.max || val < _this.props.min) {
+        if (_this.state.err == false) _this.props.paramCounter(1);
+
+        _this.setState({
+          err: true
+        });
+      } else {
+        if (_this.state.err == true) _this.props.paramCounter(-1);
+
+        _this.setState({
+          err: false
+        });
+      }
 
       _this.props.setValue(name, event.target.value);
     });
 
+    _this.state = {
+      err: false
+    };
     return _this;
   }
 
@@ -1133,7 +1155,7 @@ function (_React$Component) {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 23
+          lineNumber: 38
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_TextField__WEBPACK_IMPORTED_MODULE_3___default.a, {
@@ -1142,9 +1164,10 @@ function (_React$Component) {
         value: this.props.textValue,
         onChange: this.onInputChange,
         margin: "normal",
+        error: this.state.err,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 24
+          lineNumber: 39
         },
         __self: this
       }));
@@ -1159,7 +1182,8 @@ function mapStateToProps(state) {
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, {
-  setValue: _src_actions__WEBPACK_IMPORTED_MODULE_4__["setValue"]
+  setValue: _src_actions__WEBPACK_IMPORTED_MODULE_4__["setValue"],
+  paramCounter: _src_actions__WEBPACK_IMPORTED_MODULE_4__["paramCounter"]
 })(InputText));
 
 /***/ }),
@@ -1177,11 +1201,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var d3_shape__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! d3-shape */ "./node_modules/d3-shape/src/index.js");
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! next/head */ "./node_modules/next/head.js");
-/* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(next_head__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _data_data_test__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../data/data_test */ "./data/data_test.json");
-var _data_data_test__WEBPACK_IMPORTED_MODULE_4___namespace = /*#__PURE__*/__webpack_require__.t(/*! ../../data/data_test */ "./data/data_test.json", 1);
-/* harmony import */ var react_vis__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-vis */ "./node_modules/react-vis/es/index.js");
+/* harmony import */ var _Generic_Dropdown__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Generic/Dropdown */ "./components/Generic/Dropdown.jsx");
+/* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! next/head */ "./node_modules/next/head.js");
+/* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(next_head__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _data_data_test__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../data/data_test */ "./data/data_test.json");
+var _data_data_test__WEBPACK_IMPORTED_MODULE_5___namespace = /*#__PURE__*/__webpack_require__.t(/*! ../../data/data_test */ "./data/data_test.json", 1);
+/* harmony import */ var react_vis__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-vis */ "./node_modules/react-vis/es/index.js");
 var _jsxFileName = "C:\\Users\\nicho_000\\Documents\\RehabRobotV2\\server\\components\\Pages\\DataPage.jsx";
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -1204,6 +1229,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
  //import "react-vis/dist/style.css";
 
 
@@ -1223,26 +1249,22 @@ function (_React$Component) {
   _inherits(DataPage, _React$Component);
 
   function DataPage(props) {
-    var _this;
-
     _classCallCheck(this, DataPage);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(DataPage).call(this, props));
-    console.log(_data_data_test__WEBPACK_IMPORTED_MODULE_4__.data);
-    return _this;
+    return _possibleConstructorReturn(this, _getPrototypeOf(DataPage).call(this, props));
   }
 
   _createClass(DataPage, [{
     key: "render",
     value: function render() {
-      var Line = react_vis__WEBPACK_IMPORTED_MODULE_5__["LineSeriesCanvas"];
+      var Line = react_vis__WEBPACK_IMPORTED_MODULE_6__["LineSeriesCanvas"];
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         __source: {
           fileName: _jsxFileName,
           lineNumber: 34
         },
         __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(next_head__WEBPACK_IMPORTED_MODULE_3___default.a, {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(next_head__WEBPACK_IMPORTED_MODULE_4___default.a, {
         __source: {
           fileName: _jsxFileName,
           lineNumber: 35
@@ -1256,7 +1278,7 @@ function (_React$Component) {
           lineNumber: 36
         },
         __self: this
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_vis__WEBPACK_IMPORTED_MODULE_5__["XYPlot"], {
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_vis__WEBPACK_IMPORTED_MODULE_6__["XYPlot"], {
         width: 300,
         height: 300,
         __source: {
@@ -1264,25 +1286,25 @@ function (_React$Component) {
           lineNumber: 41
         },
         __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_vis__WEBPACK_IMPORTED_MODULE_5__["HorizontalGridLines"], {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_vis__WEBPACK_IMPORTED_MODULE_6__["HorizontalGridLines"], {
         __source: {
           fileName: _jsxFileName,
           lineNumber: 42
         },
         __self: this
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_vis__WEBPACK_IMPORTED_MODULE_5__["VerticalGridLines"], {
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_vis__WEBPACK_IMPORTED_MODULE_6__["VerticalGridLines"], {
         __source: {
           fileName: _jsxFileName,
           lineNumber: 43
         },
         __self: this
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_vis__WEBPACK_IMPORTED_MODULE_5__["XAxis"], {
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_vis__WEBPACK_IMPORTED_MODULE_6__["XAxis"], {
         __source: {
           fileName: _jsxFileName,
           lineNumber: 44
         },
         __self: this
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_vis__WEBPACK_IMPORTED_MODULE_5__["YAxis"], {
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_vis__WEBPACK_IMPORTED_MODULE_6__["YAxis"], {
         __source: {
           fileName: _jsxFileName,
           lineNumber: 45
@@ -1290,36 +1312,14 @@ function (_React$Component) {
         __self: this
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Line, {
         className: "first-series",
-        data: _data_data_test__WEBPACK_IMPORTED_MODULE_4__.data //{[{x: 1, y: 3}, {x: 2, y: 5}, {x: 3, y: 15}, {x: 4, y: 12}]}
+        data: _data_data_test__WEBPACK_IMPORTED_MODULE_5__.data[this.props.user_data - 1] //{[{x: 1, y: 3}, {x: 2, y: 5}, {x: 3, y: 15}, {x: 4, y: 12}]}
         ,
         __source: {
           fileName: _jsxFileName,
           lineNumber: 46
         },
         __self: this
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_vis__WEBPACK_IMPORTED_MODULE_5__["LineSeries"], {
-        className: "third-series",
-        curve: 'curveMonotoneX',
-        data: [{
-          x: 1,
-          y: 10
-        }, {
-          x: 2,
-          y: 4
-        }, {
-          x: 3,
-          y: 2
-        }, {
-          x: 4,
-          y: 15
-        }],
-        strokeDasharray: "7, 3",
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 50
-        },
-        __self: this
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_vis__WEBPACK_IMPORTED_MODULE_5__["ChartLabel"], {
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_vis__WEBPACK_IMPORTED_MODULE_6__["ChartLabel"], {
         text: "X Axis",
         className: "alt-x-label",
         includeMargin: false,
@@ -1327,10 +1327,10 @@ function (_React$Component) {
         yPercent: 1.01,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 56
+          lineNumber: 50
         },
         __self: this
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_vis__WEBPACK_IMPORTED_MODULE_5__["ChartLabel"], {
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_vis__WEBPACK_IMPORTED_MODULE_6__["ChartLabel"], {
         text: "Y Axis",
         className: "alt-y-label",
         includeMargin: false,
@@ -1342,10 +1342,22 @@ function (_React$Component) {
         },
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 64
+          lineNumber: 58
         },
         __self: this
-      })));
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_Dropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        text: "User",
+        id: "user_data",
+        value: this.props.user_data,
+        select1: "User 1",
+        select2: "User 2",
+        select3: "User 3",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 70
+        },
+        __self: this
+      }));
     }
   }]);
 
@@ -1353,7 +1365,9 @@ function (_React$Component) {
 }(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
 
 function mapStateToProps(state) {
-  return {};
+  return {
+    user_data: state.user_data
+  };
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(mapStateToProps, {})(DataPage));
@@ -1834,7 +1848,7 @@ function (_React$Component) {
           lineNumber: 95
         },
         __self: this
-      }), this.props.SET, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_GenericButton__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      }), "Set: ", this.props.SET, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_GenericButton__WEBPACK_IMPORTED_MODULE_2__["default"], {
         text: "Home",
         message: "HOME",
         __source: {
@@ -1842,7 +1856,7 @@ function (_React$Component) {
           lineNumber: 97
         },
         __self: this
-      }), this.props.HOME, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_GenericButton__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      }), "Home: ", this.props.HOME, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_GenericButton__WEBPACK_IMPORTED_MODULE_2__["default"], {
         text: "Run",
         message: "RUN",
         __source: {
@@ -1850,16 +1864,22 @@ function (_React$Component) {
           lineNumber: 99
         },
         __self: this
-      }), this.props.RUN, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", {
+      }), "Run: ", this.props.RUN, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", {
         __source: {
           fileName: _jsxFileName,
           lineNumber: 101
         },
         __self: this
+      }), "Error: ", this.props.err, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 103
+        },
+        __self: this
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 102
+          lineNumber: 104
         },
         __self: this
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_13___default.a, {
@@ -1867,13 +1887,13 @@ function (_React$Component) {
         gutterBottom: true,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 103
+          lineNumber: 105
         },
         __self: this
       }, "Robot Status"), "Status:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 107
+          lineNumber: 109
         },
         __self: this
       }), "Total Length:"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_11___default.a, {
@@ -1881,7 +1901,7 @@ function (_React$Component) {
         xs: true,
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 110
+          lineNumber: 112
         },
         __self: this
       }))));
@@ -1904,7 +1924,8 @@ function mapStateToProps(state) {
     RUN: state.RUN,
     HOME: state.HOME,
     SET: state.SET,
-    traj: state.traj
+    traj: state.traj,
+    err: state.param_error
   };
 }
 
@@ -2341,9 +2362,11 @@ function (_React$Component) {
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Generic_InputText__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        text: "Max Velocity1",
+        text: "Max Velocity",
         textValue: this.props.vmax,
         paramName: "vmax",
+        min: 1,
+        max: 2,
         __source: {
           fileName: _jsxFileName,
           lineNumber: 18
@@ -2353,6 +2376,8 @@ function (_React$Component) {
         text: "Max Position",
         textValue: this.props.xmax,
         paramName: "xmax",
+        min: 0.1,
+        max: 0.5,
         __source: {
           fileName: _jsxFileName,
           lineNumber: 19
@@ -2362,6 +2387,8 @@ function (_React$Component) {
         text: "Admittance K",
         textValue: this.props.K,
         paramName: "K",
+        min: 1,
+        max: 2,
         __source: {
           fileName: _jsxFileName,
           lineNumber: 20
@@ -2371,6 +2398,8 @@ function (_React$Component) {
         text: "Admittance B",
         textValue: this.props.B,
         paramName: "B",
+        min: 1,
+        max: 2,
         __source: {
           fileName: _jsxFileName,
           lineNumber: 21
@@ -2380,6 +2409,8 @@ function (_React$Component) {
         text: "Admittance M",
         textValue: this.props.M,
         paramName: "M",
+        min: 1,
+        max: 2,
         __source: {
           fileName: _jsxFileName,
           lineNumber: 22
@@ -2816,7 +2847,7 @@ function mapStateToProps(state) {
 /*! exports provided: data, default */
 /***/ (function(module) {
 
-module.exports = {"data":[{"x":1,"y":10},{"x":2,"y":4},{"x":3,"y":1},{"x":4,"y":9}]};
+module.exports = {"data":[[{"x":1,"y":10},{"x":2,"y":4},{"x":3,"y":1},{"x":4,"y":9}],[{"x":1,"y":5},{"x":2,"y":1},{"x":3,"y":9},{"x":4,"y":2}],[{"x":1,"y":3},{"x":2,"y":4},{"x":3,"y":5},{"x":4,"y":6}]]};
 
 /***/ }),
 
@@ -82205,7 +82236,7 @@ function (_React$Component) {
 /*!************************!*\
   !*** ./src/actions.js ***!
   \************************/
-/*! exports provided: CHANGE_TEXT, TOGGLE_DRAWER, SET_VALUE, changeText, toggleDrawer, setValue */
+/*! exports provided: CHANGE_TEXT, TOGGLE_DRAWER, SET_VALUE, PARAM_COUNTER, changeText, toggleDrawer, setValue, paramCounter */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -82213,15 +82244,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CHANGE_TEXT", function() { return CHANGE_TEXT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TOGGLE_DRAWER", function() { return TOGGLE_DRAWER; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_VALUE", function() { return SET_VALUE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PARAM_COUNTER", function() { return PARAM_COUNTER; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "changeText", function() { return changeText; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "toggleDrawer", function() { return toggleDrawer; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setValue", function() { return setValue; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "paramCounter", function() { return paramCounter; });
 /*
  * action types
  */
 var CHANGE_TEXT = 'CHANGE_TEXT';
 var TOGGLE_DRAWER = 'TOGGLE_DRAWER';
 var SET_VALUE = 'SET_VALUE';
+var PARAM_COUNTER = 'PARAM_COUNTER';
 /*
  * action creators
  */
@@ -82241,6 +82275,12 @@ function setValue(id, value) {
   return {
     type: SET_VALUE,
     id: id,
+    value: value
+  };
+}
+function paramCounter(value) {
+  return {
+    type: PARAM_COUNTER,
     value: value
   };
 }
@@ -82267,6 +82307,7 @@ var initState = {
   menuOpen: false,
   activePage: 1,
   socket: null,
+  param_error: 0,
   P: 2,
   D: 1,
   K: 10,
@@ -82280,7 +82321,8 @@ var initState = {
   traj: 1,
   SET: 0,
   HOME: 0,
-  RUN: 0
+  RUN: 0,
+  user_data: 1
 };
 
 function todoApp() {
@@ -82296,6 +82338,12 @@ function todoApp() {
 
     case _actions__WEBPACK_IMPORTED_MODULE_1__["SET_VALUE"]:
       return Object.assign({}, state, _defineProperty({}, action.id, action.value));
+      break;
+
+    case _actions__WEBPACK_IMPORTED_MODULE_1__["PARAM_COUNTER"]:
+      return Object.assign({}, state, {
+        param_error: state.param_error + action.value
+      });
       break;
 
     default:

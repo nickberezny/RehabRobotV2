@@ -93,11 +93,13 @@ class SetupPage extends React.Component {
 				    		Send Commands
 			      		</Typography>
 					    <GenericButton text="Set" message="SET" /> 
-					    {this.props.SET}
+					    Set: {this.props.SET}
 					    <GenericButton text="Home" message="HOME" />
-					    {this.props.HOME} 
+					    Home: {this.props.HOME} 
 					    <GenericButton text="Run" message="RUN" /> 
-					    {this.props.RUN}
+					    Run: {this.props.RUN}
+					    <br/>
+					    Error: {this.props.err}
 					    <br/>
 			      		<br/>
 					    <Typography variant="display1" gutterBottom>
@@ -132,7 +134,8 @@ function mapStateToProps(state) {
   	RUN: state.RUN,
   	HOME: state.HOME,
   	SET: state.SET,
-  	traj: state.traj
+  	traj: state.traj,
+  	err: state.param_error
 
   }
 }

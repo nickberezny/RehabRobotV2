@@ -1,6 +1,7 @@
 import React from 'react'
 import {curveCatmullRom} from 'd3-shape';
 import { connect } from 'react-redux'
+import Dropdown from '../Generic/Dropdown'
 
 //import "react-vis/dist/style.css";
 import Head from 'next/head';
@@ -22,7 +23,6 @@ class DataPage extends React.Component {
 
 	constructor(props) {
 	    super(props);
-	    console.log(data_test.data)
 	}
 
 	render() {
@@ -45,14 +45,8 @@ class DataPage extends React.Component {
 		          <YAxis />
 		          <Line
 		            className="first-series"
-		            data = {data_test.data}  //{[{x: 1, y: 3}, {x: 2, y: 5}, {x: 3, y: 15}, {x: 4, y: 12}]}
+		            data = {data_test.data[this.props.user_data - 1]}  //{[{x: 1, y: 3}, {x: 2, y: 5}, {x: 3, y: 15}, {x: 4, y: 12}]}
 		          />
-		           <LineSeries
-			        className="third-series"
-			        curve={'curveMonotoneX'}
-			        data={[{x: 1, y: 10}, {x: 2, y: 4}, {x: 3, y: 2}, {x: 4, y: 15}]}
-			        strokeDasharray="7, 3"
-			      />
 		          <ChartLabel 
 		            text="X Axis"
 		            className="alt-x-label"
@@ -73,6 +67,7 @@ class DataPage extends React.Component {
 		            }}
 		            />
 	        </XYPlot>
+	        <Dropdown text="User" id="user_data" value={this.props.user_data} select1="User 1" select2 = "User 2" select3 = "User 3" />
 			</div>
 		);
 	}
@@ -80,7 +75,9 @@ class DataPage extends React.Component {
 
 
 function mapStateToProps(state) {
-  return {}
+  return {
+  	user_data: state.user_data
+  }
 }
 
 export default connect(
