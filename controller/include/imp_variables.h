@@ -7,7 +7,8 @@
 #ifndef INCLUDE_FILE
 #define INCLUDE_FILE
 
-#define TCP_PORT 1337 //socket port
+#define UI_PORT 1337 //socket port for UI server
+#define GAME_PORT 2000 //socket port for Unity game server
 #define LINUX_SCHEDULER SCHED_RR //cpu scheduler, choose from: SCHED_FIFO, SCHED_RR, SCHED_DEADLINE
 
 #define NSEC_IN_SEC 1000000000.0

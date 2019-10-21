@@ -42,7 +42,7 @@
 int subject_id = 6;
 
 int daqHandle; 
-int listenfd = 0, connfd = 0;
+int listenfd_1 = 0, connfd_1 = 0, listenfd_2 = 0, connfd_2 = 0;
 int environment = 2;
 int exp_number = 0;
 int game_number = 0;
@@ -52,6 +52,7 @@ int exp_iteration = 0;
 int finished_home = 0;
 int finished_set = 0;
 int finished_calibrate = 0; 
+int record_traj = 0;
 
 int terminate_program = 0;
 
@@ -160,16 +161,24 @@ int main(int argc, char* argv[]) {
 					   Initialize TCP Socket
 	***********************************************************************/
 		
-    struct sockaddr_in serv_addr; 
+    struct sockaddr_in serv_addr_1, serv_addr_2; 
 
-    listenfd = socket(AF_INET, SOCK_STREAM, 0);
-    memset(&serv_addr, '0', sizeof(serv_addr));
+    listenfd_1 = socket(AF_INET, SOCK_STREAM, 0);
+    memset(&serv_addr_1, '0', sizeof(serv_addr_1));
     
-    serv_addr.sin_family = AF_INET;
-    inet_pton(AF_INET, "127.0.0.1",  &serv_addr.sin_addr.s_addr);
-    serv_addr.sin_port = htons(TCP_PORT); 
+    serv_addr_1.sin_family = AF_INET;
+    inet_pton(AF_INET, "127.0.0.1",  &serv_addr_1.sin_addr.s_addr);
+    serv_addr_1.sin_port = htons(UI_PORT); 
 
-    if(DEBUG) printf("Initialized Socket\n"); 
+    listenfd_2 = socket(AF_INET, SOCK_STREAM, 0);
+    memset(&serv_addr_2, '0', sizeof(serv_addr_2));
+    
+    serv_addr_2.sin_family = AF_INET;
+    inet_pton(AF_INET, "127.0.0.1",  &serv_addr_2.sin_addr.s_addr);
+    serv_addr_2.sin_port = htons(GAME_PORT); 
+
+
+    if(DEBUG) printf("Initialized Sockets\n"); 
 
     /**********************************************************************
 					  		 Initialize DAQ
@@ -268,16 +277,43 @@ int main(int argc, char* argv[]) {
 	 
 
     /**********************************************************************
+				 Initialize Controller for Homing/Recording 
+	***********************************************************************/
+
+	double A2[2][2] = {{0.0, 1.0},{0.0, -b_gain/imp[0].M}};
+    double B2[2] = {0.0, 1.0/M_GAIN};
+
+    matrix_exp(A2, Ad2);
+    imp_calc_Bd(Ad2, A2, B2, Bd2);
+
+    for(int i = 0; i < BUFFER_SIZE; i++)
+    {
+    	imp[i].Ad2 = Ad2;
+    	imp[i].Bd2 = Bd2;
+    }
+
+    printf("Ad: %.4f, %.4f, %.4f, %.4f\n", Ad2[0], Ad2[1], Ad2[2], Ad2[3]);
+    printf("Bd: %.4f, %.4f\n", Bd2[0], Bd2[1]);
+
+    
+    
+
+
+    /**********************************************************************
 					   Wait for input 
 	***********************************************************************/
 
     //start tcp socket
-    bind(listenfd, (struct sockaddr*)&serv_addr, sizeof(serv_addr)); 
-    listen(listenfd, 100);
+    bind(listenfd_1, (struct sockaddr*)&serv_addr_1, sizeof(serv_addr_1)); 
+    listen(listenfd_1, 100);
 
 	//Start UI Process *make sure to use npm run build before  
 	//system("gnome-terminal --working-directory=Documents/RehabRobot/server -e 'sudo NODE_ENV='production' node server.js'");
 	system("gnome-terminal --working-directory=Documents/RehabRobot/server -e 'sudo node server.js'");
+
+	bind(listenfd_2, (struct sockaddr*)&serv_addr_2, sizeof(serv_addr_2)); 
+    listen(listenfd_2, 100);
+	connfd_2 = accept(listenfd_2, (struct sockaddr*)NULL, NULL);
 
 	//start top level while loop 
 	while(1)
@@ -287,8 +323,8 @@ int main(int argc, char* argv[]) {
 
 		while(1)
 		{
-			connfd = accept(listenfd, (struct sockaddr*)NULL, NULL);
-			if(read(connfd, recvBuff, sizeof(recvBuff)))
+			connfd_1 = accept(listenfd_1, (struct sockaddr*)NULL, NULL);
+			if(read(connfd_1, recvBuff, sizeof(recvBuff)))
 			{
 				if(recvBuff[0] == 'S'){
 					
@@ -297,7 +333,7 @@ int main(int argc, char* argv[]) {
 					get_parameters();
 
 					sprintf(sendBuff,"SET");
-					send(connfd, sendBuff, strlen(sendBuff), 0);
+					send(connfd_1, sendBuff, strlen(sendBuff), 0);
 
 				}else if(recvBuff[0] == 'H'){
 					
@@ -306,7 +342,7 @@ int main(int argc, char* argv[]) {
 					home();
 
 					sprintf(sendBuff,"HOME_%d",x_end);
-					send(connfd, sendBuff, strlen(sendBuff), 0);
+					send(connfd_1, sendBuff, strlen(sendBuff), 0);
 
 				}else if(recvBuff[0] == 'C'){
 					
@@ -315,16 +351,17 @@ int main(int argc, char* argv[]) {
 					calibrate();
 
 					sprintf(sendBuff,"CAL_%d",ft_offset);
-					send(connfd, sendBuff, strlen(sendBuff), 0);
+					send(connfd_1, sendBuff, strlen(sendBuff), 0);
 
 				}else if(recvBuff[0] == 'T'){
 					
 					//recieved trajectory record command 
 					recvBuff[0] == 'X'
+					FILE * fp_traj = fopen('trajectory/custom_trajectory.txt',"w");
 					record_trajectory(); 
 
 					sprintf(sendBuff,"TRAJ");
-					send(connfd, sendBuff, strlen(sendBuff), 0);
+					send(connfd_1, sendBuff, strlen(sendBuff), 0);
 
 				}else if(recvBuff[0] == 'R'){
 					
@@ -333,7 +370,7 @@ int main(int argc, char* argv[]) {
 					if() break;
 
 					sprintf(sendBuff,"RUN");
-					send(connfd, sendBuff, strlen(sendBuff), 0); 	
+					send(connfd_1, sendBuff, strlen(sendBuff), 0); 	
 
 				}else if(recvBuff[0] == 'E'){
 					
@@ -342,7 +379,7 @@ int main(int argc, char* argv[]) {
 					LJM_eStreamStop(daqHandle);
 					LJM_Close(daqHandle);
 					fclose(imp[0].fp);
-					shutdown(connfd, 2);
+					shutdown(connfd_1, 2);
 				    if(DEBUG) printf("Finished, terminating program... \n");
 
 				    return;
@@ -378,7 +415,7 @@ int main(int argc, char* argv[]) {
 	    printf("Bd: %.4f, %.4f\n", Bd[0], Bd[1]);
 
 	    sprintf(sendBuff,"SET");
-		send(connfd, sendBuff, strlen(sendBuff), 0);
+		send(connfd_1, sendBuff, strlen(sendBuff), 0);
 
 	  	
 
@@ -387,7 +424,7 @@ int main(int argc, char* argv[]) {
 		***********************************************************************/
 
 	    sprintf(sendBuff,"RUN");
-		send(connfd, sendBuff, strlen(sendBuff), 0);
+		send(connfd_1, sendBuff, strlen(sendBuff), 0);
 
 
 		/**********************************************************************
@@ -478,7 +515,17 @@ void *controller(void * d)
 			{
 				case 1:
 					//assistive or resistive
-					imp_traj2(imp_cont, &direction, &xdes_old, &x_end);
+					switch(traj_type)
+					{
+						case 1:
+							//standard trajectory
+							imp_traj2(imp_cont, &direction, &xdes_old, &x_end);
+							break;
+						case 2:
+							//custom trajectory from file
+							break;
+					}
+
 					imp_Adm(imp_cont, &xa, &va, &x_end);
 					break;
 
@@ -555,7 +602,7 @@ void *controller(void * d)
 
 	LJM_eWriteName(daqHandle, "DAC0", MOTOR_ZERO);
 	sprintf(sendBuff,"END_STAGE");
-	send(connfd, sendBuff, strlen(sendBuff), 0);
+	send(connfd_1, sendBuff, strlen(sendBuff), 0);
 
 	return NULL;
 }
@@ -579,7 +626,7 @@ void *server(void* d)
 			{
 				imp_serve = &((struct impStruct*)d)[i];
 				sprintf(sendBuff,"%.2f,%.2f,%.2f,%.2f,%.2f,%.2f", imp_serve->xk, imp_serve->xdes,imp_serve->vk,imp_serve->vdes,imp_serve->x_ball, x_end);
-				send(connfd, sendBuff, strlen(sendBuff), 0);
+				send(connfd_2, sendBuff, strlen(sendBuff), 0);
 			}
 			
 
@@ -701,7 +748,7 @@ void home(void * d)
     LJM_eNames(daqHandle, 5, aNames, aWrites, aNumValues, aValues, &errorAddress);
 
     sprintf(sendBuff,"INFO,%.2f,%.2f", ft_offset, x_end);
-	send(connfd, sendBuff, strlen(sendBuff), 0);
+	send(connfd_1, sendBuff, strlen(sendBuff), 0);
 
 	finished_home = 1;
 
@@ -712,6 +759,116 @@ void home(void * d)
 
 void record_trajectory()
 {
+
+	if(DEBUG) printf("Beginning recording of trajectory...\n");
+
+	xa = 0.0; // X_DES*1000;
+	va = 0.0;
+	curr_pos = 0.0; //track movement since homing? 
+	x_end = 0.0;
+
+	imp_curr = imp[0];
+	imp_prev = imp[1];
+	imp_curr->start_time = temp_time;
+
+	while(1)
+	{
+
+		clock_gettime(CLOCK_MONOTONIC, &temp_time); 
+		LJM_eNames(daqHandle, 5, aNames, aWrites, aNumValues, aValues, &errorAddress);
+				
+        imp_curr->fk = FT_GAIN*aValues[1] - ft_offset;
+        imp_prev->LSF[0] = imp_curr->LSF[0];
+        imp_prev->LSB[0] = imp_curr->LSB[0];
+        imp_curr->LSF[0] = aValues[2];
+        imp_curr->LSB[0] = aValues[3];
+        curr_pos = curr_pos + ENC_TO_MM * (double)aValues[4]; 
+        imp_curr->xk = curr_pos;
+
+        imp_StepTime(&imp_curr->start_time, &last_time, &imp_curr->step_time);
+		imp_curr->vk = ENC_TO_MM * aValues[4] / ((double)imp_curr->step_time.tv_sec + (double)imp_curr->step_time.tv_nsec/NSEC_IN_SEC);
+		imp_curr->v_unfilt = imp_curr->vk;
+		imp_FIR(v_filt, &imp_curr->vk, &fir_order_v);
+
+		imp_Adm(imp_curr, &xa, &va, &x_end);
+
+		if(imp_curr->cmd != imp_curr->cmd) imp_curr->cmd = 0; //check if command is nan
+		if(imp_curr->cmd > MAX_COMMAND) imp_curr->cmd = MAX_COMMAND;
+		if((-1)*imp_curr->cmd > MAX_COMMAND) imp_curr->cmd = (-1)*MAX_COMMAND;
+		if(imp_curr->cmd > 0) imp_curr->cmd = MOTOR_ZERO_FWD - imp_curr->cmd;
+		if(imp_curr->cmd < 0) imp_curr->cmd = MOTOR_ZERO_BWD - imp_curr->cmd;
+		if(imp_curr->cmd == 0) imp_curr->cmd = MOTOR_ZERO;
+
+		if(imp_curr->LSF[0])
+		{
+		  	if(imp_curr->cmd < MOTOR_ZERO) imp_curr->cmd = MOTOR_ZERO; 
+		  	//direction = -1.0;		
+		}
+		if(imp_curr->LSB[0])  
+		{
+			if(imp_curr->cmd > MOTOR_ZERO) imp_curr->cmd = MOTOR_ZERO;  
+			//direction = 1.0;
+		}
+		
+		if(imp_curr->LSB[0] && !imp_prev->LSB[0] && record_traj == 0)
+		{
+			//begin recording 
+			record_traj = 1;
+			xa = 0.0; // X_DES*1000;
+			va = 0.0;
+			curr_pos = 0.0;
+		}
+
+		if(imp_curr->LSF[0] && !imp_prev->LSF[0] && record_traj == 1)
+		{
+			//halfway through trajectory 
+			record_traj = 2;
+		}
+
+		if(imp_curr->LSB[0] && !imp_prev->LSB[0] && record_traj == 2)
+		{
+			//stop recording 
+			record_traj = 0;
+			fclose(fp_traj);
+			break;
+		}
+
+		if(imp_curr->fk > MAX_FORCE) imp_curr->cmd = MOTOR_ZERO; 
+
+		//set motor command (written at beginning of next step on eNames())
+		aValues[0] = imp_curr->cmd;
+		//if(DEBUG  & i==0) printf("Motor Command: %.2f\n", aValues[0]);
+
+		if(record_traj > 0)
+		{
+			fprintf (imp_log->fp, "%.2f, %.2f\n", imp_curr->step_time, imp_curr->xk);
+		}
+
+        clock_gettime(CLOCK_MONOTONIC, &(imp_curr->end_time));
+        
+        imp_curr->wait_time = imp_curr->end_time;
+        last_time = imp_curr->start_time;
+        
+        imp_StepTime(&imp_curr->end_time, &imp_curr->start_time, &imp_curr->step_time);
+        imp_WaitTime(&imp_curr->step_time, &imp_curr->wait_time);
+
+        //unlock current, lock next mutex
+		if(i == BUFFER_SIZE - 1) { pthread_mutex_lock(&lock[0]); }
+		else { pthread_mutex_lock(&lock[i+1]); }
+		pthread_mutex_unlock(&lock[i]);	
+        
+		if(++temp_counter > MAX_COUNT) {
+			//pthread_mutex_unlock(&lock[0]);	
+			//printf("i %d count %d \n", i, temp_counter);
+			//LJM_eWriteName(daqHandle, "DAC0", MOTOR_ZERO);
+			//return;
+		}
+       
+        clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &imp_curr->wait_time, NULL);
+
+	}
+
+
 	return;
 }
 
@@ -741,8 +898,8 @@ void get_parameters()
 		if(DEBUG) printf("Waiting for run signal from UI ... \n");
 
 		//wait for game settings
-		connfd = accept(listenfd, (struct sockaddr*)NULL, NULL); 
-		if(read(connfd, recvBuff, sizeof(recvBuff)) && recvBuff[0] == 'S')
+		connfd_1 = accept(listenfd_1, (struct sockaddr*)NULL, NULL); 
+		if(read(connfd_1, recvBuff, sizeof(recvBuff)) && recvBuff[0] == 'S')
 		{
 			//recieved settings 
 			if(DEBUG) printf("recieved data: %s\n", recvBuff);
