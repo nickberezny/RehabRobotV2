@@ -311,6 +311,7 @@ int main(int argc, char* argv[]) {
 	//system("gnome-terminal --working-directory=Documents/RehabRobot/server -e 'sudo NODE_ENV='production' node server.js'");
 	system("gnome-terminal --working-directory=Documents/RehabRobot/server -e 'sudo node server.js'");
 
+
 	bind(listenfd_2, (struct sockaddr*)&serv_addr_2, sizeof(serv_addr_2)); 
     listen(listenfd_2, 100);
 	connfd_2 = accept(listenfd_2, (struct sockaddr*)NULL, NULL);
@@ -992,6 +993,17 @@ void get_parameters()
 		finished_set = 1;
 	
 	}
+
+	switch(imp[0].game){
+		case 1:
+			system("gnome-terminal --working-directory=Documents/RehabRobot/server -e 'sudo ./game1'");
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+	}
+	
 
 	return;
 }
