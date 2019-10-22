@@ -138,3 +138,4 @@ void imp_regex_match(regex_t * compiled, char recvBuff[1024], regmatch_t matches
 void imp_Haptics_impedance(struct impStruct * imp, struct physics_ball * ball, struct gait_sim * gait,  double * xa, double * va, double *fa, double * fk, double * fa_1, int * environment, double * x_end);
 void imp_physics(struct impStruct * imp, struct physics_ball * ball, double * x_end);
 void imp_gait(struct impStruct * imp, struct gait_sim * gait);
+void imp_traj_custom(struct impStruct * imp, double * dir, double * xdes_old, double * x_end);

@@ -49,6 +49,8 @@ int game_number = 0;
 int game_type = 0;
 int exp_iteration = 0;
 
+double custom_trajectory[];
+
 int finished_home = 0;
 int finished_set = 0;
 int finished_calibrate = 0; 
@@ -211,10 +213,10 @@ int main(int argc, char* argv[]) {
 	int en = strlen(data_file_name);
 	data_file_name[en-1] = '_';
 
-	const char file_ext[] = ".txt";
+	const char file_name[] = "data.txt";
 	char folder[1000] = "data/";
-	strcat(data_file_name, file_ext);
 	strcat(folder, data_file_name);
+
 	//strcat(folder, file_ext);
 
 	for(int i; i < strlen(folder) - 1; i++)
@@ -225,6 +227,8 @@ int main(int argc, char* argv[]) {
 			folder[i]='-';
 	}
 
+	mkdir(folder);
+
 
    //create file name (date&time_data.txt)
 
@@ -234,7 +238,7 @@ int main(int argc, char* argv[]) {
 
 	sprintf(freq_buff, "Controller Frequency: %.2f kHz", freq);
 
-    imp[0].fp = fopen (folder,"w");
+    imp[0].fp = fopen (file_name,"w");
     fprintf (imp[0].fp, "Subject ID: %d\n", subject_id); 
     fprintf (imp[0].fp, "%s", asctime (timeinfo) ); 
     fprintf (imp[0].fp, "%s\n", freq_buff); 
@@ -294,9 +298,6 @@ int main(int argc, char* argv[]) {
 
     printf("Ad: %.4f, %.4f, %.4f, %.4f\n", Ad2[0], Ad2[1], Ad2[2], Ad2[3]);
     printf("Bd: %.4f, %.4f\n", Bd2[0], Bd2[1]);
-
-    
-    
 
 
     /**********************************************************************
@@ -377,7 +378,7 @@ int main(int argc, char* argv[]) {
 					
 					//end loop, exit program
 					//finished sessions, begin shutdown
-					LJM_eStreamStop(daqHandle);
+					LJM_eStreamStop(daqHandle);  
 					LJM_Close(daqHandle);
 					fclose(imp[0].fp);
 					shutdown(connfd_1, 2);
@@ -524,6 +525,7 @@ void *controller(void * d)
 							break;
 						case 2:
 							//custom trajectory from file
+							imp_traj_custom();
 							break;
 					}
 
@@ -842,7 +844,7 @@ void record_trajectory()
 
 		if(record_traj > 0)
 		{
-			fprintf (imp_log->fp, "%.2f, %.2f\n", imp_curr->step_time, imp_curr->xk);
+			fprintf (fp_traj, "%.2f, %.2f\n", imp_curr->step_time, imp_curr->xk);
 		}
 
         clock_gettime(CLOCK_MONOTONIC, &(imp_curr->end_time));
@@ -968,6 +970,22 @@ void get_parameters()
 				sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
 				sscanf(matchBuffer, "%lf", &imp[0].game);
 			    if(DEBUG) { printf("Game set to: %f\n", imp[0].game); }
+			}
+
+			regcomp(&compiled, regex.traj, REG_EXTENDED);
+			if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
+				sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
+				sscanf(matchBuffer, "%lf", &imp[0].traj);
+			    if(DEBUG) { printf("Trajectory set to: %f\n", imp[0].traj); }
+
+			    if(imp[0].traj == 2)
+			    {
+			    	//load trajectory 
+			    	fp_traj = fopen('trajectory/trajectory.txt', "r");
+			    	while (fgets(str, MAXCHAR, fp_traj) != NULL)
+				        custom_trajectory ;
+				    fclose(fp);
+			    }
 			}
 		}
 			
