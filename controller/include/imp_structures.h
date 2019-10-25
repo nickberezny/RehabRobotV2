@@ -27,13 +27,14 @@ struct impStruct {
 	double fdes, xdes, vdes;
 	double xmax, vmax, fmax;
 	double P, D;
-	double *Ad, *Bd;
+	double *Ad, *Bd, *Ad2, *Bd2;
 	double *Adf, *Bdf;
 	double K, B, M;
 	double m, b, T; //haptic coupling
 	double cmd;
 	int game; 
 	int exp;
+	int traj;
 	struct timespec start_time;
 	struct timespec end_time;
 	struct timespec wait_time;
@@ -104,9 +105,9 @@ void *controller(void * d);
 void *server(void * d);
 void *logger(void * d);
 
-void home();
-void record_trajectory(); 
-void get_parameters();
+void home(struct impStruct * imp);
+void record_trajectory(struct impStruct * imp); 
+void get_parameters(struct impStruct * imp);
 
 int init_daq();
 
@@ -138,4 +139,4 @@ void imp_regex_match(regex_t * compiled, char recvBuff[1024], regmatch_t matches
 void imp_Haptics_impedance(struct impStruct * imp, struct physics_ball * ball, struct gait_sim * gait,  double * xa, double * va, double *fa, double * fk, double * fa_1, int * environment, double * x_end);
 void imp_physics(struct impStruct * imp, struct physics_ball * ball, double * x_end);
 void imp_gait(struct impStruct * imp, struct gait_sim * gait);
-void imp_traj_custom(struct impStruct * imp, double * curr_step, double * start_time, double * custom_trajectory)
+void imp_traj_custom(struct impStruct * imp, double * curr_step, double * start_time, double * custom_trajectory);

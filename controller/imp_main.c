@@ -49,7 +49,7 @@ int game_number = 0;
 int game_type = 0;
 int exp_iteration = 0;
 
-double custom_trajectory[];
+double custom_trajectory[2][100];
 
 int finished_home = 0;
 int finished_set = 0;
@@ -63,6 +63,9 @@ struct impStruct * imp_cont;
 struct impStruct * imp_cont_next;
 struct impStruct * imp_log;
 struct impStruct * imp_serve;
+struct impStruct * imp_curr;
+struct impStruct * imp_prev;
+
 
 char recvBuff[1024];
 char sendBuff[1024];
@@ -104,7 +107,7 @@ double xdes_old = 0.0;
 double x_end = 0.0;
 double v_max = 0.0;
 
-double * traj_curr_step = 0.0;
+double * traj_curr_step;
 double * traj_start_time; 
 
 
@@ -115,19 +118,10 @@ struct gait_sim gait;
 
 int game_wait_sec = 5.0;
 
+FILE * fp_traj;
 
-/***********************************************************************
-***********************************************************************/
-
-int main(int argc, char* argv[]) {
-
-    if(DEBUG) printf("Begin ... \n");
-
-    int start_controller = 0;
-    struct impStruct imp[BUFFER_SIZE + 1] = {0};
-
-    struct regexMatch regex =
-	{
+regex_t compiled;
+struct regexMatch regex = {
 		.SET = "SET",
 		.P = "_P([0-9]*.[0-9]*)_",
 		.D = "_D([0-9]*.[0-9]*)_",
@@ -141,13 +135,24 @@ int main(int argc, char* argv[]) {
 		.exp = "_exp([0-9]*)_",
 		.traj = "_traj([0-9]*)_"
 	} ; //regex matches
+regmatch_t matches[2];
+char matchBuffer[100];
 
-	regex_t compiled;
-	regmatch_t matches[2];
-	char matchBuffer[100];
+/***********************************************************************
+***********************************************************************/
+
+int main(int argc, char* argv[]) {
+
+    if(DEBUG) printf("Begin ... \n");
+
+    int start_controller = 0;
+    struct impStruct imp[BUFFER_SIZE + 1] = {0};
 
 	double Ad[4] = {0};
 	double Bd[2] = {0};
+
+	double Ad2[4] = {0};
+	double Bd2[2] = {0};
 
 	double Adf[4] = {0};
 	double Bdf[2] = {0};
@@ -231,7 +236,7 @@ int main(int argc, char* argv[]) {
 			folder[i]='-';
 	}
 
-	mkdir(folder);
+	mkdir(folder,0);
 
 
    //create file name (date&time_data.txt)
@@ -335,8 +340,8 @@ int main(int argc, char* argv[]) {
 				if(recvBuff[0] == 'S'){
 					
 					//recieved settings 
-					recvBuff[0] == 'X'
-					get_parameters();
+					recvBuff[0] == 'X';
+					get_parameters(imp);
 
 					sprintf(sendBuff,"SET");
 					send(connfd_1, sendBuff, strlen(sendBuff), 0);
@@ -344,8 +349,8 @@ int main(int argc, char* argv[]) {
 				}else if(recvBuff[0] == 'H'){
 					
 					//received homing command 
-					recvBuff[0] == 'X'
-					home();
+					recvBuff[0] == 'X';
+					home(imp);
 
 					sprintf(sendBuff,"HOME_%d",x_end);
 					send(connfd_1, sendBuff, strlen(sendBuff), 0);
@@ -353,7 +358,7 @@ int main(int argc, char* argv[]) {
 				}else if(recvBuff[0] == 'C'){
 					
 					//received homing command 
-					recvBuff[0] == 'X'
+					recvBuff[0] == 'X';
 					calibrate();
 
 					sprintf(sendBuff,"CAL_%d",ft_offset);
@@ -362,9 +367,9 @@ int main(int argc, char* argv[]) {
 				}else if(recvBuff[0] == 'T'){
 					
 					//recieved trajectory record command 
-					recvBuff[0] == 'X'
-					FILE * fp_traj = fopen('trajectory/custom_trajectory.txt',"w");
-					record_trajectory(); 
+					recvBuff[0] == 'X';
+					fp_traj = fopen('trajectory/custom_trajectory.txt',"w");
+					record_trajectory(imp); 
 
 					sprintf(sendBuff,"TRAJ");
 					send(connfd_1, sendBuff, strlen(sendBuff), 0);
@@ -372,8 +377,8 @@ int main(int argc, char* argv[]) {
 				}else if(recvBuff[0] == 'R'){
 					
 					//end loop, exit program
-					recvBuff[0] == 'X'
-					if() break;
+					recvBuff[0] == 'X';
+					//if() break;
 
 					sprintf(sendBuff,"RUN");
 					send(connfd_1, sendBuff, strlen(sendBuff), 0); 	
@@ -521,7 +526,7 @@ void *controller(void * d)
 			{
 				case 1:
 					//assistive or resistive
-					switch(traj_type)
+					switch(imp_cont->traj)
 					{
 						case 1:
 							//standard trajectory
@@ -683,7 +688,7 @@ void *logger(void * d)
 
 //TODO: set up homing, position thread 
 
-void home(void * d)
+void home(struct impStruct * imp)
 {
 
     sleep(2);
@@ -764,7 +769,7 @@ void home(void * d)
 }
 
 
-void record_trajectory()
+void record_trajectory(struct impStruct * imp)
 {
 
 	if(DEBUG) printf("Beginning recording of trajectory...\n");
@@ -774,8 +779,8 @@ void record_trajectory()
 	curr_pos = 0.0; //track movement since homing? 
 	x_end = 0.0;
 
-	imp_curr = imp[0];
-	imp_prev = imp[1];
+	*imp_curr = imp[0];
+	*imp_prev = imp[1];
 	imp_curr->start_time = temp_time;
 
 	while(1)
@@ -860,9 +865,6 @@ void record_trajectory()
         imp_WaitTime(&imp_curr->step_time, &imp_curr->wait_time);
 
         //unlock current, lock next mutex
-		if(i == BUFFER_SIZE - 1) { pthread_mutex_lock(&lock[0]); }
-		else { pthread_mutex_lock(&lock[i+1]); }
-		pthread_mutex_unlock(&lock[i]);	
         
 		if(++temp_counter > MAX_COUNT) {
 			//pthread_mutex_unlock(&lock[0]);	
@@ -879,7 +881,7 @@ void record_trajectory()
 	return;
 }
 
-void get_parameters()
+void get_parameters(struct impStruct * imp)
 {
 	if(DEBUG) printf("recieved data: %s\n", recvBuff);
 				
@@ -910,7 +912,7 @@ void get_parameters()
 		{
 			//recieved settings 
 			if(DEBUG) printf("recieved data: %s\n", recvBuff);
-			start_controller = 1;
+			//start_controller = 1;
 
 			//find set parameters in message using regular expreesions 
 			regcomp(&compiled, regex.P, REG_EXTENDED);
@@ -988,14 +990,15 @@ void get_parameters()
 			    	fp_traj = fopen('trajectory/trajectory.txt', "r");
 			    	int it = 0;
 			    	char *traj_data; 
+			    	char * str;
 
-			    	while (fgets(str, MAXCHAR, fp_traj) != NULL)
+			    	while (fgets(str, 10, fp_traj) != NULL)
 			    		traj_data = strtok(str, ',');
 				        custom_trajectory[it][0] = traj_data[0];
 				    	custom_trajectory[it][1] = traj_data[1];
 				    	it++;
 
-				    fclose(fp);
+				    fclose(fp_traj);
 			    }
 			}
 		}

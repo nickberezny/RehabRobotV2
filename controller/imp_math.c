@@ -234,8 +234,8 @@ void imp_traj_custom(struct impStruct * imp, double * curr_step, double * start_
 Sets trajectory to custom trajectory recorded by user
 ------------------------------------------------------------------------*/
 
-	while(imp->start_time - *start_time < custom_trajectory[++curr_step][0]);
-    imp->xdes = custom_trajectory[curr_step][1];
+	//while(imp->start_time - *start_time < custom_trajectory[++curr_step][0]);
+    //imp->xdes = custom_trajectory[curr_step][1];
 
     return;
 }
