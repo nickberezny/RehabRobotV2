@@ -104,6 +104,10 @@ double xdes_old = 0.0;
 double x_end = 0.0;
 double v_max = 0.0;
 
+double * traj_curr_step = 0.0;
+double * traj_start_time; 
+
+
 double home_decrease = 0.0;
 
 struct physics_ball physics_ball; 
@@ -525,7 +529,7 @@ void *controller(void * d)
 							break;
 						case 2:
 							//custom trajectory from file
-							imp_traj_custom();
+							imp_traj_custom(imp_cont, traj_curr_step, traj_start_time, custom_trajectory); //void imp_traj_custom(struct impStruct * imp, double * curr_step, double * start_time, double * custom_trajectory)
 							break;
 					}
 
@@ -844,7 +848,7 @@ void record_trajectory()
 
 		if(record_traj > 0)
 		{
-			fprintf (fp_traj, "%.2f, %.2f\n", imp_curr->step_time, imp_curr->xk);
+			fprintf (fp_traj, "%.2f,%.2f\n", imp_curr->step_time, imp_curr->xk);
 		}
 
         clock_gettime(CLOCK_MONOTONIC, &(imp_curr->end_time));
@@ -982,8 +986,15 @@ void get_parameters()
 			    {
 			    	//load trajectory 
 			    	fp_traj = fopen('trajectory/trajectory.txt', "r");
+			    	int it = 0;
+			    	char *traj_data; 
+
 			    	while (fgets(str, MAXCHAR, fp_traj) != NULL)
-				        custom_trajectory ;
+			    		traj_data = strtok(str, ',');
+				        custom_trajectory[it][0] = traj_data[0];
+				    	custom_trajectory[it][1] = traj_data[1];
+				    	it++;
+
 				    fclose(fp);
 			    }
 			}

@@ -227,39 +227,15 @@ Sets velocity trajectory to follow a parabola, with small velocity at the extrem
     return;
 }
 
-void imp_traj_custom(struct impStruct * imp, double * dir, double * xdes_old, double * x_end)
+void imp_traj_custom(struct impStruct * imp, double * curr_step, double * start_time, double * custom_trajectory)
 {
 
 /*------------------------------------------------------------------------
-Sets velocity trajectory to follow a parabola, with small velocity at the extremes and vmax in the middle
+Sets trajectory to custom trajectory recorded by user
 ------------------------------------------------------------------------*/
 
-    imp->xdes = *xdes_old;
-
-    if(imp->xdes > *x_end - 0.025) *dir = -1.0;
-    if(imp->xdes < 0.025) *dir = 1.0;
-    if(imp->xdes < 0.0) imp->xdes = 0.0;
-    
-    if(imp->xdes < 0.4*(*x_end)){
-    	imp->vdes = (*dir) * (imp->vmax/(0.4*(*x_end))*imp->xdes + 3.0);
-    }
-    else if(imp->xdes > 0.6*(*x_end))
-    {
-    	imp->vdes = (*dir) * (-imp->vmax/(0.4*(*x_end))*(imp->xdes - (*x_end)*0.6) + imp->vmax + 3.0);
-    }
-    else{
-    	imp->vdes = (*dir)*imp->vmax;
-    }
-
-
-    imp->xdes = imp->xdes + (imp->vdes * (STEP_NSEC/NSEC_IN_SEC));
-
-    *xdes_old = imp->xdes; 
-
-    /*
-    imp->vdes = (*dir)*1.0 - (*dir)*( imp->vmax / pow((X_END/2.0),2.0) ) * imp->xk * (imp->xk - X_END);
-    imp->xdes = imp->xk + (*dir)*(imp->vdes * STEP_NSEC/NSEC_IN_SEC); 
-	*/
+	while(imp->start_time - *start_time < custom_trajectory[++curr_step][0]);
+    imp->xdes = custom_trajectory[curr_step][1];
 
     return;
 }
