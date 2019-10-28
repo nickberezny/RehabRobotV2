@@ -317,24 +317,29 @@ int main(int argc, char* argv[]) {
     bind(listenfd_1, (struct sockaddr*)&serv_addr_1, sizeof(serv_addr_1)); 
     listen(listenfd_1, 100);
 
+    bind(listenfd_2, (struct sockaddr*)&serv_addr_2, sizeof(serv_addr_2)); 
+    listen(listenfd_2, 100);
+
 	//Start UI Process *make sure to use npm run build before  
 	//system("gnome-terminal --working-directory=Documents/RehabRobot/server -e 'sudo NODE_ENV='production' node server.js'");
-	system("gnome-terminal --working-directory=Documents/RehabRobot/server -e 'sudo node server.js'");
+	system("gnome-terminal --working-directory=Documents/RehabRobotV2/server -e 'sudo node server.js'");
+	system("gnome-terminal --working-directory=Documents/RehabRobotV2/server/game -e 'sudo ./Linux_build01.x86_64'");
 
-
-	bind(listenfd_2, (struct sockaddr*)&serv_addr_2, sizeof(serv_addr_2)); 
-    listen(listenfd_2, 100);
+	
 	connfd_2 = accept(listenfd_2, (struct sockaddr*)NULL, NULL);
+
+	printf("connfd_2: %d\n", connfd_2);
 
 	//start top level while loop 
 	while(1)
 	{
 
 		//TODO: reset after run 
+		connfd_1 = accept(listenfd_1, (struct sockaddr*)NULL, NULL);
 
 		while(1)
 		{
-			connfd_1 = accept(listenfd_1, (struct sockaddr*)NULL, NULL);
+			
 			if(read(connfd_1, recvBuff, sizeof(recvBuff)))
 			{
 				if(recvBuff[0] == 'S'){
@@ -381,7 +386,9 @@ int main(int argc, char* argv[]) {
 					//if() break;
 
 					sprintf(sendBuff,"RUN");
-					send(connfd_1, sendBuff, strlen(sendBuff), 0); 	
+					send(connfd_1, sendBuff, strlen(sendBuff), 0); 
+
+					break;	
 
 				}else if(recvBuff[0] == 'E'){
 					
@@ -695,6 +702,7 @@ void home(struct impStruct * imp)
     if(DEBUG) printf("Homing...\n" );  
 
     //home to back
+    /*
     aValues[0] = MOTOR_ZERO; 
     LJM_eNames(daqHandle, 5, aNames, aWrites, aNumValues, aValues, &errorAddress);
     imp[9].LSB[0] = aValues[3];
@@ -763,7 +771,7 @@ void home(struct impStruct * imp)
 	send(connfd_1, sendBuff, strlen(sendBuff), 0);
 
 	finished_home = 1;
-
+	*/
 	return NULL;
 
 }
@@ -902,129 +910,129 @@ void get_parameters(struct impStruct * imp)
 		}
 	}
 
-	while(1)
-    {
-		if(DEBUG) printf("Waiting for run signal from UI ... \n");
+	/*
+	if(DEBUG) printf("Waiting for run signal from UI ... \n");
 
-		//wait for game settings
-		connfd_1 = accept(listenfd_1, (struct sockaddr*)NULL, NULL); 
-		if(read(connfd_1, recvBuff, sizeof(recvBuff)) && recvBuff[0] == 'S')
-		{
-			//recieved settings 
-			if(DEBUG) printf("recieved data: %s\n", recvBuff);
-			//start_controller = 1;
+	//wait for game settings
+	//connfd_1 = accept(listenfd_1, (struct sockaddr*)NULL, NULL); 
+	if(read(connfd_1, recvBuff, sizeof(recvBuff)) && recvBuff[0] == 'S')
+	{
+		//recieved settings 
+		if(DEBUG) printf("recieved data: %s\n", recvBuff);
+		//start_controller = 1;
 
-			//find set parameters in message using regular expreesions 
-			regcomp(&compiled, regex.P, REG_EXTENDED);
-			if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
-				sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
-				sscanf(matchBuffer, "%lf", &imp[0].P);
-			    if(DEBUG) { printf("P gain is: %lf\n", imp[0].P); }
-			}
-
-			regcomp(&compiled, regex.D, REG_EXTENDED);
-			if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
-				sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
-				sscanf(matchBuffer, "%lf", &imp[0].D);
-			    if(DEBUG) { printf("D gain is: %f\n", imp[0].D); }
-			}
-
-			regcomp(&compiled, regex.xdes, REG_EXTENDED);
-			if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
-				sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
-				sscanf(matchBuffer, "%lf", &imp[0].xdes);
-			    if(DEBUG) { printf("xdes is: %f\n", imp[0].xdes); }
-			}
-
-			regcomp(&compiled, regex.xmax, REG_EXTENDED);
-			if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
-				sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
-				sscanf(matchBuffer, "%lf", &imp[0].xmax);
-			    if(DEBUG) { printf("Xmax is: %f\n", imp[0].xmax); }
-			}
-
-			regcomp(&compiled, regex.vmax, REG_EXTENDED);
-			if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
-				sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
-				sscanf(matchBuffer, "%lf", &imp[0].vmax);
-			    if(DEBUG) { printf("Vmax is: %f\n", imp[0].vmax); }
-			}
-
-			regcomp(&compiled, regex.K, REG_EXTENDED);
-			if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
-				sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
-				sscanf(matchBuffer, "%lf", &imp[0].K);
-			    if(DEBUG) { printf("K is: %f\n", imp[0].K); }
-			}
-			
-			regcomp(&compiled, regex.B, REG_EXTENDED);
-			if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
-				sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
-				sscanf(matchBuffer, "%lf", &imp[0].B);
-			    if(DEBUG) { printf("B is: %f\n", imp[0].B); }
-			}
-			
-			regcomp(&compiled, regex.M, REG_EXTENDED);
-			if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
-				sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
-				sscanf(matchBuffer, "%lf", &imp[0].M);
-			    if(DEBUG) { printf("M is: %f\n", imp[0].M); }
-			}
-
-			regcomp(&compiled, regex.game, REG_EXTENDED);
-			if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
-				sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
-				sscanf(matchBuffer, "%lf", &imp[0].game);
-			    if(DEBUG) { printf("Game set to: %f\n", imp[0].game); }
-			}
-
-			regcomp(&compiled, regex.traj, REG_EXTENDED);
-			if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
-				sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
-				sscanf(matchBuffer, "%lf", &imp[0].traj);
-			    if(DEBUG) { printf("Trajectory set to: %f\n", imp[0].traj); }
-
-			    if(imp[0].traj == 2)
-			    {
-			    	//load trajectory 
-			    	fp_traj = fopen('trajectory/trajectory.txt', "r");
-			    	int it = 0;
-			    	char *traj_data; 
-			    	char * str;
-
-			    	while (fgets(str, 10, fp_traj) != NULL)
-			    		traj_data = strtok(str, ',');
-				        custom_trajectory[it][0] = traj_data[0];
-				    	custom_trajectory[it][1] = traj_data[1];
-				    	it++;
-
-				    fclose(fp_traj);
-			    }
-			}
-		}
-			
-			
-
-		for(int i = 1; i < BUFFER_SIZE; i++)
-		{
-			imp[i].P = imp[0].P;
-			imp[i].D = imp[0].D;
-			imp[i].K = imp[0].K;
-			imp[i].B = imp[0].B;
-			imp[i].M = imp[0].M;
-			imp[i].xdes = imp[0].xdes;
-			imp[i].fp = imp[0].fp;
-
-			imp[i].xmax = imp[0].xmax;
-			imp[i].vmax = imp[0].vmax;
-			imp[i].game = imp[0].game;
-					
+		//find set parameters in message using regular expreesions 
+		regcomp(&compiled, regex.P, REG_EXTENDED);
+		if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
+			sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
+			sscanf(matchBuffer, "%lf", &imp[0].P);
+		    if(DEBUG) { printf("P gain is: %lf\n", imp[0].P); }
 		}
 
-		if(DEBUG) printf("Set All Parameters...\n");
-		finished_set = 1;
-	
+		regcomp(&compiled, regex.D, REG_EXTENDED);
+		if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
+			sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
+			sscanf(matchBuffer, "%lf", &imp[0].D);
+		    if(DEBUG) { printf("D gain is: %f\n", imp[0].D); }
+		}
+
+		regcomp(&compiled, regex.xdes, REG_EXTENDED);
+		if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
+			sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
+			sscanf(matchBuffer, "%lf", &imp[0].xdes);
+		    if(DEBUG) { printf("xdes is: %f\n", imp[0].xdes); }
+		}
+
+		regcomp(&compiled, regex.xmax, REG_EXTENDED);
+		if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
+			sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
+			sscanf(matchBuffer, "%lf", &imp[0].xmax);
+		    if(DEBUG) { printf("Xmax is: %f\n", imp[0].xmax); }
+		}
+
+		regcomp(&compiled, regex.vmax, REG_EXTENDED);
+		if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
+			sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
+			sscanf(matchBuffer, "%lf", &imp[0].vmax);
+		    if(DEBUG) { printf("Vmax is: %f\n", imp[0].vmax); }
+		}
+
+		regcomp(&compiled, regex.K, REG_EXTENDED);
+		if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
+			sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
+			sscanf(matchBuffer, "%lf", &imp[0].K);
+		    if(DEBUG) { printf("K is: %f\n", imp[0].K); }
+		}
+		
+		regcomp(&compiled, regex.B, REG_EXTENDED);
+		if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
+			sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
+			sscanf(matchBuffer, "%lf", &imp[0].B);
+		    if(DEBUG) { printf("B is: %f\n", imp[0].B); }
+		}
+		
+		regcomp(&compiled, regex.M, REG_EXTENDED);
+		if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
+			sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
+			sscanf(matchBuffer, "%lf", &imp[0].M);
+		    if(DEBUG) { printf("M is: %f\n", imp[0].M); }
+		}
+
+		regcomp(&compiled, regex.game, REG_EXTENDED);
+		if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
+			sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
+			sscanf(matchBuffer, "%lf", &imp[0].game);
+		    if(DEBUG) { printf("Game set to: %f\n", imp[0].game); }
+		}
+
+		regcomp(&compiled, regex.traj, REG_EXTENDED);
+		if(regexec(&compiled, recvBuff, 2, matches, 0)==0){
+			sprintf(matchBuffer, "%.*s\n", matches[1].rm_eo-matches[1].rm_so,  recvBuff+matches[1].rm_so );
+			sscanf(matchBuffer, "%lf", &imp[0].traj);
+		    if(DEBUG) { printf("Trajectory set to: %f\n", imp[0].traj); }
+
+		    if(imp[0].traj == 2)
+		    {
+		    	//load trajectory 
+		    	fp_traj = fopen('trajectory/trajectory.txt', "r");
+		    	int it = 0;
+		    	char *traj_data; 
+		    	char * str;
+
+		    	while (fgets(str, 10, fp_traj) != NULL)
+		    		traj_data = strtok(str, ',');
+			        custom_trajectory[it][0] = traj_data[0];
+			    	custom_trajectory[it][1] = traj_data[1];
+			    	it++;
+
+			    fclose(fp_traj);
+		    }
+		}
+
 	}
+		
+		
+
+	for(int i = 1; i < BUFFER_SIZE; i++)
+	{
+		imp[i].P = imp[0].P;
+		imp[i].D = imp[0].D;
+		imp[i].K = imp[0].K;
+		imp[i].B = imp[0].B;
+		imp[i].M = imp[0].M;
+		imp[i].xdes = imp[0].xdes;
+		imp[i].fp = imp[0].fp;
+
+		imp[i].xmax = imp[0].xmax;
+		imp[i].vmax = imp[0].vmax;
+		imp[i].game = imp[0].game;
+				
+	}
+
+	if(DEBUG) printf("Set All Parameters...\n");
+	finished_set = 1;
+
+
 
 	switch(imp[0].game){
 		case 1:
@@ -1036,7 +1044,7 @@ void get_parameters(struct impStruct * imp)
 			break;
 	}
 	
-
+	*/
 	return;
 }
 
@@ -1049,6 +1057,7 @@ void calibrate()
 
     if(DEBUG) printf("Calibrating Force Sensor, Keep motor enabled ...\n"); 
 
+    /*
     LJM_eNames(daqHandle, 5, aNames, aWrites, aNumValues, aValues, &errorAddress);
     ft_offset = FT_GAIN*aValues[1]; 
 
@@ -1063,6 +1072,7 @@ void calibrate()
     if(DEBUG) printf("Force sensor offset: %.3f\n", ft_offset);
 
     finished_calibrate = 1;
+    */
 
 	return;
 }

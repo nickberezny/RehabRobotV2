@@ -53,16 +53,16 @@ class WindowContent extends React.Component {
 
 	handleConfirm = (message) => {
 		//var test = <div>Back Home Complete</div> 
-		this.setValue(message.toString(), 2 );
-		this.setValue('response', 0 );
-		this.setValue('status', 'WAITING FOR INPUT...' );
+		this.props.setValue(message.toString(), 2 );
+		this.props.setValue('response', 0 );
+		this.props.setValue('status', 'WAITING FOR INPUT...' );
 
 		switch(message){
 			case 'SET':
-				this.setValue('status', 'READY TO RUN' );
+				this.props.setValue('status', 'READY TO RUN' );
 				break;
 			case 'RUN':
-				this.setValue('status', 'RUNNING...' );
+				this.props.setValue('status', 'RUNNING...' );
 				break;
 		}
 	}

@@ -105,7 +105,9 @@ function mapStateToProps(state) {
     RUN: state.RUN,
     CAL: state.CAL,
     err: state.param_error,
-    response: state.response
+    response: state.response,
+    game: state.game,
+    exp: state.exp
   }
 }
 

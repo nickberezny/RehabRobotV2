@@ -35,7 +35,7 @@ class SetupPage extends React.Component {
 	render() {
 
 		if(this.props.SET>0) this.state.disabled = true
-		if(this.props.status == 'READY TO RUN') this.setState({ color: 'primary' });
+		if(this.props.status == 'READY TO RUN') this.state.color = 'primary' ;
 		if(this.props.response == 1) this.props.setValue('status', 'WAITING FOR RESPONSE...');
 
 		if(this.props.traj > 2)

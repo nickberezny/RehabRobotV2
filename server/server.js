@@ -4,7 +4,7 @@ var io = require("socket.io")(server);
 const next = require('next')
 var net = require('net');
 
-var tcp_port = 1337;
+var tcp_port = 2000;
 var ui_port = 3000;
 
 var TEST = 1;
@@ -34,12 +34,12 @@ if(TEST) {
 
     var res = data.toString().split("_");
 
-    if(data.toString() == 'SET') { io.emit('CONFIRM', 'SET'; }
-    else if(data.toString() == 'RUN') { io.emit('CONFIRM', 'RUN'; }
-    else if(res[0] == 'HOME') { io.emit('CONFIRM', 'HOME'; }
-    else if(res[0] == 'CAL') { io.emit('CONFIRM', 'CAL'; }
-    else if(data.toString() == 'TRAJ') { io.emit('CONFIRM', 'TRAJ'; }
-    else if(data.toString() == 'END') { io.emit('CONFIRM', 'END'; }
+    if(data.toString() == 'SET') { io.emit('CONFIRM', 'SET') }
+    else if(data.toString() == 'RUN') { io.emit('CONFIRM', 'RUN') }
+    else if(res[0] == 'HOME') { io.emit('CONFIRM', 'HOME') }
+    else if(res[0] == 'CAL') { io.emit('CONFIRM', 'CAL') }
+    else if(data.toString() == 'TRAJ') { io.emit('CONFIRM', 'TRAJ') }
+    else if(data.toString() == 'END') { io.emit('CONFIRM', 'END') }
     if(res[0] == 'INFO') {
       io.emit('INFO',data.toString());
       console.log('INFO' + res[1] + '  ' + data)
