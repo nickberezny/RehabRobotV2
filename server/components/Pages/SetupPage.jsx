@@ -38,13 +38,16 @@ class SetupPage extends React.Component {
 		if(this.props.status == 'READY TO RUN') this.state.color = 'primary' ;
 		if(this.props.response == 1) this.props.setValue('status', 'WAITING FOR RESPONSE...');
 
-		if(this.props.traj > 2)
+		if(this.props.traj == 1)
+		{
+			var temp1 = null
+			
+		}else if(this.props.traj == 2)
+		{ 
+			var temp1 = <InputText text="Max Velocity" textValue={this.props.vmax} paramName='vmax' min={1} max={2} />
+		}else if(this.props.traj == 3)
 		{
 			var temp1 = <GenericButton disabled={this.state.disabled} text="Record" message="RECORD" /> 
-			
-		}else
-		{ 
-			var temp1 = null
 		}
 
 		this.state.button =  temp1;
@@ -152,6 +155,7 @@ function mapStateToProps(state) {
   	K: state.K,
   	B: state.B,
   	M: state.M,
+  	vmax: state.vmax,
   	game: state.game,
   	user: state.user,
   	RUN: state.RUN,

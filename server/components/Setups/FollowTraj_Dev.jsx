@@ -15,8 +15,6 @@ class FollowTraj_Dev extends React.Component {
 
     return (
       <div> 
-        <InputText text="Max Velocity" textValue={this.props.vmax} paramName='vmax' min={1} max={2} />
-        <InputText text="Max Position" textValue={this.props.xmax} paramName='xmax' min={0.1} max={0.5} />
         <InputText text="Admittance K" textValue={this.props.K} paramName='K' min={1} max={2} />
         <InputText text="Admittance B" textValue={this.props.B} paramName='B' min={1} max={2} />
         <InputText text="Admittance M" textValue={this.props.M} paramName='M' min={1} max={2} />
