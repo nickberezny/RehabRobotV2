@@ -388,7 +388,7 @@ int main(int argc, char* argv[]) {
 					sprintf(sendBuff,"RUN");
 					send(connfd_1, sendBuff, strlen(sendBuff), 0); 
 
-					break;	
+					break;
 
 				}else if(recvBuff[0] == 'E'){
 					
@@ -455,12 +455,12 @@ int main(int argc, char* argv[]) {
 	    if(DEBUG) printf("Joining Threads ...\n"); 
 	   	// sleep(10);
 		//create and join threads 
-		pthread_create(&thread[0], &attr[0], controller, (void *)imp);
+		//pthread_create(&thread[0], &attr[0], controller, (void *)imp);
 		pthread_create(&thread[1], &attr[1], server, (void *)imp);
-		pthread_create(&thread[2], &attr[2], logger, (void *)imp);
-	    pthread_join(thread[0], NULL);
+		//pthread_create(&thread[2], &attr[2], logger, (void *)imp);
+	    //pthread_join(thread[0], NULL);
 		pthread_join(thread[1], NULL);
-		pthread_join(thread[2], NULL);
+		//pthread_join(thread[2], NULL);
 		
 	}
 
@@ -640,11 +640,12 @@ void *server(void* d)
 		for(int i = 0; i < BUFFER_SIZE; i++)
 		{
 			pthread_mutex_lock(&lock[i]);
-			//if(DEBUG & i == 0) printf("Thread 2 (server) Executing ...\n");
+			if(DEBUG & i == 0) printf("Thread 2 (server) Executing ...\n");
 			if(temp_counter%20 == 0) //refresh UI every _ seconds / 500 = every 0.5 seconds
 			{
 				imp_serve = &((struct impStruct*)d)[i];
-				sprintf(sendBuff,"%.2f,%.2f,%.2f,%.2f,%.2f,%.2f", imp_serve->xk, imp_serve->xdes,imp_serve->vk,imp_serve->vdes,imp_serve->x_ball, x_end);
+				//sprintf(sendBuff,"%.2f,%.2f,%.2f,%.2f,%.2f,%.2f", imp_serve->xk, imp_serve->xdes,imp_serve->vk,imp_serve->vdes,imp_serve->x_ball, x_end);
+				sprintf(sendBuff,"%d\n", temp_counter);
 				send(connfd_2, sendBuff, strlen(sendBuff), 0);
 			}
 			
