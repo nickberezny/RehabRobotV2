@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 
 import {setValue} from '../../src/actions'
 
+import GenericButtonExp from '../Generic/GenericButtonExp'
 import GenericButton from '../Generic/GenericButton'
 import InputText from '../Generic/InputText'
 import Dropdown from '../Generic/Dropdown'
@@ -13,6 +14,7 @@ import Balance_Dev from '../Setups/Balance_Dev'
 import FollowTraj from '../Setups/FollowTraj'
 import FollowVel from '../Setups/FollowVel'
 import Balance from '../Setups/Balance'
+import Experiment from '../Setups/Experiment'
 
 
 import Grid from '@material-ui/core/Grid';
@@ -20,7 +22,7 @@ import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 
-class SetupPage extends React.Component {
+class ExperimentPage extends React.Component {
 
 	constructor(props) {
 	    super(props);
@@ -56,7 +58,7 @@ class SetupPage extends React.Component {
 		if(this.props.user == 1){
 			switch(this.props.game) {
 				case 1: 
-					this.state.contents = <div> <FollowTraj_Dev /> </div> 
+					this.state.contents = <div> <Experiment /> </div> 
 					break;
 				case 2:
 					this.state.contents = <div> <FollowVel_Dev /> </div> 
@@ -93,28 +95,28 @@ class SetupPage extends React.Component {
 		      	<Grid container>
 			      	<Grid item xs>
 			      		<Typography variant="display1" gutterBottom>
-			    			Game Type  
+			    			Time per trial
 		      			</Typography>
-			      		<Dropdown disabled={this.state.disabled} text="Game" id="game" value={this.props.game} select1="Follow Trajectory" select2 = "Racing" select3 = "Balance" />
-			      		<br/>
-			      		<br/>
-			      		<Typography variant="display1" gutterBottom>
-				    			Trajectory  
-			      		</Typography>
-			      		<Dropdown disabled={this.state.disabled} text="Trajectory Profile" id="traj" value={this.props.traj} select1="Standard Trajectory" select2 = "Standard Trajectory 2" select3 = "Custom Trajectory" />
-			      		{this.state.button}
+		      			<InputText text="Time (s)" textValue={this.props.time} paramName='time' min={1} max={2} />
+		      			<br />
+		      			<br />
+		      			<Typography variant="display1" gutterBottom>
+			    			Number of Trials
+		      			</Typography>
+		      			<InputText text="Trials" textValue={this.props.trials} paramName='trials' min={1} max={2} />
 			      	</Grid>
 			      	<Grid item xs>
 				      	<Typography variant="display1" gutterBottom>
 				    			Parameters 
 			      		</Typography>
+
 				      	{this.state.contents}
 			      	</Grid>
 			      	<Grid item xs>
 			      		<Typography variant="display1" gutterBottom>
 				    		Send Commands
 			      		</Typography>
-					    <GenericButton text="Set" message="SET" /> 
+					    <GenericButtonExp text="Set" message="SET" /> 
 					    <GenericButton text="Home" message="HOME" />
 					    <GenericButton text="Calibrate" message="CAL" /> 
 					    <GenericButton text="Run" message="RUN" />  
@@ -169,11 +171,12 @@ function mapStateToProps(state) {
   	force_offset: state.force_offset,
   	total_length: state.total_length,
   	response: state.response,
-  	test_mat: state.test_mat,
+  	time: state.time,
+  	trials: state.trials
   }
 }
 
 export default connect(
   mapStateToProps,
   {setValue}
-)(SetupPage);
+)(ExperimentPage);

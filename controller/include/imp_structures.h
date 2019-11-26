@@ -71,6 +71,7 @@ struct regexMatch {
 	char *game;
 	char *exp;
 	char *traj;
+	char *time;
 };
 
 struct physics_ball {

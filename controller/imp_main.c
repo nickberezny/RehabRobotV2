@@ -133,7 +133,8 @@ struct regexMatch regex = {
 		.vmax = "_vmax([0-9]*.[0-9]*)_",
 		.game = "_game([0-9]*)_",
 		.exp = "_exp([0-9]*)_",
-		.traj = "_traj([0-9]*)_"
+		.traj = "_traj([0-9]*)_",
+		.time = "_time([0-9]*)_"
 	} ; //regex matches
 regmatch_t matches[2];
 char matchBuffer[100];

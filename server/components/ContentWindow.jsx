@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 
 import SetupPage from './Pages/SetupPage'
+import ExperimentPage from './Pages/ExperimentPage'
 import DataPage from './Pages/DataPage'
 import SettingsPage from './Pages/SettingsPage'
 
@@ -90,9 +91,12 @@ class WindowContent extends React.Component {
 				  if(this.props.user == 2) {this.state.content = <div style={this.state.style}> <SetupPage /> </div>}
 				  break;
 			case 2:
-				  this.state.content = <div style={this.state.style}> <DataPage /> {this.state.home} {this.state.info}  </div>
-				  break;
+				this.state.content = <div style={this.state.style}> <ExperimentPage /> {this.state.home} {this.state.info}  </div>
+				break;
 			case 3:
+				this.state.content = <div style={this.state.style}> <DataPage /> {this.state.home} {this.state.info}  </div>
+				break;
+			case 4:
 				this.state.content = <div style={this.state.style}> <SettingsPage /> </div>
 				break;
 			default:

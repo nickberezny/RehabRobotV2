@@ -12,6 +12,7 @@ import BuildIcon from '@material-ui/icons/Build';
 import MoviesIcon from '@material-ui/icons/Movie';
 import ChartIcon from '@material-ui/icons/InsertChartOutlined';
 import SettingsIcon from '@material-ui/icons/Settings';
+import PlayIcon from '@material-ui/icons/PlayCircleOutline';
 
 
 const ListStyles = {
@@ -26,6 +27,7 @@ class DrawerList extends React.Component {
       this.pageOne = this.pageOne.bind(this);
       this.pageTwo = this.pageTwo.bind(this);
       this.pageThree = this.pageThree.bind(this);
+      this.pageFour = this.pageFour.bind(this);
   }
 
   pageOne() {
@@ -47,6 +49,12 @@ class DrawerList extends React.Component {
     }
   }
 
+  pageFour() {
+    if(window.confirm('This will cancel any settings, do you wish to continue?')){
+      this.props.setValue('activePage',4);
+    }
+  }
+
 
   render() {
     return (
@@ -60,11 +68,17 @@ class DrawerList extends React.Component {
           </ListItem>
           <ListItem button onClick={this.pageTwo}>
             <ListItemIcon>
+              <PlayIcon />
+            </ListItemIcon>
+            <ListItemText primary="Experiment" />
+          </ListItem>
+          <ListItem button onClick={this.pageThree}>
+            <ListItemIcon>
               <ChartIcon />
             </ListItemIcon>
             <ListItemText primary="Data" />
           </ListItem>
-          <ListItem button onClick={this.pageThree}>
+          <ListItem button onClick={this.pageFour}>
             <ListItemIcon>
               <SettingsIcon />
             </ListItemIcon>

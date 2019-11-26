@@ -3,11 +3,11 @@ import { connect } from 'react-redux'
 
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
-import { setValue } from "../../src/actions";
+import { setMatValue } from "../../src/actions";
 import { paramCounter } from "../../src/actions";
 import InputAdornment from '@material-ui/core/InputAdornment';
 
-class InputText extends React.Component {
+class InputTextExp extends React.Component {
 
 	constructor(props) {
 	    super(props);
@@ -20,6 +20,7 @@ class InputText extends React.Component {
 	onInputChange = (event) => {
         console.log("New parameter")
         let name = this.props.paramName
+        let stage = this.props.stage
         let val = event.target.value
         if(val>this.props.max || val<this.props.min)
         {
@@ -31,7 +32,7 @@ class InputText extends React.Component {
         	if(this.state.err == true) this.props.paramCounter(-1)
         	this.setState({ err: false });
         }
-        this.props.setValue(name,event.target.value);
+        this.props.setMatValue(name,stage,event.target.value);
         
     }
 
@@ -53,8 +54,7 @@ class InputText extends React.Component {
 					error={this.state.err}
 					 InputProps={{
 			            startAdornment: <InputAdornment position="start">{this.props.startAdornment}</InputAdornment>,
-			          }}
-          
+			          }}          
 		        />
 		    </div>
 
@@ -71,6 +71,6 @@ function mapStateToProps(state) {
 
 export default connect(
   mapStateToProps,
-  { setValue,
+  { setMatValue,
     paramCounter }
-)(InputText);
+)(InputTextExp);

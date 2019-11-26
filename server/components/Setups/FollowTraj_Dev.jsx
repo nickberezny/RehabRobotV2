@@ -18,6 +18,7 @@ class FollowTraj_Dev extends React.Component {
         <InputText text="Admittance K" textValue={this.props.K} paramName='K' min={1} max={2} />
         <InputText text="Admittance B" textValue={this.props.B} paramName='B' min={1} max={2} />
         <InputText text="Admittance M" textValue={this.props.M} paramName='M' min={1} max={2} />
+        <InputText text="Time (s)" textValue={this.props.time} paramName='time' min={1} max={200} />
       </div>
     )
   }
@@ -32,6 +33,7 @@ function mapStateToProps(state) {
     K: state.K,
     B: state.B,
     M: state.M,
+    time: state.time,
   }
 }
 

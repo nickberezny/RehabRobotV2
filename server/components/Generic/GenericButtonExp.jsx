@@ -6,7 +6,7 @@ import {setValue} from "../../src/actions";
 
 import io from "socket.io-client";
 
-class GenericButton extends React.Component {
+class GenericButtonExp extends React.Component {
   
   constructor(props) {
     super(props);
@@ -37,8 +37,18 @@ class GenericButton extends React.Component {
         case "SET":
           if(this.props.RUN == 0)
           {
-            dataToSend = 'SET_game' + this.props.game + '_traj' + this.props.traj + 
-            '_K' + this.props.K + '_B' + this.props.B + '_M' + this.props.M
+            dataToSend = 'SETEXP_time' + this.props.time + '_trials_' + this.props.trials 
+              + '_K1_' + this.props.k_exp[0] + '_B1_' + this.props.b_exp[0]
+              + '_K2_' + this.props.k_exp[1] + '_B2_' + this.props.b_exp[1]
+              + '_K3_' + this.props.k_exp[2] + '_B3_' + this.props.b_exp[2]
+              + '_K4_' + this.props.k_exp[3] + '_B4_' + this.props.b_exp[3]
+              + '_K5_' + this.props.k_exp[4] + '_B5_' + this.props.b_exp[4]
+              + '_K6_' + this.props.k_exp[5] + '_B6_' + this.props.b_exp[5]
+              + '_K7_' + this.props.k_exp[6] + '_B7_' + this.props.b_exp[6]
+              + '_K8_' + this.props.k_exp[7] + '_B8_' + this.props.b_exp[7]
+              + '_K9_' + this.props.k_exp[8] + '_B9_' + this.props.b_exp[8]
+              + '_K10_' + this.props.k_exp[9] + '_B10_' + this.props.b_exp[9]
+
             this.props.setValue(this.props.message, 1)
             this.setState({ color: 'primary' });
           }
@@ -108,13 +118,17 @@ function mapStateToProps(state) {
     err: state.param_error,
     response: state.response,
     game: state.game,
-    exp: state.exp
+    exp: state.exp,
+    k_exp: state.k_exp,
+    b_exp: state.b_exp,
+    time: state.time,
+    trials: state.trials
   }
 }
 
 export default connect(
   mapStateToProps,
   { setValue }
-)(GenericButton);
+)(GenericButtonExp);
 
 //
